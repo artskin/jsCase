@@ -18,7 +18,7 @@ pre button{
   right: 10px;
   bottom: 10px;
 }
-.hljs ul {list-style: decimal;}
+.hljs ul {list-style: decimal;background: #414447;margin: 0;}
 .hljs {
 	border: 0;
 	font-family: "Consulas", "Courier New", Courier, mono, serif;
@@ -28,10 +28,12 @@ pre button{
   line-height:1.6;
 	margin: 0;
 	width: 100%;
-	white-space: pre-wrap
+  white-space: pre-wrap;
 }
 .hljs ul li {list-style: decimal-leading-zero;
-  border-left: 1px solid #222 !important;}
+  border-left: 1px solid #222 !important;
+  background: #282b2e;
+}
 .hljs ul li:nth-of-type(even) {
   background-color: #2a2f33;
   color: inherit;
