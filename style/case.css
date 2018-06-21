@@ -18,3 +18,38 @@ pre button{
   right: 10px;
   bottom: 10px;
 }
+.hljs ul {list-style: decimal;}
+.hljs {
+	border: 0;
+	font-family: "Consulas", "Courier New", Courier, mono, serif;
+	font-size: 14px;
+	display: block;
+  padding: 1px;
+  line-height:1.6;
+	margin: 0;
+	width: 100%;
+	white-space: pre-wrap
+}
+.hljs ul li {list-style: decimal-leading-zero;
+  border-left: 1px solid #222 !important;}
+.hljs ul li:nth-of-type(even) {
+  background-color: #2a2f33;
+  color: inherit;
+}
+/* .hljs ul {
+	list-style: decimal;
+	background-color: #fff;
+	margin: 0px 0px 0 40px !important;
+	padding: 0px;
+}
+.hljs ul li {
+	list-style: decimal-leading-zero;
+	border-left: 1px solid #ddd !important;
+	background: #fff;
+	padding: 5px!important;
+	margin: 0 !important;
+	line-height: 14px;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+ */

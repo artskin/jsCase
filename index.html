@@ -20,7 +20,6 @@
       console.log("case1",i)
     },i*1000)
   }
-
 </code></pre>
 
 <h3>2.数组去重</h3>
@@ -39,7 +38,7 @@
   }
   console.log("sameArr",sameArr);
   console.log("diffArr",diffArr);
-  </code></pre>
+</code></pre>
 
 <h3>3.数组排序</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
@@ -115,6 +114,7 @@
     };
 
     $('pre code').each(function(i, block) {
+      $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
       hljs.highlightBlock(block);
     });
 
