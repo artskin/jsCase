@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <title>js在线调试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <link rel="stylesheet" href="style/case.css">
+</head>
+<body>
+
+<h3>1.定时器</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var arr = [0,1,2,3];
+  for(let i=0; i< arr.length; i++){
+    setTimeout(function(){
+      console.log("case1",i)
+    },i*1000)
+  }
+
+</code></pre>
+
+<h3>2.数组去重</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var items = [1,'a','b',9,3,8,5,6,7,4,2,0];
+  var lists = [0,'a',1,10,20,3,40,5,60,6];
+  var sameArr=[];
+  var diffArr=[];
+  for(let i=0; i < items.length; i++){
+    if(lists.indexOf(items[i]) != -1){
+      sameArr.push(items[i]);
+    }
+    if(!lists.includes(items[i])){
+      diffArr.push(items[i])
+    }
+  }
+  console.log("sameArr",sameArr);
+  console.log("diffArr",diffArr);
+  </code></pre>
+
+<h3>3.数组排序</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+    var arr = ['c',3,1,4,'v',2,5];
+    function quick(arr){
+      if(arr.length<=1){
+        return arr;
+      }
+      var left = [];
+      var right = [];
+      var base = arr[0];
+      for(var i=1;i < arr.length; i++){
+       // 判决条件
+        if(arr[i]>base){
+          right.push(arr[i]);
+        }else {
+          left.push(arr[i])
+        }
+      }
+      return quick(left).concat(base,quick(right));
+    }
+    console.log(quick(arr));
+  </code></pre>
+   
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/case.js"></script>
+<script>
+  $(function(){
+    var data={
+      code:""
+    };
+
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+
+    $(".run").click(function(){
+      //console.log($(this).next("code").text());
+      data.code = $(this).next("code").text();
+      new Function(
+        data.code
+      )();
+    })
+  })
+</script>
+</body>
+</html>
