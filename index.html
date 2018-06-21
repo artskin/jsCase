@@ -43,26 +43,67 @@
 
 <h3>3.数组排序</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
-    var arr = ['c',3,1,4,'v',2,5];
-    function quick(arr){
-      if(arr.length<=1){
-        return arr;
-      }
-      var left = [];
-      var right = [];
-      var base = arr[0];
-      for(var i=1;i < arr.length; i++){
-       // 判决条件
-        if(arr[i]>base){
-          right.push(arr[i]);
-        }else {
-          left.push(arr[i])
-        }
-      }
-      return quick(left).concat(base,quick(right));
+  var arr = ['c',3,1,4,'v',2,5];
+  function quick(arr){
+    if(arr.length<=1){
+      return arr;
     }
-    console.log(quick(arr));
-  </code></pre>
+    var left = [];
+    var right = [];
+    var base = arr[0];
+    for(var i=1;i < arr.length; i++){
+      // 判决条件
+      if(arr[i]>base){
+        right.push(arr[i]);
+      }else {
+        left.push(arr[i])
+      }
+    }
+    return quick(left).concat(base,quick(right));
+  }
+  console.log(quick(arr));
+</code></pre>
+
+<h3>4.js深度拷贝</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var animal = {a:10,b:20,c:30}
+  var people = animal;
+  console.log("people",people);
+  people.a = 100;
+
+  console.log("people:",people)
+  console.log("animal:",animal);
+  console.log("----------")
+
+  var dog = JSON.parse(JSON.stringify(animal))
+  dog.b = 200
+  console.log("animal:",animal);
+  console.log("dog",dog)
+</code></pre>
+<h3>5.斐波那契额数列</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  function feibo(len) { 
+    var fbarr = [1,1];
+    for(let n =2;n < len;n++){
+      fbarr[n] = fbarr[n-1]+fbarr[n-2];
+    }
+    return fbarr;
+  }
+  console.log(feibo(30));
+</code></pre>
+<h3>6.js执行顺序</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var a=1;
+  setTimeout(function(){
+    console.log("timeout.a",a)
+  },0);
+
+  var b=2;
+  console.log("b",b);
+
+  var c=3;
+  console.log("c",c);
+</code></pre>
    
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>

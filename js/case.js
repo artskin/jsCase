@@ -62,26 +62,26 @@ function quick(arr){
   }
   return quick(left).concat(base,quick(right));
 }
-console.log(quick(arr));
-console.log(arr)
-console.log(arr.sort());
-console.log(arr)
+// console.log(quick(arr));
+// console.log(arr)
+// console.log(arr.sort());
+// console.log(arr)
 
 //case5 value-copy
 function deepCopy(){
-  var dongwu = {a:10,b:20,c:30}
-  var ren = dongwu;
-  console.log(ren)
-  ren.a = 100;
+  var animal = {a:10,b:20,c:30}
+  var people = animal;
+  console.log("people",people);
+  people.a = 100;
 
-  console.log(ren)
-  console.log(dongwu);
+  console.log("people:",people)
+  console.log("animal:",animal);
   console.log("----------")
 
-  var dog = JSON.parse(JSON.stringify(dongwu))
+  var dog = JSON.parse(JSON.stringify(animal))
   dog.b = 200
-  console.log(dongwu)
-  console.log(dog)
+  console.log("animal:",animal);
+  console.log("dog",dog)
 }
 
 //case6:斐波那契
@@ -92,4 +92,4 @@ function feibo(len) {
   }
   return fbarr;
 }
-console.log(feibo(30));
+//console.log(feibo(30));
