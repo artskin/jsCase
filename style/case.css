@@ -16,7 +16,7 @@ pre code{display: block;}
 pre button{
   position: absolute;
   right: 10px;
-  bottom: 10px;
+  bottom: 12px;
 }
 .hljs ul {list-style: decimal;background: #414447;margin: 0;}
 .hljs {
