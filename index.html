@@ -93,15 +93,26 @@
 </code></pre>
 <h3>6.js执行顺序</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
-  var a=1;
+  var a="001";
+  console.log(a);
   setTimeout(function(){
     console.log("timeout.a",a)
   },0);
-
-  var b=2;
+  var b="002";
   console.log("b",b);
-
-  var c=3;
+  //Promise
+  new Promise(function executor(resolve) {
+    console.log(1);
+    for( var i=0 ; i<10 ; i++ ) {
+      console.log("Promise",i)
+      i == 9 && resolve();
+    }
+    console.log(2);
+  }).then(function() {
+    console.log("Promise.then",5);
+  });
+  
+  var c="003";
   console.log("c",c);
 </code></pre>
    
