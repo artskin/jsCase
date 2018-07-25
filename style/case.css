@@ -1,7 +1,7 @@
 /*androidstudio.css*/
 .hljs{color:#a9b7c6;background:#282b2e;display:block;overflow-x:auto;padding:0.5em}.hljs-number,.hljs-literal,.hljs-symbol,.hljs-bullet{color:#6897BB}.hljs-keyword,.hljs-selector-tag,.hljs-deletion{color:#cc7832}.hljs-variable,.hljs-template-variable,.hljs-link{color:#629755}.hljs-comment,.hljs-quote{color:#808080}.hljs-meta{color:#bbb529}.hljs-string,.hljs-attribute,.hljs-addition{color:#6A8759}.hljs-section,.hljs-title,.hljs-type{color:#ffc66d}.hljs-name,.hljs-selector-id,.hljs-selector-class{color:#e8bf6a}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}
 /*androidstudio.css*/
-button{
+.btn,button{
   border: none;
   background: #fc0;
   padding: 7px 15px;
@@ -55,3 +55,8 @@ pre button{
 	word-wrap: break-word;
 }
  */
+ 
+.file-layer{margin-bottom: 10px;position: relative;}
+.input-file{position: absolute;opacity: 0.01;background: #f00;width: 100%;height: 100%;}
+.file-moke input[type='text']{padding:4px;}
+.file-moke .btn{font-size: 14px;}

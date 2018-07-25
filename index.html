@@ -12,6 +12,39 @@
   <link rel="stylesheet" href="style/case.css">
 </head>
 <body>
+  <ul>
+    <li>花生</li>
+    <li>橘子</li>
+    <li>豌豆</li>
+  </ul>
+<p>-------------------</p>
+<h3>1.ajax异步文件上传</h3>
+<div class="file-layer">
+  <input class="input-file" type="file" id="file" name="file">
+  <div class="file-moke">
+    <input type="text"  value="未选择任何文件">
+    <input class="btn" type="button" value="选择文件">
+  </div>
+</div>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  function uploadFile(obj){
+    var fileData = new FormData();
+    fileData.append("file",obj[0].files[0]);
+    console.log(fileData);
+    $.ajax({
+      url : 'http://106.14.7.135:8081/upload/image',
+      type : 'POST',
+      dataType:"JSON",
+      processData : false, //告诉jQ不要去处理发送的数据
+      contentType : false, //告诉jQ不要设置Content-Type请求头
+      data : fileData,
+      success:function(data){
+        console.log(data)
+      }
+    })
+  }
+  uploadFile($("#file"))
+</code></pre>
 
 <h3>1.定时器</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">

@@ -1,5 +1,28 @@
 "use strict";
 
+$("#file").change(function(){
+  $(".file-moke [type='text']").val($(this).val());
+  uploadFile($(this));
+})
+
+function uploadFile(obj){
+  var fileData = new FormData();
+  fileData.append("file",obj[0].files[0]);
+  $.ajax({
+    url : 'http://106.14.7.135:8081/upload/image',
+    type : 'POST',
+    dataType:"JSON",
+    processData : false, //告诉jQ不要去处理发送的数据
+    contentType : false, //告诉jQ不要设置Content-Type请求头
+    data : fileData,
+    success:function(data){
+      console.log(data)
+    }
+  })
+}
+
+
+
 //case1
 // function outPutArr(){
 //   var arr = [0,1,2,3];
