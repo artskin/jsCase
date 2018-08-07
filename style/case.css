@@ -10,6 +10,9 @@
   font-size: 18px;
   line-height: 1;
 }
+.btn-green{
+	background: rgb(21, 179, 34);
+}
 pre{position: relative;margin: 0;padding: 0;background: #282b2e;
 color: #fff;}
 pre code{display: block;}
@@ -22,7 +25,7 @@ pre button{
 .hljs {
 	border: 0;
 	font-family: "Consulas", "Courier New", Courier, mono, serif;
-	font-size: 14px;
+	font-size: 13px;
 	display: block;
   padding: 1px;
   line-height:1.6;
@@ -55,7 +58,7 @@ pre button{
 	word-wrap: break-word;
 }
  */
- 
+
 .file-layer{margin-bottom: 10px;position: relative;}
 .input-file{position: absolute;opacity: 0.01;background: #f00;width: 100%;height: 100%;}
 .file-moke input[type='text']{padding:4px;}
