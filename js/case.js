@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 $("#file").change(function(){
   $(".file-moke [type='text']").val($(this).val());

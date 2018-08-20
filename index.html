@@ -52,7 +52,7 @@
 <h3>1.定时器</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
   var arr = [0,1,2,3];
-  for(let i=0; i< arr.length; i++){
+  for(let i=0; i < arr.length; i++){
     setTimeout(function(){
       console.log("case1",i)
     },i*1000)
@@ -150,6 +150,20 @@
   
   var c="003";
   console.log("c",c);
+</code></pre>
+
+<h3>6.js精度</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var sum = 0.1+0.2;
+  console.log(sum == 0.3)   //false
+  
+  function add(num1, num2) {
+    const num1Digits = (num1.toString().split('.')[1] || '').length;
+    const num2Digits = (num2.toString().split('.')[1] || '').length;
+    const baseNum = Math.pow(10, Math.max(num1Digits, num2Digits));
+    return (num1 * baseNum + num2 * baseNum) / baseNum;
+  }
+  console.log(add(0.1,0.2) == 0.3)   //true
 </code></pre>
    
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
