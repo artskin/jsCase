@@ -1,0 +1,31 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {},
+  "name": "jscase",
+  "description": "js经典问题在线调试",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "aa",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artskin/jsCase.git"
+  },
+  "keywords": [
+    "docs"
+  ],
+  "author": "artskin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artskin/jsCase/issues"
+  },
+  "homepage": "https://github.com/artskin/jsCase#readme"
+}

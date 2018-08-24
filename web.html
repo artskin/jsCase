@@ -9,12 +9,12 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
-  <link rel="stylesheet" href="./src/style/case.css">
+  <link rel="stylesheet" href="style/case.css">
 </head>
 <body>
-<div id="test">1</div>
+
 <h3>1.定时器</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var arr = [0,1,2,3];
   for(let i=0; i< arr.length; i++){
     setTimeout(function(){
@@ -24,7 +24,7 @@
 </code></pre>
 
 <h3>2.数组去重</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var items = [1,'a','b',9,3,8,5,6,7,4,2,0];
   var lists = [0,'a',1,10,20,3,40,5,60,6];
   var sameArr=[];
@@ -42,7 +42,7 @@
 </code></pre>
 
 <h3>3.数组排序</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var arr = ['c',3,1,4,'v',2,5];
   function quick(arr){
     if(arr.length<=1){
@@ -65,7 +65,7 @@
 </code></pre>
 
 <h3>4.js深度拷贝</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var animal = {a:10,b:20,c:30}
   var people = animal;
   console.log("people",people);
@@ -81,7 +81,7 @@
   console.log("dog",dog)
 </code></pre>
 <h3>5.斐波那契额数列</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   function feibo(len) { 
     var fbarr = [1,1];
     for(let n =2;n < len;n++){
@@ -92,7 +92,7 @@
   console.log(feibo(30));
 </code></pre>
 <h3>6.js执行顺序</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var a="001";
   console.log("a",a);
   setTimeout(function(){
@@ -116,7 +116,7 @@
   console.log("c",c);
 </code></pre>
 <h3>7.js的循环</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="run">run</button><code class="javascript" contenteditable="true"> "use strict";
   var arr = ['a','b','c','d'];
   Array.prototype.qq = 10;
   
@@ -152,136 +152,12 @@
   for(let item of hi){
     //console.log(item)
   }
-  //for ... of 还可以遍历map/set/dom
+  //for ... of 还可以遍历map/ser/dom
 </code></pre>
-
-<h3>8.js随机数</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
-/**
-* 获取指定个数的随机数，范围[2,32]
-* @param {number} n：需要的整数个数
-* @return {array} 返回随机数数组，个数为n
-*/
-
-  function isPositiveInteger(s){//是否为正整数
-      var re = /^[0-9]+$/ ;
-      return re.test(s)
-  }
-  function rangeRandom(min,max){
-      return Math.floor(Math.random()*(max-min+1)+min);
-  }
-
-  function fn(n){
-      //变量声明
-      var min =2,max=32;
-      
-      //参数校验
-      if(typeof n === 'number' && isPositiveInteger(n)){
-          var arr = [];
-          for(let i=0;i < n;i++){
-              var num = rangeRandom(2,32);
-              arr.push(num);
-          }
-          console.log(arr)
-          return arr;
-      }else{
-          return []
-      }
-  }
-  fn(5);
-</code></pre>
-
-<h3>8.js类型判断</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
-  var arr = ['12',12,false,undefined,null,[1,2,3],{},function(){}];
-
-  for(let i=0;i < arr.length;i++){
-    console.log(isType(arr[i]))
-  }
-
-  function isType(obj){
-    if(obj == null){
-      return String( obj )
-    }else{
-      let str = Object.prototype.toString.call(obj).split(" ").pop();
-      return str.substring(0,str.length -1);
-    }
-  }
-  
-  function class2type(i,name){
-
-  }
-  //console.log(isType(1),isType('1'),isType(function(){}),isType([]))
-
-</code></pre>
-
-<h3>8.js类型判断</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
-  var name = 'the window'
-
-  var obj ={
-    name:'my obj',
-    getnamefun:function(){
-      //var self = this;
-      return function(){
-        return this.name;
-      }
-    }
-  }
-  //console.log(this.name);
-  //console.log(obj.getnamefun()());
-
-  console.log(typeof Infinity ==='number');
-  var str = new String('im string');
-  var str2 = 'im string';
-  console.log(typeof str);
-  console.log(typeof str2);
-
-  console.log((function(){return typeof arguments})())
-
-  function f(){};
-  var o={};
-  console.log(f.__proto__)
-  console.log(f.__proto__.__proto__)
-  console.log(o.__proto__)
-  console.log(f.prototype)
-  console.log(o.prototype)
-
-  function dds(){
-    var div = document.getElementById('test');
-    div.circularReference = div;
-    div.lotsOfData=new Array(1000).join("*");
-  }
-  dds()
-
-</code></pre>
-
-<h3>8.js arguments</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
-  
-  function add(a, b) {
-    var realLen = arguments.length;
-    console.log("realLen:", arguments.length);
-    console.log(arguments[0]);
-    console.log(arguments[1]);
-    console.log(arguments[2]);
-    console.log(arguments[3]);
-    var len = add.length;
-    console.log("len:", add.length);
-    if (realLen == len) {
-      console.log('实参 = 形参个数');
-    } else {
-      console.log('实参 ≠ 形参个数');
-    }
-  };
-  add(1,2,3);
-
-</code></pre>
-
+   
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="./src/js/Fe.js" type="module"></script>
-
+<script src="js/case.js"></script>
 <script>
   $(function(){
     var data={
@@ -295,8 +171,7 @@
 
     $(".run").click(function(){
       //console.log($(this).next("code").text());
-      data.code = '"use strict";console.clear();'+$(this).next("code").text();
-      //console.log(data.code)
+      data.code = $(this).next("code").text();
       new Function(
         data.code
       )();

@@ -1,6 +1,19 @@
 /*androidstudio.css*/
-.hljs{color:#a9b7c6;background:#282b2e;display:block;overflow-x:auto;padding:0.5em}.hljs-number,.hljs-literal,.hljs-symbol,.hljs-bullet{color:#6897BB}.hljs-keyword,.hljs-selector-tag,.hljs-deletion{color:#cc7832}.hljs-variable,.hljs-template-variable,.hljs-link{color:#629755}.hljs-comment,.hljs-quote{color:#808080}.hljs-meta{color:#bbb529}.hljs-string,.hljs-attribute,.hljs-addition{color:#6A8759}.hljs-section,.hljs-title,.hljs-type{color:#ffc66d}.hljs-name,.hljs-selector-id,.hljs-selector-class{color:#e8bf6a}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}
+body{margin: 0;padding: 5px;}
+
+/*hljs-style*/
+.hljs{color:#a9b7c6;background:#282b2e;display:block;overflow-x:auto;padding:0}
+.hljs-number,.hljs-literal,.hljs-symbol,.hljs-bullet{color:#6897BB}
+.hljs-keyword,.hljs-selector-tag,.hljs-deletion{color:#cc7832}
+.hljs-variable,.hljs-template-variable,.hljs-link{color:#629755}
+.hljs-comment,.hljs-quote{color:#808080}
+.hljs-meta{color:#bbb529}
+.hljs-string,.hljs-attribute,.hljs-addition{color:#6A8759}
+.hljs-section,.hljs-title,.hljs-type{color:#ffc66d}
+.hljs-name,.hljs-selector-id,.hljs-selector-class{color:#e8bf6a}
+.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}
 /*androidstudio.css*/
+
 button{
   border: none;
   background: #fc0;
@@ -24,13 +37,13 @@ pre button{
 	font-family: "Consulas", "Courier New", Courier, mono, serif;
 	font-size: 14px;
 	display: block;
-  padding: 1px;
   line-height:1.6;
 	margin: 0;
 	width: 100%;
   white-space: pre-wrap;
 }
-.hljs ul li {list-style: decimal-leading-zero;
+.hljs ul li {
+	list-style: decimal-leading-zero;
   border-left: 1px solid #222 !important;
   background: #282b2e;
 }

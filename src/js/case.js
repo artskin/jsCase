@@ -1,5 +1,7 @@
 "use strict";
 
+
+FE.mathPro.isInteger()
 //case1
 // function outPutArr(){
 //   var arr = [0,1,2,3];

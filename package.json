@@ -1,0 +1,39 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "lodash": "^4.17.10"
+  },
+  "name": "jscase",
+  "description": "js经典问题在线调试",
+  "version": "1.0.0",
+  "private": true,
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "scripts": {
+    "dev": "webpack --config=config/webpack.dev.js",
+    "dist": "webpack --mode=production",
+    "test": "mocha",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artskin/jsCase.git"
+  },
+  "keywords": [
+    "docs"
+  ],
+  "author": "artskin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artskin/jsCase/issues"
+  },
+  "homepage": "https://github.com/artskin/jsCase#readme"
+}
