@@ -2,7 +2,7 @@
 //模块引入
 //import _ from 'lodash';
 import mathPro from './module/mathPro.js';
-import {uploadFile,imgPreview} from './module/case.js';
+import {uploadFile,imgPreview} from './module/uploadFile.js';
 
 
 //

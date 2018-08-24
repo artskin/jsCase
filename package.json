@@ -20,6 +20,7 @@
     "dev": "webpack --config=config/webpack.dev.js",
     "dist": "webpack --mode=production",
     "test": "mocha",
+    "docs": "npx vuepress dev docs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
