@@ -26,11 +26,11 @@
     <input type="text"  value="未选择任何文件">
     <input class="btn btn-green" type="button" value="选择文件">
   </div>
-  <div class="preview">
-    <img src="" alt="" width="100" height="100">
-  </div>
 </div>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<div class="preview">
+  <img src="" alt="" width="100" height="100">
+</div>
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   function uploadFile(obj){
     var fileData = new FormData();
     fileData.append("file",obj[0].files[0]);
@@ -51,7 +51,7 @@
 </code></pre>
 
 <h3>1.定时器</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var arr = [0,1,2,3];
   for(let i=0; i < arr.length; i++){
     setTimeout(function(){
@@ -61,7 +61,7 @@
 </code></pre>
 
 <h3>2.数组去重</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var items = [1,'a','b',9,3,8,5,6,7,4,2,0];
   var lists = [0,'a',1,10,20,3,40,5,60,6];
   var sameArr=[];
@@ -79,7 +79,7 @@
 </code></pre>
 
 <h3>3.数组排序</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var arr = ['c',3,1,4,'v',2,5];
   function quick(arr){
     if(arr.length<=1){
@@ -102,7 +102,7 @@
 </code></pre>
 
 <h3>4.js深度拷贝</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var animal = {a:10,b:20,c:30}
   var people = animal;
   console.log("people",people);
@@ -118,7 +118,7 @@
   console.log("dog",dog)
 </code></pre>
 <h3>5.斐波那契额数列</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   function feibo(len) { 
     var fbarr = [1,1];
     for(let n =2;n < len;n++){
@@ -129,7 +129,7 @@
   console.log(feibo(30));
 </code></pre>
 <h3>6.js执行顺序</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var a="001";
   console.log("a",a);
   setTimeout(function(){
@@ -154,7 +154,7 @@
 </code></pre>
 
 <h3>7.js的循环</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var arr = ['a','b','c','d'];
   Array.prototype.qq = 10;
   
@@ -194,7 +194,7 @@
 </code></pre>
 
 <h3>8.js随机数</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
 /**
 * 获取指定个数的随机数，范围[2,32]
 * @param {number} n：需要的整数个数
@@ -230,7 +230,7 @@
 </code></pre>
 
 <h3>8.js类型判断</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var arr = ['12',12,false,undefined,null,[1,2,3],{},function(){}];
 
   for(let i=0;i < arr.length;i++){
@@ -254,7 +254,7 @@
 </code></pre>
 
 <h3>9.js的原型及原型链</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var name = 'the window'
 
   var obj ={
@@ -295,7 +295,7 @@
 </code></pre>
 
 <h3>10.js 形参实参arguments</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   
   function add(a, b) {
     var realLen = arguments.length;
@@ -318,7 +318,7 @@
 
 
 <h3>11.js精度</h3>
-<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var sum = 0.1+0.2;
   console.log(sum == 0.3)   //false
   
@@ -356,6 +356,7 @@
     })
 
   })
+  //FE.mathPro.isInteger()
 </script>
 </body>
 </html>

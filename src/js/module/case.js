@@ -1,16 +1,10 @@
 //"use strict";
 
-$("#file").change(function(){
-  $(".file-moke [type='text']").val($(this).val());
-  uploadFile($(this));
-})
 
-function uploadFile(obj){
+export function uploadFile(obj){
   var fileData = new FormData();
   fileData.append("file",obj[0].files[0]);
   console.log(obj[0].files[0]);
-
-  imgPreview($('.preview img'),obj[0].files[0])
 
   $.ajax({
     url : 'http://106.14.7.135:8081/upload/image',
@@ -26,7 +20,7 @@ function uploadFile(obj){
     }
   })
 }
-function imgPreview(dom,fileName){
+export function imgPreview(dom,fileName){
   if(fileName){
     var reader = new FileReader();
     reader.readAsDataURL(fileName);
@@ -42,7 +36,7 @@ function imgPreview(dom,fileName){
 
 
 
-FE.mathPro.isInteger()
+
 //case1
 // function outPutArr(){
 //   var arr = [0,1,2,3];

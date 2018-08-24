@@ -2,6 +2,7 @@
 //模块引入
 //import _ from 'lodash';
 import mathPro from './module/mathPro.js';
+import {uploadFile,imgPreview} from './module/case.js';
 
 
 //
@@ -11,6 +12,13 @@ function ele(){
   return createEl;
 }
 //document.body.appendChild(ele());
+
+
+$("#file").change(function(){
+  $(".file-moke [type='text']").val($(this).val());
+  uploadFile($(this));
+  imgPreview($('.preview img'),$(this)[0].files[0])
+})
 
 
 //模块导出
