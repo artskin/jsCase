@@ -13,8 +13,7 @@ body{margin: 0;padding: 5px;}
 .hljs-name,.hljs-selector-id,.hljs-selector-class{color:#e8bf6a}
 .hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}
 /*androidstudio.css*/
-
-button{
+button,.btn{
   border: none;
   background: #fc0;
   padding: 7px 15px;
@@ -22,6 +21,9 @@ button{
   color: #fff;
   font-size: 18px;
   line-height: 1;
+}
+.btn-green{
+	background: rgb(21, 179, 34);
 }
 pre{position: relative;margin: 0;padding: 0;background: #282b2e;
 color: #fff;}
@@ -35,7 +37,7 @@ pre button{
 .hljs {
 	border: 0;
 	font-family: "Consulas", "Courier New", Courier, mono, serif;
-	font-size: 14px;
+	font-size: 13px;
 	display: block;
   line-height:1.6;
 	margin: 0;
@@ -68,3 +70,8 @@ pre button{
 	word-wrap: break-word;
 }
  */
+
+.file-layer{margin-bottom: 10px;position: relative;}
+.input-file{position: absolute;opacity: 0.01;background: #f00;width: 100%;height: 100%;}
+.file-moke input[type='text']{padding:4px;}
+.file-moke .btn{font-size: 14px;}

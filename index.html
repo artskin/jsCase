@@ -12,11 +12,48 @@
   <link rel="stylesheet" href="./src/style/case.css">
 </head>
 <body>
-<div id="test">1</div>
+  <div id="test">1</div>
+  <ul>
+    <li>花生</li>
+    <li>橘子</li>
+    <li>豌豆</li>
+  </ul>
+<p>-------------------</p>
+<h3>1.ajax异步文件上传</h3>
+<div class="file-layer">
+  <input class="input-file" type="file" id="file" name="file">
+  <div class="file-moke">
+    <input type="text"  value="未选择任何文件">
+    <input class="btn btn-green" type="button" value="选择文件">
+  </div>
+  <div class="preview">
+    <img src="" alt="" width="100" height="100">
+  </div>
+</div>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  function uploadFile(obj){
+    var fileData = new FormData();
+    fileData.append("file",obj[0].files[0]);
+    console.log(fileData);
+    $.ajax({
+      url : 'http://106.14.7.135:8081/upload/image',
+      type : 'POST',
+      dataType:"JSON",
+      processData : false, //告诉jQ不要去处理发送的数据
+      contentType : false, //告诉jQ不要设置Content-Type请求头
+      data : fileData,
+      success:function(data){
+        console.log(data)
+      }
+    })
+  }
+  uploadFile($("#file"))
+</code></pre>
+
 <h3>1.定时器</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
   var arr = [0,1,2,3];
-  for(let i=0; i< arr.length; i++){
+  for(let i=0; i < arr.length; i++){
     setTimeout(function(){
       console.log("case1",i)
     },i*1000)
@@ -103,7 +140,7 @@
   //Promise
   new Promise(function executor(resolve) {
     console.log(10);
-    for( var i=0 ; i<5 ; i++ ) {
+    for( var i=0 ; i < 5 ; i++ ) {
       console.log("Promise.for",i)
       i == 4 && resolve();
     }
@@ -115,6 +152,7 @@
   var c="003";
   console.log("c",c);
 </code></pre>
+
 <h3>7.js的循环</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
   var arr = ['a','b','c','d'];
@@ -215,7 +253,7 @@
 
 </code></pre>
 
-<h3>8.js类型判断</h3>
+<h3>9.js的原型及原型链</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
   var name = 'the window'
 
@@ -256,7 +294,7 @@
 
 </code></pre>
 
-<h3>8.js arguments</h3>
+<h3>10.js 形参实参arguments</h3>
 <pre><button class="run">run</button><code class="javascript" contenteditable="true">
   
   function add(a, b) {
@@ -278,6 +316,21 @@
 
 </code></pre>
 
+
+<h3>11.js精度</h3>
+<pre><button class="run">run</button><code class="javascript" contenteditable="true">
+  var sum = 0.1+0.2;
+  console.log(sum == 0.3)   //false
+  
+  function add(num1, num2) {
+    const num1Digits = (num1.toString().split('.')[1] || '').length;
+    const num2Digits = (num2.toString().split('.')[1] || '').length;
+    const baseNum = Math.pow(10, Math.max(num1Digits, num2Digits));
+    return (num1 * baseNum + num2 * baseNum) / baseNum;
+  }
+  console.log(add(0.1,0.2) == 0.3)   //true
+</code></pre>
+   
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="./src/js/Fe.js" type="module"></script>
