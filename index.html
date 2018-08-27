@@ -12,9 +12,13 @@
   <link rel="stylesheet" href="./src/style/case.css">
 </head>
 <body>
+  <h1>js在线测试</h1>
+  <p>进入这个页面，先打开Console控制台</p>
 <div class="testlayer">
-  <div id="test">dom操作测试区：</div>
+  <div id="test">DOM操作区：</div>
+  <hr>
   <div id="list">
+    <button id="bindEvent" class="btn btn-green">绑定事件</button>
     <span class="add">+</span>
     <ul>
         <li>仙子</li>
@@ -28,11 +32,10 @@
 
 
 <h3>事件</h3>
-<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
+<pre class="bindEvent"><button class="btn run">run</button><code class="javascript" contenteditable="true">
   var parent = document.getElementsByTagName("ul")[0],
       child  = parent.children, //childNodes 包含空格和换行
       addLi  = document.getElementsByTagName("span")[0];
-      console.log(window)
   console.log(fe.typePro(parent))
   console.log(fe.typePro(child))
 
@@ -406,6 +409,12 @@
 
     $(".run").click(function(){
       data.code = '"use strict";console.clear();'+$(this).next("code").text();
+      new Function(
+        data.code
+      )();
+    })
+    $("#bindEvent").click(function(){
+      data.code = '"use strict";console.clear();'+$("."+$(this).attr("id")).children("code").text();
       new Function(
         data.code
       )();

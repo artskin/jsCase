@@ -77,5 +77,5 @@ pre button{
 .preview{line-height: 0;margin-bottom: 10px;}
 .run{font-size: 18px;}
 .testlayer{border:1px dashed #ccc;background: rgba(106,109,60,.2);padding: 15px;}
-.testlayer li{border: 1px dashed #ccc;box-sizing: border-box}
+.testlayer li{border: 1px dashed #ccc;box-sizing: border-box;padding: 3px 5px;}
 .add{cursor: pointer;display: inline-block;padding:0 5px;}
