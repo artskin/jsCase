@@ -14,6 +14,7 @@ function ele(){
 document.body.appendChild(ele());
 
 
+
 //case3: 数组去重
 function arrDiff(){
   var items = [1,'a','b',9,3,8,5,6,7,4,2,0];

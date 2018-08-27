@@ -1,8 +1,14 @@
 "use strict";
 //模块引入
 //import _ from 'lodash';
+import typePro from './module/typePro.js';
 import mathPro from './module/mathPro.js';
 import {uploadFile,imgPreview} from './module/uploadFile.js';
+
+var felib = {
+  typePro:typePro,
+  mathPro:mathPro
+}
 
 
 //
@@ -22,6 +28,4 @@ $("#file").change(function(){
 
 
 //模块导出
-export default {
-  mathPro
-}
+export default felib

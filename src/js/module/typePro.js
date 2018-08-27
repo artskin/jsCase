@@ -1,6 +1,6 @@
 "use strict";
 
-var jsType= function(obj){
+var typePro = function(obj){
   if(obj == null){
     return String( obj )
   }else{
@@ -9,5 +9,5 @@ var jsType= function(obj){
   }
 }
 
-//export default jsType
-module.exports = jsType;
+export default typePro
+//module.exports = typePro;

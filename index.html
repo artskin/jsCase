@@ -12,14 +12,64 @@
   <link rel="stylesheet" href="./src/style/case.css">
 </head>
 <body>
-  <div class="testlayer">
-    <div id="test">dom操作测试区：</div>
+<div class="testlayer">
+  <div id="test">dom操作测试区：</div>
+  <div id="list">
+    <span class="add">+</span>
     <ul>
-      <li>花生</li>
-      <li>橘子</li>
-      <li>豌豆</li>
-    </ul>
+        <li>仙子</li>
+        <li>葫芦</li>
+        <li>豌豆</li>
+      </ul>
   </div>
+  
+</div>
+
+
+
+<h3>事件</h3>
+<pre><button class="btn run">run</button><code class="javascript" contenteditable="true">
+  var parent = document.getElementsByTagName("ul")[0],
+      child  = parent.children, //childNodes 包含空格和换行
+      addLi  = document.getElementsByTagName("span")[0];
+      console.log(window)
+  console.log(fe.typePro(parent))
+  console.log(fe.typePro(child))
+
+  addLi.onclick = function(){
+    var newLi = document.createElement("li");
+    newLi.innerHTML = child.length+":新建行";
+    parent.appendChild(newLi);
+  }
+
+  document.body.addEventListener("click",function(e){
+    console.log("click-body");
+  },false); //false:冒泡 | true:捕获
+  
+  parent.addEventListener("click",function(e){
+    console.log("click-parent");
+    //事件委托：ie/chrome为srcElement，ff为target
+    e = e || window.event;
+    let target = e.target || e.srcElement;
+    if(target.nodeName.toLowerCase() == 'li'){
+      console.log("click-child",target.innerHTML);
+    }
+    console.log(target.children);
+  },false);
+
+  //for(let i=1;i < child.length; i++){
+  //  child[i].addEventListener("click",function(e){
+  //    console.log("click-child",e);
+  //  },false);
+  //}
+  //addEventListener 可以绑定多个事件，并分别执行
+  //onclick= ""绑定事件后边的会覆盖前边的事件
+  //通用的事件绑定方法:ie8及以下用attachEvent
+  function addEvent(el, evnt, fun){
+    return el.attachEvent ? el.attachEvent('on'+evnt, fun) : el.addEventListener(evnt, fun, false);
+  }
+</code></pre>
+
 <h3>Ajax异步文件上传</h3>
 <div class="file-layer">
   <input class="input-file" type="file" id="file" name="file">
@@ -334,9 +384,12 @@
    
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="./src/js/felib.js" type="module"></script>
+<!-- <script src="./src/js/felib.js" type="module"></script> -->
 
-<script>
+<script type="module">
+  import felib from './src/js/felib.js';
+  window.fe = felib;
+
   $(function(){
     var data={
       code:""
@@ -352,16 +405,13 @@
     });
 
     $(".run").click(function(){
-      //console.log($(this).next("code").text());
       data.code = '"use strict";console.clear();'+$(this).next("code").text();
-      //console.log(data.code)
       new Function(
         data.code
       )();
     })
 
-  })
-  //FE.mathPro.isInteger()
+  });
 </script>
 </body>
 </html>
