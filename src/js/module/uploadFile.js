@@ -2,6 +2,7 @@
 
 
 export function uploadFile(obj){
+  console.log(obj[0].files[0])
   var fileData = new FormData();
   fileData.append("file",obj[0].files[0]);
 
