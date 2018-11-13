@@ -20,6 +20,7 @@ export function uploadFile(obj){
   })
 }
 export function imgPreview(dom,fileName){
+  console.log(fileName)
   if(fileName){
     var reader = new FileReader();
     reader.readAsDataURL(fileName);
