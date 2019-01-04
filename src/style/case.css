@@ -84,6 +84,7 @@ pre button{
 	background: rgb(227, 225, 151);
 width: 200px;
     height: 200px;
+	padding:20px;
     line-height: 30px;
     -webkit-border-bottom-left-radius: 20px 500px;
     -webkit-border-bottom-right-radius: 500px 30px;
