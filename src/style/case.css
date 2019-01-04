@@ -79,10 +79,10 @@ pre button{
 .testlayer{border:1px dashed #ccc;background: rgba(106,109,60,.2);padding: 15px;}
 .testlayer li{border: 1px dashed #ccc;box-sizing: border-box;padding: 3px 5px;}
 .add{cursor: pointer;display: inline-block;padding:0 5px;}
-
+.flex{displa:flex;}
 .flag{
 	background: rgb(227, 225, 151);
-width: 200px;
+	width: 200px;
     height: 200px;
 	float:left;
 	padding:20px;
