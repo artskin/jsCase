@@ -20,8 +20,10 @@ function ele(){
 //document.body.appendChild(ele());
 
 
-$("#file").change(function(){
+$("#file").change(function(e){
+  console.log(e);
   $(".file-moke [type='text']").val($(this).val());
+  $(this).val("certis_transparent.png")
   uploadFile($(this));
   imgPreview($('.preview img'),$(this)[0].files[0])
 })

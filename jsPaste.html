@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>js在线调试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <link rel="stylesheet" href="./src/style/case.css">
+  <style>
+  #edite{border: 1px dashed #ccc;min-width: 400px;min-height: 300px;}
+  </style>
+</head>
+<body>
+  <div id="edite"></div>
+  <div id="preview"></div>
+  <p id="log"></p>
+  <div class="my_img"></div>
+  <div id="tar_box"></div>
+   
+<!-- <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script> -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<!-- <script src="./src/js/felib.js" type="module"></script> -->
+
+<script type="module">
+
+document.addEventListener('paste', function (event) {
+    var items = (event.clipboardData || window.clipboardData).items;
+    console.log(event,event.clipboardData)
+    var file = null;
+    if (items && items.length) {
+      // 搜索剪切板items
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          file = items[i].getAsFile();
+          break;
+        }
+      }
+    } else {
+      log.innerHTML = '<span style="color:red;">当前浏览器不支持</span>';
+      return;
+    }
+    if (!file) {
+      log.innerHTML = '<span style="color:red;">粘贴内容非图片</span>';
+      return;
+    }
+    console.log(file)
+    // 此时file就是我们的剪切板中的图片对象
+    // 如果需要预览，可以执行下面代码
+    function imgPreview(){
+
+    }
+    var reader = new FileReader()
+    reader.onload = function(event) {
+      preview.innerHTML = '<img src="' + event.target.result + '" class="upload-image">';
+    }
+    reader.readAsDataURL(file);
+    // 如果不需要预览，上面这段可以忽略
+
+    // 这里是上传
+    var xhr = new XMLHttpRequest();
+    // 上传进度
+    if (xhr.upload) {
+        xhr.upload.addEventListener('progress', function (event) {
+            log.innerHTML = '正在上传，进度：' + Math.round(100 * event.loaded / event.total) / 100 + '%';
+        }, false);
+    }
+    // 上传结束
+    xhr.onload = function () {
+        var responseText = xhr.responseText;
+        log.innerHTML = '上传成功，地址是：' + responseText;
+    };
+    xhr.onerror = function () {
+        log.innerHTML = '<span style="color:red;">网络异常，上传失败</span>';
+    };
+    xhr.open('POST', './upload.php', true);
+    xhr.setRequestHeader('FILENAME', encodeURIComponent(file.name));
+    xhr.send(file);
+});
+  
+// document.addEventListener('paste', function (event) {
+//   console.log(event)
+//   var isChrome = false;
+//   if ( event.clipboardData || event.originalEvent ) {
+//     //not for ie11  某些chrome版本使用的是event.originalEvent
+//     var clipboardData = (event.clipboardData || event.originalEvent.clipboardData);
+//     if ( clipboardData.items ) {
+//       // for chrome
+//       var  items = clipboardData.items,
+//         len = items.length,
+//         blob = null;
+//       isChrome = true;
+//       //items.length比较有意思，初步判断是根据mime类型来的，即有几种mime类型，长度就是几（待验证）
+//       //如果粘贴纯文本，那么len=1，如果粘贴网页图片，len=2, items[0].type = 'text/plain', items[1].type = 'image/*'
+//       //如果使用截图工具粘贴图片，len=1, items[0].type = 'image/png'
+//       //如果粘贴纯文本+HTML，len=2, items[0].type = 'text/plain', items[1].type = 'text/html'
+//       // console.log('len:' + len);
+//       // console.log(items[0]);
+//       // console.log(items[1]);
+//       // console.log( 'items[0] kind:', items[0].kind );
+//       // console.log( 'items[0] MIME type:', items[0].type );
+//       // console.log( 'items[1] kind:', items[1].kind );
+//       // console.log( 'items[1] MIME type:', items[1].type );
+ 
+//       //阻止默认行为即不让剪贴板内容在div中显示出来
+//       event.preventDefault();
+ 
+//       //在items里找粘贴的image,据上面分析,需要循环  
+//       for (var i = 0; i < len; i++) {
+//         if (items[i].type.indexOf("image") !== -1) {
+//           // console.log(items[i]);
+//           // console.log( typeof (items[i]));
+//           //getAsFile() 此方法只是living standard firefox ie11 并不支持        
+//           blob = items[i].getAsFile();
+//           console.log(blob)
+//         }
+//       }
+//       if ( blob !== null ) {
+//         var reader = new FileReader();
+//         reader.onload = function (event) {
+//           // event.target.result 即为图片的Base64编码字符串
+//           var base64_str = event.target.result
+//           //可以在这里写上传逻辑 直接将base64编码的字符串上传（可以尝试传入blob对象，看看后台程序能否解析）
+//           uploadImgFromPaste(base64_str, 'paste', isChrome);
+//         }
+//         reader.readAsDataURL(blob); 
+//       }
+//     } else {
+//       //for firefox
+//       setTimeout(function () {
+//         //设置setTimeout的原因是为了保证图片先插入到div里，然后去获取值
+//         var imgList = document.querySelectorAll('#tar_box img'),
+//           len = imgList.length,
+//           src_str = '',
+//           i;
+//         for ( i = 0; i < len; i ++ ) {
+//           if ( imgList[i].className !== 'my_img' ) {
+//             //如果是截图那么src_str就是base64 如果是复制的其他网页图片那么src_str就是此图片在别人服务器的地址
+//             src_str = imgList[i].src;
+//           }
+//         }
+//         uploadImgFromPaste(src_str, 'paste', isChrome);
+//       }, 1);
+//     }
+//   } else {
+//     //for ie11
+//     setTimeout(function () {
+//       var imgList = document.querySelectorAll('#tar_box img'),
+//         len = imgList.length,
+//         src_str = '',
+//         i;
+//       for ( i = 0; i < len; i ++ ) {
+//         if ( imgList[i].className !== 'my_img' ) {
+//           src_str = imgList[i].src;
+//         }
+//       }
+//       uploadImgFromPaste(src_str, 'paste', isChrome);
+//     }, 1);
+//   }
+// })
+// function uploadImgFromPaste (file, type, isChrome) {
+//   console.log(file)
+//   var formData = new FormData();
+//   formData.append('image', file);
+//   formData.append('submission-type', type);
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('POST', '/upload_image_by_paste');
+//   xhr.onload = function () {
+//     if ( xhr.readyState === 4 ) {
+//       if ( xhr.status === 200 ) {
+//         var data = JSON.parse( xhr.responseText ),
+//           tarBox = document.getElementById('tar_box');
+//         if ( isChrome ) {
+//           var img = document.createElement('img');
+//           img.className = 'my_img';
+//           img.src = data.store_path;
+//           tarBox.appendChild(img);
+//         } else {
+//           var imgList = document.querySelectorAll('#tar_box img'),
+//             len = imgList.length,
+//             i;
+//           for ( i = 0; i < len; i ++) {
+//             if ( imgList[i].className !== 'my_img' ) {
+//               imgList[i].className = 'my_img';
+//               imgList[i].src = data.store_path;
+//             }
+//           }
+//         }
+//       } else {
+//         console.log( xhr.statusText );
+//       }
+//     };
+//   };
+//   xhr.onerror = function (e) {
+//     console.log( xhr.statusText );
+//   }
+//   xhr.send(formData);
+// }
+
+</script>
+</body>
+</html>
