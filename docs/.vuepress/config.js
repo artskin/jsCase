@@ -22,30 +22,31 @@ module.exports = {
         ]
       }
     ],
-    sidebar: 
-      [
-        {
-          title:'简介',
-          collapsable: false,
-          children:[
-            '/'
-          ]
-        },
-        {
-          title:'安装',
-          collapsable: true,
-          children:[
-            '/guide/',
-          ]
-        },
-        {
-          title:'关于事件',
-          collapsable: true,
-          children:[
-            'notes/event/'
-          ]
-        },
-      ]
+    displayAllHeaders:true,
+    sidebar: 'auto'
+      // [
+      //   {
+      //     title:'简介',
+      //     collapsable: false,
+      //     children:[
+      //       '/'
+      //     ]
+      //   },
+      //   {
+      //     title:'规范',
+      //     collapsable: true,
+      //     children:[
+      //       '/guide/',
+      //     ]
+      //   },
+      //   {
+      //     title:'关于事件',
+      //     collapsable: true,
+      //     children:[
+      //       'notes/event/'
+      //     ]
+      //   },
+      // ]
     
   }
 }

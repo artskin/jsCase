@@ -1,0 +1,39 @@
+<html>
+ <head>
+  <title> 在线画图</title>
+  <meta charset="utf-8" />
+<style>
+　　#d{margin-left:30%;}
+</style>
+ </head>
+
+ <body>
+    <div id="d">
+　　　　<canvas id="canvas" width="500" height="500" style="border:1px solid red;"></canvas>
+　　</div>
+
+</body>
+<script>
+   var canvas=document.getElementById("canvas");
+   var ctx=canvas.getContext("2d");
+   
+   canvas.onmousedown=function(event){
+       var x=event.clientX-canvas.offsetLeft;
+       var y=event.clientY-canvas.offsetTop;
+       ctx.beginPath();
+       ctx.moveTo(x,y);
+   
+         document.onmousemove=function(event){
+         var x=event.clientX-canvas.offsetLeft;
+         var y=event.clientY-canvas.offsetTop;
+         ctx.lineTo(x,y);
+         ctx.strokeStyle="red";
+         ctx.stroke();
+         };
+     };
+     document.onmouseup=function(){
+         ctx.closePath();
+         document.onmousemove=null;
+     };
+  </script>
+</html>
