@@ -145,6 +145,66 @@
   }
   console.log("sameArr",sameArr);
   console.log("diffArr",diffArr);
+
+  const arr = [2,4,5,6,7,2,5]
+  const arr2 = [[2,4],[2,5],[3,6],[4,7],[2,5],[2,4]];
+  //console.log(arr2)
+  const unique = [... new Set(arr)];
+  const unique2 = [... new Set(arr2)];
+  
+
+  function uniquePlus(arr){
+    let arrNew =[];
+    for(let i=0; i < arr.length; i++){
+      arrNew.push(arr[i].toString());
+      //console.log(!arrNew.includes(arr.indexOf(arr[i])));
+      //console.log(arrNew)
+      
+      <!-- if(arrNew.includes(arrNew.indexOf(arrNew[i]))){
+        indexs.push(i)
+        console.log(i,"重复第"+i+"项",arr[i]);
+        //arr.splice(i,1);
+      }else{
+        arrNew.push(arr.indexOf(arr[i]))
+      } -->
+      
+    }
+    
+    let indexs = [];
+    arrNew.map((item,index)=>{
+      // console.log(item,index);
+      if(arrNew.includes(arrNew.indexOf(arrNew[index]))){
+        indexs.push(index)
+        console.log(index,"重复第"+index+"项",arr[index]);
+      }else{
+        arrNew.push(arr.indexOf(arr[index]))
+      }
+    })
+    
+    indexs.map((item,index)=>{
+      console.log(item)
+      arr.splice(item,1);alert("1")
+    })
+    
+    //arr.splice
+    <!-- let arrNew2 =[];
+    let newUnique = [... new Set(arrNew)]
+    for(let n=0; n < newUnique.length; n++){
+      arrNew2.push(newUnique[n].split(','))
+    } -->
+    
+    return arr
+  }
+  console.log(arr2)
+  let nn = uniquePlus(arr2);
+  console.log("去重后的数字：",nn)
+  
+  Set.__proto__.constructor = function(arr){
+    
+  }
+  <!-- console.log(new Set(arr2))
+  console.log(unique)
+  console.log(unique2) -->
 </code></pre>
 
 <h3>数组排序</h3>
