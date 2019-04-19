@@ -13,6 +13,7 @@
   <style>
   #edite{border: 1px dashed #ccc;min-width: 400px;min-height: 300px;}
   </style>
+ 
 </head>
 <body>
   <div id="edite"></div>
@@ -20,12 +21,73 @@
   <p id="log"></p>
   <div class="my_img"></div>
   <div id="tar_box"></div>
-   
+  <select name="city" id="city"></select>
+  <select name="area" id="area">
+    <option value="0">选择区域</option>
+  </select>
 <!-- <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script> -->
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <!-- <script src="./src/js/felib.js" type="module"></script> -->
-
 <script type="module">
+    const cityList = [
+      {
+        id:'0',
+        name:'请选择',
+      },
+      {
+        id:'1',
+        name:'上海',
+        area:[
+          {id:'01',name:'普陀区'},
+          {id:'02',name:'浦东新区'},
+          {id:'03',name:'闵行区'},
+          {id:'04',name:'普陀区'}
+        ]
+      },
+      {
+        id:'2',
+        name:'北京',
+        area:[
+          {id:'01',name:'东城区'},
+          {id:'02',name:'西城区'},
+          {id:'03',name:'海淀区'},
+          {id:'04',name:'朝阳区'}
+        ]
+      },
+      {
+        id:'3',
+        name:'杭州'
+      }
+    ]
+
+    let city = document.getElementById("city");
+    let area = document.getElementById("area");
+
+    traverse(city,cityList)
+    city.onchange =function(e){
+      console.log(e)
+      getCity()
+    }
+
+    function traverse(el,arr){
+      for(let i=0;i<arr.length;i++){
+        el[i]=new Option(arr[i].name,arr[i].id);
+      }
+    }    
+    
+    function getCity(){
+      let index = city.selectedIndex;
+      let selectItem = cityList[index];
+      if(selectItem.area){
+        console.log(selectItem.area)
+        traverse(area,selectItem.area)
+      }
+      
+    }
+  </script>
+<script type="module">
+
+
 
 document.addEventListener('paste', function (event) {
     var items = (event.clipboardData || window.clipboardData).items;
