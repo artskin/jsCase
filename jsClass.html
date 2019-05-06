@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>jsClass练习</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/case.css?v=2">
+</head>
+<body>
+  
+
+</body>
+<script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
+  
+  let arr = [1,2,3];
+  // let item = arr[0];
+  // item*=2;
+  console.log(arr);
+  let newArr=[];
+
+  arr.map(item=>{
+    //console.log(item,item *= 2);
+    newArr.push(item *= 2)
+    //return item *= 2;
+  });
+  console.log(arr,arr[0],arr[1],arr[2]);
+  console.log(newArr);
+
+  let arrObj = [{a:1},{a:2},{a:3}]
+  console.log(arrObj);
+  arrObj.map(item=>{
+    return item.a *= 2;
+  })
+  console.log(arrObj);
+  
+class User{
+  constructor(name,id){
+    this.name = name;
+    this.id = id
+  }
+
+  say(){
+    console.log(this.name)
+  }
+  
+}
+console.log(typeof User)  //function
+console.log(User === User.prototype.constructor) //true
+
+let admin = new User();
+console.log(admin)
+</script>
+</html>
