@@ -29,6 +29,29 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <!-- <script src="./src/js/felib.js" type="module"></script> -->
 <script type="module">
+  function makefunc(x) {
+    return function (){
+      
+      return x;
+    }
+  }
+  console.log(makefunc(1))
+  let arr = [1,2,3,4,5]
+  let i=0;
+  let timer = setInterval(()=>{
+    if(i == arr.length){
+      clearInterval(timer)
+    }else{
+      console.log(arr[i++])
+    }
+  },1000);
+  for(let i=0;i<arr.length;i++){
+    return function(i){
+      setTimeout((i)=>{
+        console.log('数组',arr[i])
+      },1000)
+    }(i)
+  }
     const cityList = [
       {
         id:'0',
