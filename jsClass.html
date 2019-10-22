@@ -18,12 +18,12 @@
 </body>
 <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
 <script>
-  var vConsole = new VConsole();
+  //var vConsole = new VConsole();
   
   let arr = [1,2,3];
   // let item = arr[0];
   // item*=2;
-  console.log(arr);
+  //console.log(arr);
   let newArr=[];
 
   arr.map(item=>{
@@ -31,15 +31,15 @@
     newArr.push(item *= 2)
     //return item *= 2;
   });
-  console.log(arr,arr[0],arr[1],arr[2]);
-  console.log(newArr);
+  //console.log(arr,arr[0],arr[1],arr[2]);
+  //console.log(newArr);
 
   let arrObj = [{a:1},{a:2},{a:3}]
-  console.log(arrObj);
+  //console.log(arrObj);
   arrObj.map(item=>{
     return item.a *= 2;
   })
-  console.log(arrObj);
+  //console.log(arrObj);
   
 class User{
   constructor(name,id){
@@ -48,14 +48,33 @@ class User{
   }
 
   say(){
-    console.log(this.name)
+    //console.log(this.name)
   }
   
 }
-console.log(typeof User)  //function
-console.log(User === User.prototype.constructor) //true
+//console.log(typeof User)  //function
+//console.log(User === User.prototype.constructor) //true
 
 let admin = new User();
-console.log(admin)
+//console.log(admin)
+function test(pp){
+	console.log(pp)
+  //debugger
+    pp.age =26
+    pp = {
+        name:'aa',
+        age:10
+    }
+	return pp
+}
+const p1 = {
+	name:'vv',
+    age:12
+}
+console.log(p1)
+const p2 = test(p1)
+console.log(p1)
+// debugger
+// console.log(p2)
 </script>
 </html>

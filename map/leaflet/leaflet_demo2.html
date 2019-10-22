@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>leaflet_demo</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css" rel="stylesheet">
+  <style>
+    #map{
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map">
+    loading
+  </div>
+</body>
+<script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
+<script src="../../lib/basemap.js"></script>
+<script>
+/**
+ * Created by 忆枫 on 2018/4/10.
+ */
+
+// 加载地图
+
+
+// 谷歌街道
+var GoogleNormalMap = L.tileLayer.chinaProvider('Google.Normal.Map', {
+        maxZoom: 23,
+        minZoom: 0
+    }),
+    // 地形
+    GoogleTerrainMap = L.tileLayer.chinaProvider('Google.Terrain.Map', {
+        maxZoom: 23,
+        minZoom: 0
+    }),
+    GoogleTerrainAnnotion = L.tileLayer.chinaProvider('Google.Terrain.Annotion', {
+        maxZoom: 23,
+        minZoom: 0
+    }),
+    // 卫星
+    GoogleSatelliteMap = L.tileLayer.chinaProvider('Google.Satellite.Map', {
+        maxZoom: 23,
+        minZoom: 0
+    }),
+    GoogleSatelliteAnnotion = L.tileLayer.chinaProvider('Google.Satellite.Annotion', {
+        maxZoom: 23,
+        minZoom: 0
+    });
+
+// 高德街道
+var GaoDeNormalMap = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+        maxZoom: 18,
+        minZoom: 3
+    }),
+    // 卫星
+    GaoDeSatelliteMap = L.tileLayer.chinaProvider('GaoDe.Satellite.Map', {
+        maxZoom: 18,
+        minZoom: 0
+    }),
+    GaoDeSatelliteAnnotion = L.tileLayer.chinaProvider('GaoDe.Satellite.Annotion', {
+        maxZoom: 18,
+        minZoom: 0
+    });
+
+// Arcgis街道
+var ArcgisNormalMap = L.tileLayer.chinaProvider('Arcgis.Normal.Map', {
+        maxZoom: 18,
+        minZoom: 0
+    }),
+    // 卫星
+    ArcgisSatelliteMap = L.tileLayer.chinaProvider('Arcgis.Satellite.Map', {
+        maxZoom: 18,
+        minZoom: 0
+    }),
+    ArcgisSatelliteAnnotion = L.tileLayer.chinaProvider('Arcgis.Satellite.Annotion', {
+        maxZoom: 18,
+        minZoom: 0
+    });
+
+// Open街道
+var OpenNormalMap = L.tileLayer.chinaProvider('Open.Normal.Map', {
+    maxZoom: 23,
+    minZoom: 0,
+    id: 'mapbox.streets'
+});
+
+
+var google_streets = L.layerGroup([GoogleNormalMap]),
+    google_terrain = L.layerGroup([GoogleTerrainMap, GoogleTerrainAnnotion]),
+    google_satellite = L.layerGroup([GoogleSatelliteMap]),
+    google_hybrid = L.layerGroup([GoogleSatelliteMap, GoogleSatelliteAnnotion]);
+
+var gaode_streets = L.layerGroup([GaoDeNormalMap]),
+    gaode_satellite = L.layerGroup([GaoDeSatelliteMap]),
+    gaode_hybrid = L.layerGroup([GaoDeSatelliteMap, GaoDeSatelliteAnnotion]);
+
+var arcgis_streets = L.layerGroup([ArcgisNormalMap]),
+    arcgis_satellite = L.layerGroup([ArcgisSatelliteMap]),
+    arcgis_hybrid = L.layerGroup([ArcgisSatelliteMap, ArcgisSatelliteAnnotion]);
+
+var open_streets = L.layerGroup([OpenNormalMap]);
+
+var baseLayers = {
+    "谷歌地图(街道)": google_streets,
+    "谷歌地图(地形)": google_terrain,
+    "谷歌地图(卫星)": google_satellite,
+    "谷歌地图(混合)": google_hybrid,
+    "高德地图(街道)": gaode_streets,
+    "高德地图(卫星)": gaode_satellite,
+    "高德地图(混合)": gaode_hybrid,
+    "Arcgis(街道)": arcgis_streets,
+    "Arcgis(卫星)": arcgis_satellite,
+    "Arcgis(混合)": arcgis_hybrid,
+    "OpenMap(街道)": open_streets
+};
+
+var overlayLayers = {};
+
+
+var map = L.map("map", {
+    center: [39.54, 116.23],
+    zoom: 8,
+    layers: [google_streets],
+    zoomControl: true,
+    worldCopyJump: true,
+    zoomSnap: 0.5,
+    zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 120
+});
+
+L.control.layers(baseLayers).addTo(map);
+</script>
+</html>

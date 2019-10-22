@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>leaflet_demo</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css" rel="stylesheet">
+  <style>
+    #mapid{
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mapid">
+    loading
+  </div>
+</body>
+<script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
+<script src="https://cdn.bootcss.com/proj4js/2.5.0/proj4.js"></script>
+<script src="https://cdn.bootcss.com/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+<script src="../../lib/tileLayer.baidu.js"></script>
+<script>
+  //let mapUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+  let mapUrl = 'http://api.map.baidu.com/staticimage?zoom=6'
+  //var map = L.map('mapid').setView([51.505, -0.09], 13);
+
+  let map = L.map('mapid', {
+    crs: L.CRS.Baidu,
+    minZoom: 3,
+    maxZoom: 18,
+    attributionControl: false,
+    zoomControl:false,
+    center: [31.834912, 117.220102],
+    zoom: 12
+  });
+
+  L.control.zoom({position: 'bottomright' }).addTo(map);
+
+
+  //控制地图底图
+  L.control.layers(
+    {
+      "百度地图"   : L.tileLayer.baidu({ layer: 'vec' }).addTo(map),
+      "百度卫星"   : L.tileLayer.baidu({ layer: 'img' }),
+      "地图-大字体": L.tileLayer.baidu({ layer: 'vec',bigfont:true }),
+      "卫星-大字体": L.tileLayer.baidu({ layer: 'img', bigfont: true }),
+      "自定义-黑色": L.tileLayer.baidu({ layer: 'custom', customid:'dark' }),
+      "自定义-蓝色": L.tileLayer.baidu({ layer: 'custom', customid:'midnight' })
+    },
+    {
+      "实时交通信息": L.tileLayer.baidu({ layer: 'time' })
+    },
+    { position: "topright" }
+  ).addTo(map);
+
+  
+ 
+</script>
+</html>
