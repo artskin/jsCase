@@ -11,6 +11,7 @@
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/case.css?v=2">
+  
 </head>
 <body>
     <br/><br/>
@@ -22,6 +23,7 @@
     邮箱：guliqiang@sensetime.com<br>
     微信：artcoder
   </div>
+  
   <br/><br/>
   <div class="flex">
     <div class="flag">
@@ -42,6 +44,37 @@
   Powerd by 谷阿沐<br>
   Copyright © 2009-2019
 </div>
+<div>
+  <h2>css伪类</h2>
+  <ol class="list_has">
+    <li class="first"><span>111</span></li>
+    <li><em>sss12212</em></li>
+    <li class="end"><p class="e">21212212</p></li>
+  </ol>
+</div>
+<form action="">
+<input type="text" type="email" value="s@rr.com">
+<input type="text" type="email" value="srrcom">
+<input type="text" type="email" value="" placeholder="请输入">
+</form>
+<style>
+    .list_has li{color: aqua;}
+    .list_has li:not(.end){color: brown;}
 
+    .list_has li:has(span){color: chartreuse;}
+
+    input:valid{
+      border: 1px solid green;
+    }
+    input:invalid{
+      border: 1px solid red;
+    }
+    ::placeholder{
+      color: darkgoldenrod;
+    }
+    input:placeholder-shown{
+      border: 1px solid blue;
+    }
+  </style>
 </body>
 </html>
