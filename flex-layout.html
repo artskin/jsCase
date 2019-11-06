@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Flex 布局</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <style>
+    body{
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    h1{text-align: center;}
+    .flex{
+		  display:flex;
+      width: 100%;
+      border: 1px dashed darkcyan;
+      padding: 10px;
+      box-sizing: border-box;
+	  }
+	  .item{
+      background: #ccc;
+      padding: 20px;
+	  }
+    .item:nth-child(1){
+      background: aqua;
+    }
+    .item:nth-child(2){
+      background: bisque;
+    }
+    .item:nth-child(3){
+      background: blueviolet;
+    }
+    .item:nth-child(4){
+      background: coral;
+    }
+    
+    /* .item:nth-child(1){
+      flex-basis: 100%;
+    } */
+    .code-operate{
+      background: #eee;
+      padding: 10px 15px;
+      border: 1px solid lightsteelblue;
+    }
+    .operate-list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-left:1em;
+    }
+    .operate-list li{margin: 5px;}
+    .operate-list span,
+    .operate-list label{
+      display: inline-block;
+    }
+    .operate-list label{
+      width: 120px;
+    }
+    .operate-list span{
+      color: darkcyan;
+      width: 120px;
+    }
+      
+  </style>
+</head>
+<body>
+  <h1>Flex布局演示</h1>
+  <h3>代码区:</h3>
+  <div class="code-operate">
+    .flex{
+    <ul class="operate-list">
+      <li>
+        <label>justify-content:</label>
+        <span>flex-start</span>
+        <select name="justifyContent" accesskey="flex">
+          <option value="flex-start">flex-start</option>
+          <option value="flex-end">flex-end</option>
+          <option value="center">center</option>
+          <option value="space-between">space-between</option>
+          <option value="space-around">space-around</option>
+          <option value="space-around">space-around</option>
+        </select>
+      </li>
+      <li>
+        <label>flex-direction:</label>
+        <span>row</span>
+        <select name="flexDirection" accesskey="flex">
+          <option value="row">row</option>
+          <option value="row-reverse">row-reverse</option>
+          <option value="column">column</option>
+          <option value="column-reverse">column-reverse</option>
+        </select>
+      </li>
+    </ul>
+    }
+    <br>
+    .item{
+    <ul class="operate-list">
+      <li class="">
+        <label>flex-basis:</label>
+        <span>auto</span>
+        <select name="flexBasis" accesskey="item">
+          <option value="auto">auto</option>
+          <option value="1000px">1000px</option>
+          <option value="100%">100%</option>
+          <option value="50%">50%</option>
+        </select>
+      </li>
+    </ul>
+    }
+  </div>
+  
+  <h3>效果预览：</h3>
+  <div class="flex">
+    <div class="item">111</div>
+    <div class="item">222222</div>
+    <div class="item">333333333</div>
+    <div class="item">444444444444</div>
+    <div class="item">555555555555555</div>
+  </div>
+  <script>
+    let flexDom = document.getElementsByClassName('flex')[0];
+    let itemDom = document.getElementsByClassName('item')[0];
+    itemDom.addEventListener('click',(e)=>{
+      console.log(e.target.style['padding']);
+      console.log(getComputedStyle(e.target, null));
+    })
+ 
+
+    let selectDom = document.getElementsByTagName('select');
+    
+    for(let i=0;i<selectDom.length;i++){
+      selectDom[i].onchange = function(ev){
+        let target = ev.srcElement || ev.target;
+        changeVal(target,ev.target.name,ev.target.value)
+      }
+    }
+
+    function changeVal(el,name,val){
+      el.previousElementSibling.innerHTML = val;
+      if(el.accessKey === 'item'){
+        itemDom.style[name] = val;
+      }else{
+        flexDom.style[name] = val;
+      }
+      
+    }
+
+  </script>
+</body>
+</html>
