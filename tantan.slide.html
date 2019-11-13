@@ -140,16 +140,16 @@
     touchEl.ontouchend = (ev)=> {
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.changedTouches[0];
-        let distance = 50
+        let distance = 30
         
         startX = touchPoint.pageX-pos.x
         startY = touchPoint.pageY-pos.y;
         if(target.parentNode.classList.contains('swiper-item')){
-            if(startX < -distance){
-                target.parentNode.classList.add('animated','fadeOutLeft')
+            if(startX < Number(-distance)){
+                target.parentNode.classList.add('animated','rotateOutUpLeft')
             }
             if(startX > distance){
-                target.parentNode.classList.add('animated','fadeOutRight')
+                target.parentNode.classList.add('animated','rotateOutUpRight')
             }
             setTimeout(()=>{
                 target.parentNode.remove();
