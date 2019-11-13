@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>仿探探左滑右滑</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link href="https://daneden.github.io/animate.css/animate.min.css" rel="stylesheet">
+  <style>
+    html{
+        height: 100%;
+    }
+    body{
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f1f3f4;
+    }
+    h1{text-align: center;margin: 0;padding: 20px;}
+    img{
+		width:100%;
+		height:330px;
+		background:#eee;
+        display: inline-block;
+	}
+    .base-wrap{
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+    }
+    .base-wrap ul{
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 30px;
+        box-sizing: border-box;
+        height: 100%;
+    }
+    .swiper-item{
+        position: absolute;
+        background: #fff;
+        width: 80%;
+        left: 10%;
+        box-shadow: 0 2px 10px rgba(0,0,0,.3);
+        text-align: center;
+        height: 430px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .swiper-item:nth-child(1){
+        z-index: 10;
+        top: 10px;
+        transform: scale(1);
+    }
+    .swiper-item:nth-child(2){
+        z-index: 9;
+        top: 32px;
+        transform: scale(0.93);
+    }
+    .swiper-item:nth-child(3){
+        z-index: 8;
+        top: 52px;
+        transform: scale(0.86);
+    }
+    .swiper-item:nth-child(4){
+        z-index: 7;
+        top: 72px;
+        transform: scale(0.79);
+    }
+
+    /* @-webkit-keyframes fadeOutLeft {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    @keyframes fadeOutLeft {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    .fadeOutLeft {
+        -webkit-animation-name: fadeOutLeft;
+        animation-name: fadeOutLeft;
+    }
+    @-webkit-keyframes fadeOutRight {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0);
+        }
+    }
+
+    @keyframes fadeOutRight {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0);
+        }
+    }
+
+    .fadeOutRight {
+        -webkit-animation-name: fadeOutRight;
+        animation-name: fadeOutRight;
+    } */
+  </style>
+</head>
+<body>
+  <h1>左滑右滑</h1>
+  <div class="base-wrap">
+    <ul id="touchlayer">
+        <li class="swiper-item">
+            <img src="assets/images/001.png" alt="111">
+            <p>科技风 | 蓝色 | 人工智能</p>
+            <p><button>☆ 收藏</button></p>
+        </li>
+        <li class="swiper-item">
+            <img src="assets/images/001.png" alt="222">
+            <p>科技风 | 蓝色 | 人工智能</p>
+            <p><button>☆ 收藏</button></p>
+        </li>
+        <li class="swiper-item">
+            <img src="assets/images/001.png" alt="333">
+            <p>科技风 | 蓝色 | 人工智能</p>
+            <p><button>☆ 收藏</button></p>
+        </li>
+        <li class="swiper-item">
+            <img src="assets/images/001.png" alt="444">
+            <p>科技风 | 蓝色 | 人工智能</p>
+            <p><button>☆ 收藏</button></p>
+        </li>
+    </ul>
+  </div>
+  <script>
+    let touchEl = document.getElementById('touchlayer');
+
+    let pos={
+        x:0,
+        y:0
+    }
+    touchEl.ontouchstart = (ev)=>{
+        console.log(ev.type,ev)
+        ev.stopPropagation();//禁用浏览器默认滑动
+
+        let target = ev.srcElement || ev.target;
+        let touchPoint = ev.touches[0]
+        
+        pos.x = touchPoint.pageX
+        pos.y = touchPoint.pageY
+    }
+
+    touchEl.ontouchmove=(ev)=>{
+        ev.stopPropagation();//禁用浏览器默认滑动
+        ev.stopImmediatePropagation();//阻止事件捕获
+        let target = ev.srcElement || ev.target;
+        let touchPoint = ev.touches[0]
+        
+        startX = touchPoint.pageX-pos.x
+        startY = touchPoint.pageY-pos.y;
+
+        if(target.className =='swiper-item'){
+            target.style['transform'] = 'translate('+startX+'px,'+startY+'px)'
+        }else if(target.parentNode.className == 'swiper-item'){
+            target.parentNode.style['transform'] = 'translate('+startX+'px,'+startY+'px)'
+        }
+    }
+
+    touchEl.ontouchend = (ev)=> {
+        let target = ev.srcElement || ev.target;
+        let touchPoint = ev.changedTouches[0]
+        
+        startX = touchPoint.pageX-pos.x
+        startY = touchPoint.pageY-pos.y;
+        if(target.parentNode.classList.contains('swiper-item')){
+            if(startX < Number('-165')){
+                target.parentNode.classList.add('animated','fadeOutLeft')
+            }
+            if(startX > 165){
+                target.parentNode.classList.add('animated','fadeOutRight')
+            }
+            setTimeout(()=>{
+                target.parentNode.remove();
+                let flag = document.createDocumentFragment();
+                let li = document.createElement('li');
+                    li.setAttribute('class','swiper-item')
+                    li.innerHTML ='<img src="assets/images/001.png"><p>SenseTime</p>';
+                flag.appendChild(li);
+                touchEl.appendChild(flag)
+            },400)
+        }
+
+    }
+
+  </script>
+</body>
+</html>
