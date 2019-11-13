@@ -139,7 +139,7 @@
     touchEl.ontouchend = (ev)=> {
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.changedTouches[0];
-        let distance = 90
+        let distance = 50
         
         startX = touchPoint.pageX-pos.x
         startY = touchPoint.pageY-pos.y;
