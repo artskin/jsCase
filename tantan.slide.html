@@ -78,32 +78,33 @@
 </head>
 <body>
   <h1>左滑右滑</h1>
+  
   <div class="base-wrap">
     <ul id="touchlayer">
         <li class="swiper-item">
-            <img src="assets/images/001.png" alt="111">
-            <p>科技风 | 蓝色 | 人工智能</p>
+            <img src="assets/images/001.jpg" alt="111">
+            <p>美女 A</p>
             <p><button>☆ 收藏</button></p>
         </li>
         <li class="swiper-item">
-            <img src="assets/images/001.png" alt="222">
-            <p>科技风 | 蓝色 | 人工智能</p>
+            <img src="assets/images/002.jpg" alt="222">
+            <p>美女 B</p>
             <p><button>☆ 收藏</button></p>
         </li>
         <li class="swiper-item">
-            <img src="assets/images/001.png" alt="333">
-            <p>科技风 | 蓝色 | 人工智能</p>
+            <img src="assets/images/003.jpg" alt="333">
+            <p>美女 C</p>
             <p><button>☆ 收藏</button></p>
         </li>
         <li class="swiper-item">
-            <img src="assets/images/001.png" alt="444">
-            <p>科技风 | 蓝色 | 人工智能</p>
+            <img src="assets/images/004.jpg" alt="444">
+            <p>美女 D</p>
             <p><button>☆ 收藏</button></p>
         </li>
     </ul>
   </div>
   <script>
-    let touchEl = document.getElementById('touchlayer');
+    let touchEl = document.getElementById('touchlayer'); 
 
     let pos={
         x:0,
@@ -155,7 +156,7 @@
                 let flag = document.createDocumentFragment();
                 let li = document.createElement('li');
                     li.setAttribute('class','swiper-item')
-                    li.innerHTML ='<img src="assets/images/001.png"><p>SenseTime</p>';
+                    li.innerHTML ='<img src="assets/images/001.jpg"><p>SenseTime</p>';
                 flag.appendChild(li);
                 touchEl.appendChild(flag)
             },365)
