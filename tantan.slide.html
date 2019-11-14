@@ -24,11 +24,12 @@
       background: #f1f3f4;
     }
     h1{text-align: center;margin: 0;padding: 20px;}
+    h2{text-align: center;}
     img{
 		width:100%;
 		height:330px;
 		background:#eee;
-        display: inline-block;
+        display: block;
 	}
     .base-wrap{
         width: 100%;
@@ -50,10 +51,12 @@
         left: 10%;
         box-shadow: 0 2px 10px rgba(0,0,0,.3);
         text-align: center;
-        height: 430px;
+        height: 480px;
         border-radius: 10px;
         overflow: hidden;
+        animation-duration:0.8s;
     }
+
     .swiper-item:nth-child(1){
         z-index: 10;
         top: 10px;
@@ -66,40 +69,59 @@
     }
     .swiper-item:nth-child(3){
         z-index: 8;
-        top: 52px;
+        top: 53px;
         transform: scale(0.86);
     }
     .swiper-item:nth-child(4){
         z-index: 7;
-        top: 72px;
+        top: 74px;
         transform: scale(0.79);
+    }
+    button{
+        background: coral;
+        color: #fff;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 4px;
+    }
+    .swiper-item p{margin: 0;padding: 10px;}
+    .swiper-item p:nth-child(3){
+        font-size: 14px;
+        color: #666;
+    }
+    .swiper-item p:last-child{
+        padding-bottom: 23px;
     }
   </style>
 </head>
 <body>
   <h1>左滑右滑</h1>
-  
+  <h2>← ☞→</h2>
   <div class="base-wrap">
     <ul id="touchlayer">
         <li class="swiper-item">
             <img src="assets/images/001.jpg" alt="111">
             <p>美女 A</p>
-            <p><button>☆ 收藏</button></p>
+            <p>身高：1.55 体重：48kg 学历：研究生</p>
+            <p><button>+ 收藏</button></p>
         </li>
         <li class="swiper-item">
             <img src="assets/images/002.jpg" alt="222">
             <p>美女 B</p>
-            <p><button>☆ 收藏</button></p>
+            <p>身高：1.55 体重：48kg 学历：研究生</p>
+            <p><button>+ 收藏</button></p>
         </li>
         <li class="swiper-item">
             <img src="assets/images/003.jpg" alt="333">
             <p>美女 C</p>
-            <p><button>☆ 收藏</button></p>
+            <p>身高：1.55 体重：48kg 学历：研究生</p>
+            <p><button>+ 收藏</button></p>
         </li>
         <li class="swiper-item">
             <img src="assets/images/004.jpg" alt="444">
             <p>美女 D</p>
-            <p><button>☆ 收藏</button></p>
+            <p>身高：1.55 体重：48kg 学历：研究生</p>
+            <p><button>+ 收藏</button></p>
         </li>
     </ul>
   </div>
@@ -107,18 +129,18 @@
     let touchEl = document.getElementById('touchlayer'); 
 
     let pos={
-        x:0,
-        y:0
+        startX:0,
+        startY:0
     }
     touchEl.ontouchstart = (ev)=>{
-        console.log(ev.type,ev)
+        //console.log(ev.type,ev)
         ev.stopPropagation();//禁用浏览器默认滑动
 
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.touches[0]
         
-        pos.x = touchPoint.pageX
-        pos.y = touchPoint.pageY
+        pos.startX = touchPoint.pageX
+        pos.startY = touchPoint.pageY
     }
 
     touchEl.ontouchmove=(ev)=>{
@@ -127,39 +149,50 @@
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.touches[0]
         
-        startX = touchPoint.pageX-pos.x
-        startY = touchPoint.pageY-pos.y;
+        moveX = touchPoint.pageX-pos.startX
+        moveY = touchPoint.pageY-pos.startY;
 
-        if(target.className =='swiper-item'){
-            target.style['transform'] = 'translate('+startX+'px,'+startY+'px)'
-        }else if(target.parentNode.className == 'swiper-item'){
-            target.parentNode.style['transform'] = 'translate('+startX+'px,'+startY+'px)'
+        if(target.classList.contains('swiper-item')){
+            target.style['transform'] = 'translate('+moveX+'px,'+moveY+'px)'
+        }else if(target.parentNode.classList.contains('swiper-item')){
+            target.parentNode.style['transform'] = 'translate('+moveX+'px,'+moveY+'px)'
         }
     }
 
     touchEl.ontouchend = (ev)=> {
+        
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.changedTouches[0];
-        let distance = 30
+        let distance = 50
         
-        startX = touchPoint.pageX-pos.x
-        startY = touchPoint.pageY-pos.y;
+        distanceX = touchPoint.pageX-pos.startX
+        distanceY = touchPoint.pageY-pos.startY;
+        //console.log(ev.type,distanceX,ev)
+
         if(target.parentNode.classList.contains('swiper-item')){
-            if(startX < Number(-distance)){
-                target.parentNode.classList.add('animated','rotateOutUpLeft')
-            }
-            if(startX > distance){
-                target.parentNode.classList.add('animated','rotateOutUpRight')
+            console.log(distanceX,distanceX < 0,Math.abs(distanceX) > distance)
+            if(distanceX < 0 && Math.abs(distanceX) > distance){
+                console.log('左滑')
+                target.parentNode.classList.add('fadeOutLeftBig');
+            }else if(distanceX > distance){
+                console.log('右滑')
+                target.parentNode.classList.add('fadeOutRightBig');
+            }else{
+                console.log('回位')
+                target.parentNode.style['transform'] = 'translate('+0+'px,'+0+'px)'
+                return false
             }
             setTimeout(()=>{
+                //console.log('删除')
                 target.parentNode.remove();
                 let flag = document.createDocumentFragment();
                 let li = document.createElement('li');
                     li.setAttribute('class','swiper-item')
-                    li.innerHTML ='<img src="assets/images/001.jpg"><p>SenseTime</p>';
+                    li.innerHTML ='<img src="assets/images/001.jpg"><p>SenseTime</p><p>身高：1.55 体重：48kg 学历：研究生</p><p><button>+ 收藏</button></p>';
                 flag.appendChild(li);
                 touchEl.appendChild(flag)
             },365)
+            
         }
 
     }
