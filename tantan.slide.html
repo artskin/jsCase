@@ -95,8 +95,8 @@
   </style>
 </head>
 <body>
-  
-  <h2>← ☞→</h2>
+  <!-- <h1>左滑右滑</h1> -->
+  <h2>← ☜ ☞→</h2>
   <div class="base-wrap">
     <ul id="touchlayer">
         <li class="swiper-item">
@@ -160,14 +160,12 @@
     }
 
     touchEl.ontouchend = (ev)=> {
-        
         let target = ev.srcElement || ev.target;
         let touchPoint = ev.changedTouches[0];
         let distance = 50
         
         distanceX = touchPoint.pageX-pos.startX
         distanceY = touchPoint.pageY-pos.startY;
-        //console.log(ev.type,distanceX,ev)
 
         if(target.parentNode.classList.contains('swiper-item')){
             console.log(distanceX,distanceX < 0,Math.abs(distanceX) > distance)
