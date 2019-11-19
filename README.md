@@ -22,6 +22,9 @@
 ## 仿探探左滑右滑
 [Demo](https://artskin.github.io/jsCase/tantan.slide.html)
 
+## Canvas 绘图
+[Demo](https://artskin.github.io/jsCase/canvas.html)
+
 ## Flex 布局
 [Demo](https://artskin.github.io/jsCase/flex-layout.html)
 
