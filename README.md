@@ -16,13 +16,17 @@
 - 形参实参
 - Number精度
 
-## 仿探探左滑右滑
+## 邮件签名
+[Demo](https://artskin.github.io/jsCase/mail_sign.html)
 
+## 仿探探左滑右滑
 [Demo](https://artskin.github.io/jsCase/tantan.slide.html)
 
-
-
 ## Flex 布局
-
 [Demo](https://artskin.github.io/jsCase/flex-layout.html)
 
+## css 伪类测试
+[Demo](https://artskin.github.io/jsCase/pseudo.classes.html)
+
+## 常见面试题
+[Demo](https://artskin.github.io/jsCase/interview.html)

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>邮件签名</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/case.css?v=2">
+  
+</head>
+<body>
+    <br/><br/>
+  <div contenteditable="true" style="width:60%;font-size:12px;font-family: 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;background:#f4f4f4 url(https://artskin.github.io/jsCase/banner.png) right 0 no-repeat;background-size:auto 100%;padding:10px;border-top:2px solid #ccc;color: #666">
+    <img style="display:block;float: left;margin-right:10px" width="80px"  src="https://artskin.github.io/jsCase/head.jpg" alt="">
+    姓名：谷阿沐<br>
+    职位：前端开发工程师<br>
+    部门：智能视频产品与应用 | 商汤科技<br>
+    邮箱：guliqiang@sensetime.com<br>
+    微信：artcoder
+  </div>
+  
+  <br/><br/>
+  <div class="flex">
+    <div class="flag">
+      2019年旅行计划：<br>
+      川西(亚丁/色达/九寨)，青海湖，黄山，婺源
+    </div>
+    <div class="flag">
+      <p>18521344213</p>
+      <p>010-22445632</p>
+      <p>artskin@163.com</p>
+      <p>2018-01-02</p>
+    </div>
+  </div>
+  
+  
+<div class="copyright">
+  
+  Powerd by 谷阿沐<br>
+  Copyright © 2009-2019
+</div>
+<div>
+  <h2>css伪类</h2>
+  <ol class="list_has">
+    <li class="first"><span>111</span></li>
+    <li><em>sss12212</em></li>
+    <li class="end"><p class="e">21212212</p></li>
+  </ol>
+</div>
+<form action="">
+<input type="text" type="email" value="s@rr.com">
+<input type="text" type="email" value="srrcom">
+<input type="text" type="email" value="" placeholder="请输入">
+</form>
+<style>
+    .list_has li{color: aqua;}
+    .list_has li:not(.end){color: brown;}
+
+    .list_has li:has(span){color: chartreuse;}
+
+    input:valid{
+      border: 1px solid green;
+    }
+    input:invalid{
+      border: 1px solid red;
+    }
+    ::placeholder{
+      color: darkgoldenrod;
+    }
+    input:placeholder-shown{
+      border: 1px solid blue;
+    }
+  </style>
+</body>
+</html>
