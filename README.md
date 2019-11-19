@@ -18,11 +18,11 @@
 
 ## 仿探探左滑右滑
 
-[Demo]: (https://artskin.github.io/jsCase/tantan.slide.html)
+[Demo](https://artskin.github.io/jsCase/tantan.slide.html)
 
 
 
 ## Flex 布局
 
-[Demo]: (https://artskin.github.io/jsCase/flex-layout.html)
+[Demo](https://artskin.github.io/jsCase/flex-layout.html)
 
