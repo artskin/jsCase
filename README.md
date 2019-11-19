@@ -15,3 +15,14 @@
 - 原型及原型链
 - 形参实参
 - Number精度
+
+## 仿探探左滑右滑
+
+[Demo]: https://artskin.github.io/jsCase/tantan.slide.html
+
+
+
+## Flex 布局
+
+[Demo]: https://artskin.github.io/jsCase/flex-layout.html
+
