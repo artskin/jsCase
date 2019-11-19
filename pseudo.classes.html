@@ -16,35 +16,96 @@
 
     .list_has li:has(span){color: chartreuse;}
 
+    input{
+      height: 24px;
+      line-height: 24px;
+      padding: 3px;
+    }
+    form p{
+      position: relative;
+    }
+    input:focus{
+      outline: none;
+    }
+
     input:valid{
       border: 1px solid green;
     }
     input:invalid{
       border: 1px solid red;
     }
-    ::placeholder{
+    input::placeholder{
       color: darkgoldenrod;
+      
     }
+    
     input:placeholder-shown{
-      border: 1px solid blue;
+      border: 2px solid sienna;
+      color: sienna;
+    }
+    
+    /*input:not(:placeholder-shown){
+      border: 2px solid silver;
+    }*/
+
+    .input-url + .input-label{
+      position: absolute;
+      color: darkgoldenrod;
+      pointer-events: none;/*元素经过状态失效*/
+      left: 5px;
+      top: 6px;
+      transform-origin: 0 0;
+      transition:  all .3s;
+      font-size: 14px;
+    }
+    .input-url:placeholder-shown::placeholder{
+      color: transparent;
+    }
+    .input-url:not(:placeholder-shown){
+      border: 1px dashed violet;
+    }
+    .input-url:focus  ~ .input-label,
+    .input-url:not(:placeholder-shown) ~ .input-label{
+      color: teal;
+      background: #fff;
+      transform: scale(0.75) translateY(-20px);
     }
   </style>
 </head>
 <body>
+  <h1>Effect without js</h1>
+  <div>
+    <h2>css伪类</h2>
+    <ol class="list_has">
+      <li class="first"><span>111</span></li>
+      <li><em>sss12212</em></li>
+      <li class="end"><p class="e">21212212</p></li>
+    </ol>
+  </div>
 
-<div>
-  <h2>css伪类</h2>
-  <ol class="list_has">
-    <li class="first"><span>111</span></li>
-    <li><em>sss12212</em></li>
-    <li class="end"><p class="e">21212212</p></li>
-  </ol>
-</div>
-<form action="">
-<input type="text" type="email" value="s@rr.com">
-<input type="text" type="email" value="srrcom">
-<input type="text" type="email" value="" placeholder="请输入">
-</form>
+  <h2>表单伪类</h2>
+  <form action="">
+    <h4>验证通过:valid</h4>
+    <p>
+      <label for=""></label>
+      <input type="email" value="s@rr.com">
+    </p>
+    <h4>验证不通过:invalid</h4>
+    <p>
+      <label for=""></label>
+      <input type="email" value="srrcom">
+    </p>
+    <h4>placeholder显示和隐藏:placeholder-shown</h4>
+    <p>
+      <input type="datetime" value="" placeholder="请输入">
+      
+    </p>
+    <h4>type='url'</h4>
+    <p>
+      <input class="input-url" type="text" value="" placeholder="输入连接地址">
+      <label class="input-label" for="">输入连接地址</label>
+    </p>
+  </form>
 
 </body>
 </html>
