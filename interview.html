@@ -11,17 +11,19 @@
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <style>
+    h2{margin: 0;position: absolute;}
       #block{
           border: 2px solid #ccc;
           padding: 10px;
       }
       /* 方法一
-      
       html,body{height: 100%;}
-      body{
-          display: flex;
-          justify-content: center;
-          align-items: center;
+      .layer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        border: 1px dashed chocolate;
       } */
 
       /* 方法二
@@ -32,11 +34,20 @@
           transform: translate(-50%,-50%);
       }*/
       
+      /* 方法三*/
+      #block{
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          
+      }
       
   </style>
 </head>
 <body>
-  <div id="block">
+  <h2>不确定宽高块元素：上下左右居中</h2>
+  <div class="layer">
+    <div id="block" contenteditable="true">
       ss21ss21ss21ss2132132<br>
       ss21ss21ss21ss2132132<br>
       ss21ss21ss21ss2132132<br>
@@ -44,7 +55,9 @@
       ss21ss21ss21ss2132132<br>
       ss21ss21ss21ss2132132<br>
       ss21ss21ss21ss2132132<br>
+    </div>
   </div>
+  
   <script>
       
     console.log(1,[] == false)
