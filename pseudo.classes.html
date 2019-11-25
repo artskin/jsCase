@@ -11,10 +11,12 @@
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <style>
-    .list_has li{color: aqua;}
-    .list_has li:not(.end){color: brown;}
-
-    .list_has li:has(span){color: chartreuse;}
+    .list li{color: orange;line-height: 24px;}
+    .list li:not(.end){color: blue;}
+    .list li:has(span){color: chartreuse;}
+    .list li:not(:last-child){
+      border-bottom: 1px dashed #ccc;
+    }
 
     input{
       height: 24px;
@@ -36,7 +38,6 @@
     }
     input::placeholder{
       color: darkgoldenrod;
-      
     }
     
     input:placeholder-shown{
@@ -74,14 +75,79 @@
 </head>
 <body>
   <h1>Effect without js</h1>
-  <div>
-    <h2>css伪类</h2>
-    <ol class="list_has">
-      <li class="first"><span>111</span></li>
-      <li><em>sss12212</em></li>
-      <li class="end"><p class="e">21212212</p></li>
-    </ol>
+
+  <h2>css伪类:not()/:has()/:last-child</h2>
+  <ol class="list">
+    <li><span>:has()草案，浏览器未实现</span></li>
+    <li>li:not(.end){color: blue;}</li>
+    <li class="end"><p class="e">:has(span)</p></li>
+    <li><p class="e">:has(span)</p></li>
+  </ol>
+
+  <style>
+    .target p{
+      position: relative;
+      display: none;
+    }
+    .target p:target{
+      background: palegoldenrod;
+      border: 1px dashed #ccc;
+      padding: 15px;
+      display: block;
+    }
+    .target p:target::before{
+      position: absolute;
+      left: 5px;
+      top: -15px;
+      content: '';
+      border-color:  transparent transparent palegoldenrod transparent  ;
+      border-width: 8px;
+      border-style: solid;
+    }
+    .centerblock{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: #fff;
+      
+      transform: translate(-50%,-50%);
+      border: 2px solid gray;
+      padding: 20px;
+    }
+    div#open:target{
+      display: block;
+    }
+    .mask-layer{
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: block;
+      display: none;
+      background: rgba(0,0,0,.2);
+    }
+  </style>
+  
+  <div class="target">
+    <h2>:target</h2>
+    <a href="#text1">第一段</a> |
+    <a href="#text2">第二段</a> |
+    <a href="#text3">第三段</a> | 
+    <a href="#open">弹出层</a>
+    <p id="text1">我是第一段话，一</p>
+    <p id="text2">我是第二段话，二二</p>
+    <p id="text3">我是第三段话，三三三</p>
+    
   </div>
+  <div class="mask-layer" id="open">
+      <div class="centerblock">
+          <p>你可以不使用任何Javascript代码，只使用:target伪类创建一个加亮框。该技术依赖于初始化时就隐藏在页面中的链接到指定元素的锚。一旦定位，CSS就会更改其display 以便显示它们。</p>
+          <p style="text-align: right;"><a href="#">关闭</a></p>
+      </div>
+  </div>
+  
 
   <h2>表单伪类</h2>
   <form action="">
