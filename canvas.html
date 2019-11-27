@@ -1,52 +1,140 @@
+<!DOCTYPE html>
 <html>
- <head>
-  <title> 在线画图</title>
-  <meta charset="utf-8" />
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Canvas 绘图</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <style>
+    html{
+      background: #e1e6e9;
+    }
     body{
-      display: flex;
-      justify-content: center;
+      /* display: flex;
+      justify-content: center; */
+      padding: 10px;
+      margin: 0;
+      width: 80%;
+      margin: 0 auto;
+      max-width: 1000px;
+      background: white;
     }
+    h1{text-align: center;border-bottom: 2px gray solid;padding-bottom: 20px;}
   　#block{
-      background-color: #ccc;
-      border:3px solid #ccc;
+      /* background-color: #ccc;
+      border:3px solid #ccc; */
+      width: 100%;
+      height: 100%;
     }
-    #canvas{border:10px solid red;}
+    #canvas{position: absolute;background: rgba(0,0,0,.2);}
+    #canvas2{border: 1px seagreen dashed;}
+    #canvas2:hover{cursor :url(assets/images/draw.ico),auto;}
   </style>
  </head>
 
 <body>
+
+  <h1>Canvas 绘图</h1>
+  <h2>案例一：手绘自由线条</h2>
+  <canvas id="canvas2" width="600" height="400"></canvas>
+  <h2>案例二：显示多边形，且位置相对图片固定</h2>
   <div id="block">
-    <canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas"></canvas>
+    <img id="video" width="60%" src="assets/images/map.png" alt="">
   </div>
+
 </body>
 <script>
-  //测试 ||
-  let aa, bb="201";
-  let cc = aa || bb;
-  console.log(cc)
+  let videoDom=document.getElementById("video");
+  let canvas=document.getElementById("canvas");
+  let ctx=canvas.getContext("2d");
+  let start = {x:351,y:385},end={x:503,y:520};
 
-  var canvas=document.getElementById("canvas");
-  var ctx=canvas.getContext("2d");
-  
+  videoDom.onload = ()=>{
+    let scaleX = videoDom.width/originalVideo.width;
+    let scaleY = videoDom.height/originalVideo.height;
+    canvas.width = videoDom.width;
+    canvas.height = videoDom.height;
+    drawLine(start,end,scaleX,scaleY)
+  }
+    
+  let originalVideo = {
+    width:1407,
+    height:1002
+  }
 
-  canvas.onmousedown=function(event){
-    var x=event.clientX-canvas.offsetLeft;
-    var y=event.clientY-canvas.offsetTop;
+  window.onresize = ()=>{
+    let scaleX = videoDom.width/originalVideo.width;
+    let scaleY = videoDom.height/originalVideo.height;
+    canvas.width = videoDom.width;
+    canvas.height = videoDom.height;
+      
+    drawLine(start,end,scaleX,scaleY)
+  }
+
+  function drawLine(start,end,scaleX,scaleY){
+    ctx.clearRect(0,0,1000,1000)
     ctx.beginPath();
-    ctx.moveTo(x,y);
-
-      document.onmousemove=function(event){
-        var x=event.clientX-canvas.offsetLeft;
-        var y=event.clientY-canvas.offsetTop;
-        ctx.lineTo(x,y);
-        ctx.strokeStyle="red";
-        ctx.stroke();
-      };
+    ctx.scale(scaleX,scaleY)
+    ctx.moveTo(start.x,start.y);
+    
+    ctx.lineTo(end.x,end.y);
+    
+    ctx.closePath();
+    
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5,15]);
+    ctx.strokeStyle = "red"
+    ctx.stroke();
+  }
+  
+  function poly (num){
+    let r = 100;
+    let a = 2 * Math.PI / num;
+    ctx.beginPath();
+    ctx.moveTo(150+r,150);
+    for(let i=0;i < num;i++){
+      let x = 150 + r * Math.cos(a * i);
+      let y = 150 + r * Math.sin(a * i);
+      ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+  poly(8);
+  
+  let canvas2=document.getElementById("canvas2");
+  let ctx2=canvas2.getContext("2d");
+  let drawX,drawY;
+  canvas2.onmousedown=function(event){
+    let offsetX = 0,offsetY = -28;
+    console.log(canvas2.offsetLeft,canvas2.offsetTop,event)
+    drawX=event.clientX-canvas2.offsetLeft-offsetX;
+    drawY=event.clientY-canvas2.offsetTop-offsetY;
+    ctx2.beginPath();
+    ctx2.lineCap="round";
+    ctx2.shadowBlur=1.4;
+    ctx2.shadowColor="#234";
+    ctx2.moveTo(drawX,drawY);
+    document.onmousemove=function(event){
+      drawX=event.clientX-canvas2.offsetLeft-offsetX;
+      drawY=event.clientY-canvas2.offsetTop-offsetY;
+      ctx2.lineTo(drawX,drawY);
+      ctx2.lineWidth = 6;
+      ctx2.strokeStyle="#234";
+      ctx2.stroke();
+    };
   };
+  
   document.onmouseup=function(){
-      ctx.closePath();
-      document.onmousemove=null;
+    ctx2.closePath();
+    document.onmousemove=null;
   };
+
 </script>
 </html>

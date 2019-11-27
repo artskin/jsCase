@@ -12,20 +12,13 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
 </head>
 <body>
-  
+  方法一更好：
+  性能测试如下：
+  <a href="https://jsperf.com/doublequchong" target="_blank">https://jsperf.com/doublequchong</a>
 
 </body>
 <script>
-  // function makeHash(source) {
-  //   let hash = 0;
-  //   if (source.length === 0) return hash;
-  //   for (let i = 0; i < source.length; i++) {
-  //     let char = source.charCodeAt(i);
-  //     hash = ((hash<<5)-hash)+char;
-  //     hash = hash & hash; // Convert to 32bit integer
-  //   }
-  //   return hash;
-  // }
+
   let doubleList = [
       [334.62,1197.27],
       [368.62,953.28],
@@ -139,7 +132,6 @@
     let x = list[0][0],y= list[0][1];
     let result = [];
     result.push(list[0]);
-
     for(let i = 1;i<list.length;i++){
       let tx = list[i][0],ty=list[i][1];
       if(tx !=x || ty!=y){
@@ -150,10 +142,8 @@
     }
     return result
   }
-  
-  // console.log(result)
 
-  //方法二
+  //方法二：
   // function removeRepetition(arrList){
   //   let newArr = [];
   //   newArr.push(arrList[0]);
@@ -165,13 +155,13 @@
   //   }
   //   return newArr
   // }
-  // console.log(removeRepetition(doubleList))
-  
 
   var t0 = performance.now();
   var result = removeRepetition(doubleList);
   var t1 = performance.now();
   console.log('removeRepetition', (t1 - t0).toFixed(4), '毫秒:', result);
+  
+  
 
 </script>
 </html>
