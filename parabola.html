@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<style type="text/css">
+		.fly-item,
+		.fly-item > img {
+			position: absolute;
+			transition: transform .5s;
+		}
+		.fly-item {
+			display: none;
+			margin: -25px 0 0 -25px;
+			transition-timing-function: linear;
+			opacity: .5;
+		}
+		.fly-item > img {
+			transition-timing-function: cubic-bezier(.55,0,.85,.36);
+			background: #cc0;
+			width: 40px; height: 20px;
+			outline: 3px solid rgb(221,46,59);
+			
+		}
+		.btn-cart{display: block;width: 40px;height: 20px;background: #c00}
+		#shopCart{position: absolute;right: 20px;top: 10px;}
+		.box{display: flex;justify-content: center;align-items: center;height: 90vh;}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div class="box">
+			<div class="image-x">
+				<input type="button" id="btnCart" class="btn-cart" value="添加">
+			</div>
+		</div>
+		<div id="shopCart" class="shop-cart">购物车 <span>0</span></div>
+		<div id="flyItem" class="fly-item"><img src="data:image/png;base64,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" alt=""></div>
+	</div>
+<script>
+	var eleBtn = document.getElementById('btnCart');
+	var eleFlyItem = document.getElementById('flyItem');
+	var eleFlyImg = eleFlyItem.querySelector('img');
+	var eleCart = document.querySelector('#shopCart');
+
+	var isRunning = false;
+	eleBtn.addEventListener('click', function (e) {
+		console.log(e)
+		// 现在按钮距离购物车的距离
+		var boundBtn = eleBtn.getBoundingClientRect();
+		var boundCart = eleCart.getBoundingClientRect();
+		// 中心点的水平垂直距离
+		var offsetX = boundCart.left + boundCart.width / 2 - (boundBtn.left + boundBtn.width / 2);
+		var offsetY = boundCart.top + boundCart.height / 2 - (boundBtn.top + boundBtn.height / 2);
+		// 页面滚动尺寸
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+		var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+		if (isRunning == false) {
+			// 购物车图形出现与初始定位
+			eleFlyItem.style.display = 'block';
+			eleFlyItem.style.left = (boundBtn.left + scrollLeft + this.clientWidth / 2) + 'px';
+			eleFlyItem.style.top = (boundBtn.top + scrollTop + this.clientHeight / 2) + 'px';
+			// 开始动画
+			eleFlyItem.style.transform = 'translateX('+ offsetX +'px)';
+			eleFlyImg.style.transform = 'translateY('+ offsetY +'px)';
+			// 动画标志量
+			isRunning = true;
+			setTimeout(function () {
+				eleFlyItem.style.display = '';
+				eleFlyItem.style.transform = 'translateX(0)';
+				eleFlyImg.style.transform = 'translateY(0)';
+				isRunning = false;
+				eleCart.querySelector('span').innerHTML = eleCart.querySelector('span').innerHTML * 1 + 1;
+			}, 490);
+		}    
+	});
+</script>
+</body>
+</html>
