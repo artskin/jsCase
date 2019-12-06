@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>选择器</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <style>
+      h1{text-align: center;}
+  </style>
+</head>
+<body>
+  <h1>← ☜ ☞→</h1>
+  <div class="base-wrap">
+    <ul id="lists">
+        <li class="item">
+            <p>1美女 A</p>
+            <p>学历：研究生 职位：算法工程师</p>
+        </li>
+        <li class="item">
+            <p>2美女 B</p>
+            <p>学历：研究生 职位：行政人员</p>
+        </li>
+        <li class="item">
+            <p>3美女 C</p>
+            <p>学历：研究生 职位：HR人员</p>
+        </li>
+    </ul>
+    <p class="item">
+        我是p标签class='item'
+    </p>
+  </div>
+  <script>
+    var isFunction = function isFunction( obj ) {
+
+        // Support: Chrome <=57, Firefox <=52
+        // In some browsers, typeof returns "function" for HTML <object> elements
+        // (i.e., `typeof document.createElement( "object" ) === "function"`).
+        // We don't want to classify *any* DOM node as a function.
+        return typeof obj === "function" && typeof obj.nodeType !== "number";
+    };
+    function toType( obj ) {
+        if ( obj == null ) {
+            return obj + "";
+        }
+
+        // Support: Android <=2.3 only (functionish RegExp)
+        return typeof obj === "object" || typeof obj === "function" ?
+            class2type[ toString.call( obj ) ] || "object" :
+            typeof obj;
+    }
+    var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
+        var i = 0,
+            len = elems.length,
+            bulk = key == null;
+
+        // Sets many values
+        if ( toType( key ) === "object" ) {
+            chainable = true;
+            for ( i in key ) {
+                access( elems, fn, i, key[ i ], true, emptyGet, raw );
+            }
+
+        // Sets one value
+        } else if ( value !== undefined ) {
+            chainable = true;
+
+            if ( !isFunction( value ) ) {
+                raw = true;
+            }
+
+            if ( bulk ) {
+
+                // Bulk operations run against the entire set
+                if ( raw ) {
+                    fn.call( elems, value );
+                    fn = null;
+
+                // ...except when executing function values
+                } else {
+                    bulk = fn;
+                    fn = function( elem, key, value ) {
+                        return bulk.call( jQuery( elem ), value );
+                    };
+                }
+            }
+
+            if ( fn ) {
+                for ( ; i < len; i++ ) {
+                    fn(
+                        elems[ i ], key, raw ?
+                        value :
+                        value.call( elems[ i ], i, fn( elems[ i ], key ) )
+                    );
+                }
+            }
+        }
+
+        if ( chainable ) {
+            return elems;
+        }
+
+        // Gets
+        if ( bulk ) {
+            return fn.call( elems );
+        }
+
+        return len ? fn( elems[ 0 ], key ) : emptyGet;
+    };
+    function $_(dom){
+        let domEl = document.querySelectorAll(dom);
+        if(domEl.length==0){
+            return null
+        }else if(domEl.length == 1){
+            return document.querySelector(dom)
+        }else{
+            // let list = []
+            // domEl.forEach((item,i,n)=>{
+            //     console.log(item,i,n)
+            //     //item.style.fontWeight = 'bold'
+            //     list.push(item)
+            // })
+            domEl.__proto__.setStyle = function( name, value ) {
+                return access( this, function( elem, name, value ) {
+                    var styles, len,
+                        map = {},
+                        i = 0;
+                    if ( Array.isArray( name ) ) {
+                        styles = getStyles( elem );
+                        len = name.length;
+
+                        for ( ; i < len; i++ ) {
+                            map[ name[ i ] ] = jQuery.css( elem, name[ i ], false, styles );
+                        }
+
+                        return map;
+                    }
+
+                    return value !== undefined ?
+                        jQuery.style( elem, name, value ) :
+                        jQuery.css( elem, name );
+                }, name, value, arguments.length > 1 );
+            };
+
+            // let forEach = Array.prototype.forEach;
+            // console.log(forEach)
+            // firstEl = domEl[0];
+            // forEach.call(domEl.parentNode,(item,n,m)=>{
+            //     console.log(this)
+            //     console.log(item);
+            //     item.style.color = '#0F0';
+            //     //item.parentNode.style.color = '#0F0';
+            // })
+            
+            return domEl
+        }
+    }
+    
+    $_('#lists').style.color = '#c00';
+
+    console.log('querySelectorAll:',typeof $_('.item'),$_('.item'))
+    console.log($_('.item').setStyle)
+    // $_('.item').forEach((item)=>{
+    //     item.style.fontWeight = 'bold';
+    // })
+
+    $_('.item').setStyle('font-weight','bold');
+
+  </script>
+</body>
+</html>
