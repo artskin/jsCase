@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>css3  实验</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    .box,
+    .box::before,
+    .box::after{
+      height: 50px;
+      background: linear-gradient(to bottom,#1c2452,#114c80);
+    }
+    .box{
+      width: 800px;
+      height: 50px;
+      position: relative;
+      box-shadow:0 3px 6px rgba(0,0,0,0.3);
+    }
+    .box::before{
+      content: '';
+      width: 100px;
+      transform: skew(45deg);
+      position: absolute;
+      left: -25px;
+      box-shadow:0 3px 3px rgba(0,0,0,0.26);
+      clip-path: polygon(-40% -40%, 70% -40%, -20% 140%, -20% 140%);
+    }
+    .box::after{
+      content: '';
+      width: 100px;
+      transform: skew(-45deg);
+      position: absolute;
+      right: -25px;
+      box-shadow:0 -3px 3px rgba(0,0,0,0.36);
+      clip-path: polygon(50% 0%, 120% 0%, 120% 120%, 110% 120%);
+    }
+    .box2{
+      width: 600px;
+      margin: 20px;
+      height: 50px;
+      background: linear-gradient(to bottom,#1c2452,#114c80);
+      clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+      box-shadow:0px 13px 16px rgba(0,0,0,0.66);
+    }
+  </style>
+ </head>
+<body class="paper">
+  <h1>css3</h1>
+  <hr>
+  <div class="box">
+
+  </div>
+  
+  <div class="box2">
+
+  </div>
+
+</body>
+
+</html>

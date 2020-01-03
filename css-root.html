@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>css :root &var demo测试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <style>
+    :root{
+      --colorLeft:#c00;
+      --colorRight:#00f;
+      --ascVal:0;
+      --colorRightR:rgba(100,100,0);
+      animation: ascValue 1s infinite;
+    }
+    
+    body{
+      /* background: var(--colorRightR); */
+    }
+
+    @keyframes ascValue {
+        0%{--ascVal:0;}
+        5%{--ascVal:5;}
+       10%{--ascVal:10;}
+       15%{--ascVal:15;}
+       20%{--ascVal:20;}
+       25%{--ascVal:25;}
+       30%{--ascVal:30;}
+       35%{--ascVal:35;}
+       40%{--ascVal:40;}
+       45%{--ascVal:45;}
+       50%{--ascVal:50;}
+       55%{--ascVal:55;}
+       60%{--ascVal:60;}
+       65%{--ascVal:65;}
+       70%{--ascVal:70;}
+       75%{--ascVal:75;}
+       80%{--ascVal:80;}
+       85%{--ascVal:85;}
+       90%{--ascVal:90;}
+       95%{--ascVal:95;}
+      100%{--ascVal:100;}
+    }
+    @keyframes bg-color {
+      0% { background-color: #e74c3c; }
+      /* 20% { background-color: #f1c40f; }
+      40% { background-color: #1abc9c; } */
+      50% { background-color: #1abc9c; }
+      /* 60% { background-color: #3498db; }
+      80% { background-color: #9b59b6; } */
+      100% { background-color: #e74c3c; }
+    }
+    .box,.box-left,.box-right{
+      width: 100px;
+      height: 100px;
+    }
+    .box{
+      background: var(--colorRightR);
+      --rot: rotate(calc(var(--ascVal)*0.2turn));
+      /* margin-left: calc(var(--ascVal)*0.01%); */
+      transform: var(--rot);
+      /* animation: bg-color 10s infinite; */
+    }
+    .box-left{
+      background: var(--colorLeft);
+    }
+    .box-right{
+      background: var(--colorRight);
+    }
+  </style>
+</head>
+<body>
+  <div class="box-left"></div>
+  <div class="box-right"></div>
+  <div class="box"></div>
+
+</body>
+
+<script>
+  
+</script>
+</html>

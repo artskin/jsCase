@@ -1,0 +1,14 @@
+html{
+	background: #e9ecee;
+}
+body.paper{
+	/* display: flex;
+	justify-content: center; */
+	padding: 16px;
+	width: 90%;
+	margin: 20px auto;
+	max-width: 1000px;
+	background: white;
+	border-radius: 2px;
+	box-shadow: 0 1px 5px #ddd;
+}
