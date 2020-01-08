@@ -1,7 +1,7 @@
 html{
 	background: #e9ecee;
 }
-body.paper{
+.paper{
 	/* display: flex;
 	justify-content: center; */
 	padding: 16px;

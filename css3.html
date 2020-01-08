@@ -12,6 +12,12 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
+    #matrix{
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -10;
+    }
     .box,
     .box::before,
     .box::after{
@@ -50,19 +56,130 @@
       clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
       box-shadow:0px 13px 16px rgba(0,0,0,0.66);
     }
+    .box3{
+      width: 400px;
+      height: 100px;
+      box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.5) inset;
+    }
+    .number{
+      line-height:1;
+      font-size:20px;
+      overflow: hidden;
+      background: #ccc;
+      position: absolute;
+    }
+    .number i{
+      font-style:normal;
+      position: relative;
+      width: 1em;
+      display: block;
+      float: left;
+      transition: all 2s ease 0s;
+    }
+    .number i::after{
+      content:'0 1 2 3 4 5 6 7 8 9';
+      position:absolute;
+      color:aquamarine;
+      display: block;
+      width: 1em;
+      line-height: 1em;
+      left: 0;
+      top: 0;
+    }
   </style>
  </head>
-<body class="paper">
-  <h1>css3</h1>
-  <hr>
-  <div class="box">
-
+<body>
+  <div class="paper">
+    <h1>css3</h1>
+    <hr>
+    <div class="box"> </div>
+    <div class="box2"> </div>
+    <div class="box3"></div>
+    <div class="number" data-value="12188832">
+      <!-- <i style="transform: translateY(-2em);">2</i>
+      <i style="transform: translateY(-1em);">1</i>
+      <i style="transform: translateY(-2em);">2</i>
+      <i style="transform: translateY(-4em);">3</i>
+      <i style="transform: translateY(-4em);">4</i> -->
+    </div>
   </div>
-  
-  <div class="box2">
-
-  </div>
-
+  <canvas id="matrix"></canvas>
 </body>
+<script>
+let numberDom = document.querySelector('.number');
+let nowNumber = Number(numberDom.dataset.value);
+let fragment=document.createDocumentFragment();
+creatNumber(nowNumber)
 
+function creatNumber(nowNumber){
+  let arr = String(nowNumber).split('');
+  arr.map((item)=>{
+    let itemDom = document.createElement('i');
+    itemDom.style.transform = 'translateY(-'+item+'em)';
+    itemDom.innerHTML = item;
+    fragment.appendChild(itemDom)
+  })
+  console.log(fragment.children[2]);
+  numberDom.appendChild(fragment);
+}
+
+function updateNumber(nowNumber,oldNumber){
+  if(nowNumber != oldNumber){
+    if(String(nowNumber).length = String(oldNumber).length){
+
+    }else{
+
+    }
+    oldNumber = nowNumber;
+  }
+  
+}
+
+
+let tt = setInterval(()=>{
+  let newNumber = nowNumber + 2;
+  updateNumber(newNumber,nowNumber)
+  
+},3000)
+console.log(tt)
+
+
+    //文字
+    var txts = "0123456789!@#$%^&*()~_+℃☆○※";
+    //转为数组
+    txts = txts.split("");
+    var matrix=document.getElementById("matrix");
+    var context=matrix.getContext("2d");
+    matrix.height=window.innerHeight;
+    matrix.width=window.innerWidth;
+    var drop=[];
+    var font_size=25;
+    var fon = 14;
+    var columns=matrix.width/fon;
+    for(var i=0;i<columns;i++)
+        drop[i]=1;
+
+    function drawMatrix(){
+
+        context.fillStyle="rgba(0, 0, 0, 0.03)";
+        context.fillRect(0,0,matrix.width,matrix.height);
+
+
+        context.fillStyle="green";
+        context.font=font_size+"px";
+        for(var i=0;i<columns;i++){
+            //随机取要输出的文字
+            var text = txts[Math.floor(Math.random()*txts.length)];
+            //输出文字，注意坐标的计算
+            context.fillText(text,i*fon,drop[i]*fon);    /*get 0 and 1*/
+
+            if(drop[i]*font_size>(matrix.height*2/3)&&Math.random()>0.95)   /*reset*/
+                drop[i]=0;
+            drop[i]++;
+        }
+    }
+    setInterval(drawMatrix,23);
+
+
+</script>
 </html>
