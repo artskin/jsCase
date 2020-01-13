@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>jsClass练习</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/case.css?v=2">
+  <style>
+    html,body,#app{height: 100%;}
+    main{background: aquamarine;justify-content: center;height: 70%;align-items: center;display: flex;}
+  </style>
+</head>
+<body>
+  
+  <div id="app">
+    <h2>Toggle:</h2>
+    <nav>
+      <a href="">导航一</a> | 
+      <a href="">导航一</a> | 
+      <a href="">导航一</a> | 
+      <a href="">导航一</a> 
+    </nav>
+    <hr>
+    <main ref="fullScreenElement">
+      <div>
+        全屏区域
+      </div>
+    </main>
+    <br>
+    <button @click="toggleFullScreen" class="btn">{{buttonText}}</button>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      isFullScreen:false,
+      buttonText:'全屏'
+    },
+    mounted(){
+      this.$nextTick(()=>{
+        document.addEventListener('keyup', function (e) {
+          console.log('您按了:',e.key,e)
+        })
+      })
+    },
+    methods: {
+      toggleFullScreen(e){
+        let _this = this;
+        let fullScreenElement = this.$refs.fullScreenElement;
+        let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen;
+        let exitFS = document.exitFullscreen || document.msExitFullscreen;
+        if( typeof rfs !== 'undefined' && rfs){
+          this.isFullScreen = !this.isFullScreen;
+          if(this.isFullScreen){
+            rfs.call(fullScreenElement);
+          }else{
+            exitFS.call(document)
+          }
+        }
+      },
+      getFullscreenElement() {
+        return (        
+          document.fullscreenElement ||
+          document.mozFullScreenElement ||
+          document.msFullScreenElement ||
+          document.webkitFullscreenElement||null
+        );
+      }
+    }
+  })
+</script>
+</html>

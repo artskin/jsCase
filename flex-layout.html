@@ -24,6 +24,8 @@
       box-sizing: border-box;
       position: relative;
       min-height: 300px;
+      max-height: 500px;
+      overflow: auto;
     }
 
     .flex::before,
@@ -51,6 +53,7 @@
       background: #ccc;
       padding: 20px;
       position: relative;
+      min-height: 200px;
     }
     
     .item:nth-child(1){
@@ -162,6 +165,40 @@
     <div class="item">444444444444</div>
     <div class="item">555555555555555</div>
   </div>
+  <div style="padding: 30px;">
+    <div class="flex" style="max-height: 300px;overflow:auto;flex-direction: column;align-items: center;">
+      <div class="content" contenteditable="true" style="background: #ccc;">
+        <p>ddd</p>
+        <p>dd222222222233333333334444d</p>
+        <!-- <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p>
+        <p>dd222222222233333333334444d</p> -->
+      </div>
+    </div>
+  </div>
+  
   <script>
     let flexDom = document.getElementsByClassName('flex')[0];
     let itemDom = document.getElementsByClassName('item')[0];
