@@ -10,32 +10,65 @@
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
-  <link rel="stylesheet" href="./src/style/case.css?v=2">
+  <link rel="stylesheet" href="./src/style/base.css?v=2">
   <style>
-    html,body,#app{height: 100%;}
-    main{background:antiquewhite;justify-content: center;height: 70%;align-items: center;display: flex;}
+    main{background:antiquewhite;height: 600px;padding: 1px 15px;position: relative;margin-bottom: 10px;}
+    main .btn{position: absolute;bottom: 15px;padding: 10px 15px;}
+    main .isfull{display: none;}
+
+    /* :fullscreen 伪类*/
+    main:fullscreen{background-color: cadetblue;font-size: 28px;}
+    main:fullscreen .isfull,
+    main:-webkit-full-screen .isfull{display: block;}
+    main:-moz-full-screen .isfull{display: block;}
+    main:-ms-fullscreen .isfull{display: block;}
+
+    main:fullscreen > h2{border-left: 10px solid orange;padding-left: 20px;}
+    main:-moz-full-screen > h2{border-left: 10px solid orange;padding-left: 20px;}
+    main:-ms-fullscreen > h2{border-left: 10px solid orange;padding-left: 20px;}
+    main:-webkit-full-screen > h2{border-left: 10px solid orange;padding-left: 20px;}
   </style>
 </head>
-<body>
+<body class="paper">
   
   <div id="app">
-    <h2>全屏实验:</h2>
+    <h1>全屏实验:</h1>
     <nav>
-      <a href="">导航一</a> | 
-      <a href="">导航一</a> | 
-      <a href="">导航一</a> | 
-      <a href="">导航一</a> 
+      <a href="#chapter1">第一讲</a> | 
+      <a href="#chapter2">第二讲</a> 
     </nav>
     <hr>
-    <main ref="fullScreenElement">
-      <div>
-        全屏区域
-      </div>
+    <main id="chapter1" ref="fullScreenElement1">
+      <h2>第一讲</h2>
+      <h3 class="isfull">全屏true: <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/requestFullScreen" target="_blank">Element.requestFullscreen()</a></h3>
+      <article class="isfull">
+        <p>Element.requestFullscreen() 方法用于发出异步请求使元素进入全屏模式。</p>
+        <code>var Promise = Element.requestFullscreen(options);</code>
+        <p>调用此API并不能保证元素一定能够进入全屏模式。如果元素被允许进入全屏幕模式，返回的Promise会resolve，并且该元素会收到一个fullscreenchange事件，通知它已经进入全屏模式。如果全屏请求被拒绝，返回的promise会变成rejected并且该元素会收到一个fullscreenerror事件。如果该元素已经从原来的文档中分离，那么该文档将会收到这些事件。</p>
+        <p>早期的Fullscreen API实现总是会把这些事件发送给document，而不是调用的元素，所以你自己可能需要处理这样的情况。参考 Browser compatibility in [Page not yet written] 来得知哪些浏览器做了这个改动。</p>
+      </article>
+      <article>
+        <p><div class="note">W3C标准使用不带破折号的单词:fullscreen，但Webkit和Gecko应用接口各自使用前缀带有破折号的变量：<code>:-webkit-full-screen</code>&nbsp;和<code>:-moz-full-screen。</code>微软的Edge和Internet Explorer各自使用标准语法：<code>:fullscreen</code>和<code>:-ms-fullscreen。</code></div></p>
+      </article>
+      <button @click="toggleFullScreen($event,'fullScreenElement1')" class="btn">{{buttonText}}切换</button>
     </main>
-    <br>
-    <button @click="toggleFullScreen" class="btn">{{buttonText}}</button>
+
+    <main id="chapter2" ref="fullScreenElement2">
+      <h2>第二讲</h2>
+      <h3 class="isfull">全屏true: <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/requestFullScreen"target="_blank">Element.requestFullscreen()</a></h3>
+      <article class="isfull">
+        <p>Element.requestFullscreen() 方法用于发出异步请求使元素进入全屏模式。</p>
+        <code>var Promise = Element.requestFullscreen(options);</code>
+        <p>调用此API并不能保证元素一定能够进入全屏模式。如果元素被允许进入全屏幕模式，返回的Promise会resolve，并且该元素会收到一个fullscreenchange事件，通知它已经进入全屏模式。如果全屏请求被拒绝，返回的promise会变成rejected并且该元素会收到一个fullscreenerror事件。如果该元素已经从原来的文档中分离，那么该文档将会收到这些事件。</p>
+        <p>早期的Fullscreen API实现总是会把这些事件发送给document，而不是调用的元素，所以你自己可能需要处理这样的情况。参考 Browser compatibility in [Page not yet written] 来得知哪些浏览器做了这个改动。</p>
+      </article>
+      <article>
+        内容
+      </article>
+      <button @click="openFullScreen($event,'fullScreenElement2')" class="btn">打开{{buttonText}}</button>
+    </main>
+
   </div>
-</body>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
   new Vue({
@@ -45,16 +78,17 @@
       buttonText:'全屏'
     },
     mounted(){
+      //console.log(this.getFullscreenElement())
       this.$nextTick(()=>{
-        document.addEventListener('keyup', function (e) {
-          console.log('您按了:',e.key,e)
+        document.addEventListener('keyup', e=> {
+          console.log('您按了:',e.key,e.keyCode,e)
         })
       })
     },
     methods: {
-      toggleFullScreen(e){
+      toggleFullScreen(ev){
         let _this = this;
-        let fullScreenElement = this.$refs.fullScreenElement;
+        let fullScreenElement = this.$refs.fullScreenElement1;
         let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen;
         let exitFS = document.exitFullscreen || document.msExitFullscreen;
         if( typeof rfs !== 'undefined' && rfs){
@@ -64,6 +98,18 @@
           }else{
             exitFS.call(document)
           }
+        }
+      },
+      openFullScreen(ev,el){
+        let fullScreenElement;
+        if(el){
+          fullScreenElement = this.$refs[el];
+        }else{
+          fullScreenElement = document.documentElement || document.body;
+        }
+        let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen || fullScreenElement.mozRequestFullScreen;
+        if(rfs && typeof rfs !== 'undefined'){
+          rfs.call(fullScreenElement)
         }
       },
       getFullscreenElement() {
@@ -77,4 +123,5 @@
     }
   })
 </script>
+</body>
 </html>

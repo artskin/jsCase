@@ -12,3 +12,20 @@ html{
 	border-radius: 2px;
 	box-shadow: 0 1px 5px #ddd;
 }
+button,input{
+	border: none;
+	padding: 5px;
+	line-height: 1;
+}
+.btn{
+	background: #fc0;
+	border-radius: 3px;
+	font-size: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #fff;
+}
+.btn-green{
+	background: rgb(21, 179, 34);
+	border: 1px solid rgb(21, 179, 34);
+}
