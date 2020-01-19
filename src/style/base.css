@@ -14,7 +14,7 @@ html{
 }
 button,input{
 	border: none;
-	padding: 5px;
+	padding: .5em;
 	line-height: 1;
 }
 .btn{
@@ -29,3 +29,12 @@ button,input{
 	background: rgb(21, 179, 34);
 	border: 1px solid rgb(21, 179, 34);
 }
+
+table{
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+table th,
+table td{border: 1px solid #ccc;padding:3px 6px;}
+
+hr{border: none;height: 1px;background: #ccc;}

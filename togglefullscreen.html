@@ -86,10 +86,18 @@
       })
     },
     methods: {
-      toggleFullScreen(ev){
-        let _this = this;
-        let fullScreenElement = this.$refs.fullScreenElement1;
-        let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen;
+      getFullScreenElement(ev,el){
+        let fullScreenElement;
+        if(el){
+          fullScreenElement = this.$refs[el];
+        }else{
+          fullScreenElement = document.documentElement || document.body;
+        }
+        return fullScreenElement;
+      },
+      toggleFullScreen(ev,el){
+        let fullScreenElement = this.getFullScreenElement(ev,el);
+        let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen || fullScreenElement.mozRequestFullScreen;
         let exitFS = document.exitFullscreen || document.msExitFullscreen;
         if( typeof rfs !== 'undefined' && rfs){
           this.isFullScreen = !this.isFullScreen;
@@ -101,15 +109,16 @@
         }
       },
       openFullScreen(ev,el){
-        let fullScreenElement;
-        if(el){
-          fullScreenElement = this.$refs[el];
-        }else{
-          fullScreenElement = document.documentElement || document.body;
-        }
+        let fullScreenElement = this.getFullScreenElement(ev,el);
         let rfs = fullScreenElement.requestFullscreen || fullScreenElement.msRequestFullscreen || fullScreenElement.mozRequestFullScreen;
         if(rfs && typeof rfs !== 'undefined'){
           rfs.call(fullScreenElement)
+        }
+      },
+      exitFullScreen(ev,el){
+        let exitFS = document.exitFullscreen || document.msExitFullscreen || document.mozExitFullscreen;
+        if(rfs && typeof exitFS !== 'undefined'){
+          exitFS.call(document)
         }
       },
       getFullscreenElement() {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="results"></div>
+</body>
+<script src="/src/js/js-micro-tmpl.js"></script>
+<!-- <script>
+    // 立即执行函数表达式（IIFE）
+    (function(){
+        var cache = {}; // 声明缓存对象
+        /**
+         * 下面这个tmpl函数会被执行两次：“主步骤”：获取模板内容，“子步骤”：解析模板。
+         * 接收两个参数：
+         * str：需要解析的字符串
+         * data：适合这个模板的数据
+         */
+        this.tmpl = function tmpl(str, data){
+            // 利用 !/\W/.test(str) 来检查是否str是否是“纯净的正则word“
+            // 如果是，则说明是模板id，对应这个例子的"item_tmpl"，此时执行“主步骤”
+            // 如果不是，则说明是模板内容，对应这个例子script标签中间的内容，此时执行“子步骤”
+            var fn = !/\W/.test(str) ?
+            cache[str] = cache[str] ||
+                tmpl(document.getElementById(str).innerHTML) : // 执行tmpl（“子步骤”）
+            
+            // 生成一个函数，这个函数的功能是生成纯JavaScript. 其中str是模版内容，obj是数据data（只有“子步骤”时）
+            new Function("obj",
+                "var p=[],print=function(){p.push.apply(p,arguments);};" +
+                
+                // 利用with(){}，形参是obj，实参是data，这里作为本地对象
+                "with(obj){p.push('" +
+                
+                // 把模板转化成 JavaScript 代码
+                str
+                .replace(/[\r\t\n]/g, " ")
+                .split("<%").join("\t")  // <%=是我们约定的 变量之前的头部， 这里按<%分割
+                .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                .replace(/\t=(.*?)%>/g, "',$1,'")  //这里用 (.*?)捕获变量，比如<%=id%>，就会捕获到id
+                .split("\t").join("');")
+                .split("%>").join("p.push('") // %>是我们约定的 变量之后的尾部， 这里按尾部分割
+                .split("\r").join("\\'")
+            + "');}return p.join('');");  // p.join('') 会把前几个操作后存起来的数组p，再连接成为字符串返回
+            
+            // “主步骤”时，data存在，这里fn( data )就是执行 “子步骤”时上面“new Function”生成的函数
+            // “子步骤”时，data不存在，这里直接返回上面“new Function”生成的函数
+            return data ? fn( data ) : fn;
+        };
+    })();
+</script> -->
+
+<script type="text/html" id="item_tmpl">
+  <div id="<%=id%>" class="<%=(i % 2 == 1 ? " even" : "")%>">
+    <div class="grid_1 alpha right">
+    <img class="righted" src="<%=profile_image_url%>"/>
+    </div>
+    <div class="grid_6 omega contents">
+    <p><b><a href="/<%=from_user%>"><%=from_user%></a>:</b> <%=text%></p>
+    </div>
+  </div>
+</script>
+
+<script>
+    // test
+    var dataObject = {
+        id: '1000010',
+        i: 0,
+        profile_image_url: '/assets/images/002.jpg',
+        from_user: 'Mark',
+        text: '你好'
+    }
+
+    var results = document.getElementById("results");
+    results.innerHTML = tmpl("item_tmpl", dataObject);  // 执行tmpl（“主步骤”）
+</script>
+</html>

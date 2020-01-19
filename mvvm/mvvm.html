@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 双向数据绑定 靠的是表单 -->
+      <input type="text" v-model="message.a" />
+      <div>{{ message.a }} 啦啦啦</div>
+      {{ message.a }}
+      {{ b }}
+      <textarea name="" id="inputColors" cols="30" rows="10">
+        '#01B4B7','#E084A9', '#4C8EC9', '#FFB592', '#91c7ae','#4C8EC9',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'
+      </textarea>
+      <ul class="colors-show">
+        <li>
+          <label for=""></label>
+          <span>{{colorList}}</span>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
+<script src="observer.js"></script>
+<script src="watcher.js"></script>
+<script src="compile.js"></script>
+<script src="dep.js"></script>
+<script src="mvvm.js"></script>
+<script>
+  let vm = new MVVM({
+    el: "#app",
+    data: {
+      message: { a: "wlf" },
+      b: "biubiubiu",
+      colorList:['#01B4B7','#E084A9', '#4C8EC9', '#FFB592', '#91c7ae','#4C8EC9',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
+    },
+    mounted(){
+      console.log("dd")
+    }
+  });
+</script>

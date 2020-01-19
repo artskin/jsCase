@@ -31,6 +31,15 @@
 
   let target = {}
   let p = new Proxy(target,{})
+  console.log('外2');
+  setTimeout(()=>{ console.log('5')},5)
+  setTimeout(()=>{ console.log('4')},4)
+  setTimeout(()=>{ console.log('3')},3)
+  setTimeout(()=>{ console.log('2')},2)
+  setTimeout(()=>{ console.log('1')},1)
+  
+  setTimeout(()=>{ console.log('--')})
+  setTimeout(()=>{ console.log('0')},0)
 
   /*
   var docCookies = ... get the "docCookies" object here:  

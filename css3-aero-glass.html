@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>css3  实验</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    body{position: relative;}
+    .box,.aero::before{
+      background:url('/assets/images/normal1.jpg') no-repeat center;
+      background-size:cover;
+      background-attachment: fixed;
+    }
+    .box{
+      width: 100%;
+      height: 500px;
+      position: relative;
+      
+    }
+    .aero{
+      display: inline-block;
+      width: 200px;
+      height: 100px;
+      position: absolute;
+      text-align: center;
+      line-height: 100px;
+      color: #fff;
+      left: 450px;
+      top: 20px;
+      border: 2px solid #fff;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,.5);
+    }
+    .aero span{position: relative;}
+    .aero::before{
+      content: '';
+      position: absolute;
+      width: 110%;
+      height: 110%;
+      left: -4px;
+      top: -4px;
+      filter: blur(4px);
+    }
+    .aero:hover::before {filter: blur(0);}
+  </style>
+ </head>
+<body class="paper">
+  <h1>css3</h1>
+  <p>
+    <pre><code>background-attachment: fixed;</code></pre>
+    ps：是相对于窗口fixed
+  </p>
+  <hr>
+  <div class="box">
+    <div id="box" class="aero">
+      <span>毛玻璃</span>
+    </div>  
+  </div>
+  延伸阅读
+  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment">https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment</a>
+</body>
+<script>
+class Drag {
+    constructor(id) {
+      this.oDiv = document.querySelector(id);
+      this.disX = 0;
+      this.disY = 0;
+      this.init();
+    }
+
+    init() {
+      this.oDiv.onmousedown = function (e) {
+        //阻止内容被选中
+        e.preventDefault();
+        this.disX = e.clientX - this.oDiv.offsetLeft;
+        this.disY = e.clientY - this.oDiv.offsetTop;
+        document.onmousemove = this.fnMove.bind(this);
+        document.onmouseup = this.fnUp.bind(this);
+      }.bind(this);
+    }
+    //确保范围不会超出
+    ensureRange(e){
+      let left = e.clientX - this.disX;
+      let width = window.innerWidth - this.oDiv.offsetWidth;
+      if (left < 0) {
+        left = 0;
+      } else if (left > width) {
+        left = width;
+      }
+      let top = e.clientY - this.disY;
+      let height = window.innerHeight - this.oDiv.offsetHeight;
+      if (top < 0) {
+        top = 0;
+      } else if (top > height) {
+        top = height;
+      }
+      return {
+        top,
+        left
+      }
+    }
+
+    fnMove(e) {
+      let xy = this.ensureRange(e);
+      this.oDiv.style.left = xy.left + "px";
+      this.oDiv.style.top = xy.top + "px";
+    }
+    //弹起清除
+    fnUp() {
+      document.onmousemove = null;
+      document.onmouseup = null;
+    }
+}
+
+new Drag('#box');
+</script>
+</html>

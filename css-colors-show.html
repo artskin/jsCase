@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>css3  颜色生成预览</title>
+  <meta name="description" content="doT.js模板"/>
+  <meta name="keywords" content="doT.js模板"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    body{position: relative;}
+    .colors-show{
+      list-style: none;
+    }
+    .colors-show span{display: inline-block;padding: 10px;}
+  </style>
+ </head>
+<body class="paper">
+  <h1>css  颜色代码生成预览</h1>
+  <hr>
+  <div>
+    <textarea name="" id="inputColors" cols="30" rows="10">'#01B4B7','#E084A9','#4C8EC9','#FFB592','#91c7ae','#4C8EC9','#ca8622','#bda29a','#6e7074','#546570','#c4ccd3'
+    </textarea>
+  </div>
+  <button class="btn" onclick="showColor()">生成</button>
+  <hr>
+  <h2>生成</h2>
+  <script type="text/x-dot-template" id="arraystmpl">
+    <div>{{= arrColors}}</div>
+    {{~arrColors:value}}
+      <span style="background:{{= value}}">{{=value}}</span>
+    {{~}}
+  </script>
+  <div id="arrays" class="colors-show"></div>
+  <p>借助doT.js模板，轻量模板引擎</p>
+  <h2>延伸阅读</h2>
+  <p>官网<a href="https://github.com/olado/doT">doT</a></p>
+  <h3>doT.js常用表达式</h3>
+  <table>
+    <thead>
+      <tr><th>项目</th><th>JavaScript语法</th><th>对应语法</th><th>案例</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>输出变量</td><td>=</td><td>{{= 变量名}}</td><td>{{=it.name }}</td></tr>
+      <tr><td>条件判断</td><td>if</td><td>{{? 条件表达式}}</td><td>{{? i &gt; 3}}</td></tr>
+      <tr><td>条件转折</td><td>else/else if</td><td>{{??}}/{{?? 表达式}}</td><td>{{?? i ==2}}</td></tr>
+      <tr><td>循环遍历</td><td>for</td><td>{{~ 循环变量}}</td><td>{{~ it.arr:item}}…{{~}}</td></tr>
+      <tr><td>执行方法</td><td>funcName()</td><td>{{= funcName() }}</td><td>{{= it.sayHello() }}</td></tr>
+    </tbody>
+  </table>
+  
+</body>
+
+<script src="https://cdn.bootcss.com/dot/2.0.0-beta.0/doT.js"></script>
+<script>
+  function $_(el){
+    return document.querySelector(el);
+  }
+  let arrColors;
+
+  function showColor(){
+    let colorsValue = $_('#inputColors').value.trim();
+    arrColors = colorsValue.split(',');
+    let markStr='';
+
+    for(let i=0;i<arrColors.length;i++){
+      markStr = arrColors[i].substr(0,1)
+      if(markStr === '"'){
+        arrColors[i] = arrColors[i].replace(`\"`,"").replace(`\"`,"")
+      }else if(markStr === "'"){
+        //console.log(`\ ${markStr}`)
+        arrColors[i] = arrColors[i].replace(`\'`,"").replace(`\'`,"")
+      }
+    }
+    //console.log(arrColors);
+    let arrText = doT.template($_('#arraystmpl').innerHTML)
+    $_('#arrays').innerHTML = arrText(arrColors)
+  }
+  showColor()
+</script>
+</html>
