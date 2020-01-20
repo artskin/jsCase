@@ -38,6 +38,9 @@
       <span style="background:{{= value}}">{{=value}}</span>
     {{~}}
   </script>
+  <template>
+    <span v-for="item in arrColors">{{item}}</span>
+  </template>
 
   <script type="text/amu-tmpl" id="amutmpl">
     <span v-for="item in arrColors" style="background:{{item}}">{{item}}</span>
@@ -134,9 +137,10 @@
   }
   es6Template()
   function es6Template(tmpl,data){
-    let targetEl =$_('script[type="text/amu-tmpl"]')
+    //let targetEl =$_('script[type="text/amu-tmpl"]')
+    let targetEl =$_('template')
     //console.log(typeof targetEl.innerHTML)
-    console.log(targetEl.childNodes.item(0).innerHTML)
+    console.log(targetEl.content.children[0].attributes)
     //console.log(targetEl.childNodes[0].getAttribute('v-for'))
     targetEl.childNodes.forEach(element => {
       console.log(element)
@@ -148,12 +152,21 @@
     let newEl = document.createElement('div',)
     newEl.innerHTML = 'loading';
     newEl.className = 'result';
-    targetEl.parentNode.insertBefore(newEl,targetEl.nextSibling);
-
-    newEl.innerHTML = `${targetEl.childNodes.item(0).data}`
+    insertAfter(newEl,targetEl)
+    
+    newEl.innerHTML = `${targetEl.content.children[0]}`
 
   }
-  
+  function insertAfter(newElement, targetElement){
+    var parent = targetElement.parentNode;
+    if (parent.lastChild == targetElement) {
+        // 如果最后的节点是目标元素，则直接添加。因为默认是最后
+        parent.appendChild(newElement);
+    } else {
+        parent.insertBefore(newElement, targetElement.nextSibling);
+        //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
+    }
+  }
   //console.log(es6Template)
   // const template = `
   //   <ul>
