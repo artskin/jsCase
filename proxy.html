@@ -11,35 +11,61 @@
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    form label{display: inline-block;width: 60px;text-align: right;}
+  </style>
  </head>
 <body class="paper">
   <h1>Proxy</h1>
   <hr>
+  <form action="">
+    <p>
+      <label for="">用户名</label>
+      <input id="userName" type="text" value="123">
+    </p>
+    <p>
+      <label for="">年 龄</label>
+      <input id="userAge" type="text" value="123">
+    </p>
+  </form>
+  <div id="output"></div>
 
 </body>
 <script>
   //let person = new Proxy(target,handler);
+  function $(el){
+    return document.querySelector(el)
+  }
+  let user={
+    name:'artskin',
+    age:'18'
+  }
+  $('#output').innerHTML = "用户名："+$('#userName').value+"<br>年龄："+$('#userAge').value;
 
   let handler = {
-    get:(target,name)=>{
+    get(target,name){
       return name in target ? target[name]:37
+    },
+    set(target,name){
+      console.log(target,name)
     }
   }
-  console.log(handler)
-  let pp = new Proxy({},handler)
+  //console.log(handler)
+  let pp = new Proxy(user,handler)
+  console.log(pp)
   pp.a = 1
 
   let target = {}
   let p = new Proxy(target,{})
-  console.log('外2');
-  setTimeout(()=>{ console.log('5')},5)
-  setTimeout(()=>{ console.log('4')},4)
-  setTimeout(()=>{ console.log('3')},3)
-  setTimeout(()=>{ console.log('2')},2)
-  setTimeout(()=>{ console.log('1')},1)
+  // console.log('外2');
+  // setTimeout(()=>{ console.log('5')},5)
+  // setTimeout(()=>{ console.log('4')},4)
+  // setTimeout(()=>{ console.log('3')},3)
+  // setTimeout(()=>{ console.log('2')},2)
+  // setTimeout(()=>{ console.log('1')},1)
   
-  setTimeout(()=>{ console.log('--')})
-  setTimeout(()=>{ console.log('0')},0)
+  // setTimeout(()=>{ console.log('--')})
+  // setTimeout(()=>{ console.log('0')},0)
 
   /*
   var docCookies = ... get the "docCookies" object here:  
@@ -118,7 +144,7 @@ var docCookies = {
     return aKeys;
   }
 };
-console.log(docCookies)
+//console.log(docCookies)
 var docCookies = new Proxy(docCookies, {
   "get": function (oTarget, sKey) {
     return oTarget[sKey] || oTarget.getItem(sKey) || undefined;
@@ -157,27 +183,27 @@ var docCookies = new Proxy(docCookies, {
 
 /* Cookies 测试 */
 
-console.log(docCookies.my_cookie1 = "First value");
-console.log(docCookies.getItem("my_cookie1"));
+// console.log(docCookies.my_cookie1 = "First value");
+// console.log(docCookies.getItem("my_cookie1"));
 
-docCookies.setItem("my_cookie1", "Changed value");
-console.log(docCookies.my_cookie1);
+// docCookies.setItem("my_cookie1", "Changed value");
+// console.log(docCookies.my_cookie1);
 
 
-function changeObjProperty(o) {
-  console.log(o)
-  o.siteUrl = "http://www.baidu.com"
-  console.log(o)
-  o = new Object()
-  console.log(o)
-  o.siteUrl = "http://www.google.com"
-  console.log(o)
-} 
-let webSite = new Object();
-console.log(webSite)
-changeObjProperty(webSite);
-console.log(webSite)
-console.log(webSite.siteUrl);
+// function changeObjProperty(o) {
+//   console.log(o)
+//   o.siteUrl = "http://www.baidu.com"
+//   console.log(o)
+//   o = new Object()
+//   console.log(o)
+//   o.siteUrl = "http://www.google.com"
+//   console.log(o)
+// } 
+// let webSite = new Object();
+// console.log(webSite)
+// changeObjProperty(webSite);
+// console.log(webSite)
+// console.log(webSite.siteUrl);
 
 </script>
 </html>
