@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
     body{position: relative;}
+    #inputColors{width: 60%;}
     .colors-show{
       list-style: none;
     }
@@ -20,7 +21,7 @@
   </style>
  </head>
 <body class="paper">
-  <h1>css  颜色代码生成预览</h1>
+  <h1>css 颜色代码生成预览</h1>
   <hr>
   <div>
     <textarea name="" id="inputColors" cols="30" rows="10">'#01B4B7','#E084A9','#4C8EC9','#FFB592','#91c7ae','#4C8EC9','#ca8622','#bda29a','#6e7074','#546570','#c4ccd3'
@@ -29,14 +30,24 @@
   <button class="btn" onclick="showColor()">生成</button>
   <hr>
   <h2>生成</h2>
+  <h3>方案一：es6 模板标签</h3>
+  <div class="es6-tmpl colors-show"></div>
+  <h3>方案二：借助doT.js模板，轻量模板引擎</h3>
   <script type="text/x-dot-template" id="arraystmpl">
-    <div>{{= arrColors}}</div>
     {{~arrColors:value}}
       <span style="background:{{= value}}">{{=value}}</span>
     {{~}}
   </script>
+  <template>
+    <span v-for="item in arrColors">{{item}}</span>
+  </template>
+
+  <script type="text/amu-tmpl" id="amutmpl">
+    <span v-for="item in arrColors" style="background:{{item}}">{{item}}</span>
+  </script>
+  
   <div id="arrays" class="colors-show"></div>
-  <p>借助doT.js模板，轻量模板引擎</p>
+
   <h2>延伸阅读</h2>
   <p>官网<a href="https://github.com/olado/doT">doT</a></p>
   <h3>doT.js常用表达式</h3>
@@ -52,16 +63,21 @@
       <tr><td>执行方法</td><td>funcName()</td><td>{{= funcName() }}</td><td>{{= it.sayHello() }}</td></tr>
     </tbody>
   </table>
+  <p><a target="_blank" href="https://tech.meituan.com/2017/03/24/dot.html">前端渲染引擎doT.js解析</a></p>
+  <p><a target="_blank" href="https://www.jianshu.com/p/187d04d44e82">es6模板部分</a></p>
+  <p><a target="_blank" href="https://juejin.im/post/5d99d9a0f265da5b8601264c">Vue3.x源码调试</a></p>
+  <p><a target="_blank" href="https://juejin.im/post/5d977f47e51d4578453274b3">Vue 3 源码导读</a></p>
+
   
 </body>
 
 <script src="https://cdn.bootcss.com/dot/2.0.0-beta.0/doT.js"></script>
 <script>
+  let arrColors;
   function $_(el){
     return document.querySelector(el);
   }
-  let arrColors;
-
+  
   function showColor(){
     let colorsValue = $_('#inputColors').value.trim();
     arrColors = colorsValue.split(',');
@@ -76,10 +92,92 @@
         arrColors[i] = arrColors[i].replace(`\'`,"").replace(`\'`,"")
       }
     }
+
     //console.log(arrColors);
     let arrText = doT.template($_('#arraystmpl').innerHTML)
     $_('#arrays').innerHTML = arrText(arrColors)
+    es6Tmpl()
   }
   showColor()
+
+  // let userList=[
+  //   {
+  //     name:'lulu',
+  //     age:17,
+  //     height:180
+  //   },
+  //   {
+  //     name:'张三',
+  //     age:23,
+  //     height:170
+  //   },
+  //   {
+  //     name:'李小四',
+  //     age:27,
+  //     height:175
+  //   }
+  // ]
+  
+  // const msg = outStr`我是${userList[0].name},我的年龄是${userList[0].age}`
+  
+  // function outStr(str,...values){
+  //   //console.log(...values)
+  //   return 
+  // }
+  function es6Tmpl(){
+    
+    const es6Template = `
+      ${arrColors.map(item =>`
+      <span style="background:${item}">
+        ${item}
+      </span>`
+      ).join('')}
+      `;
+    $_('.es6-tmpl').innerHTML = es6Template;
+  }
+  es6Template()
+  function es6Template(tmpl,data){
+    //let targetEl =$_('script[type="text/amu-tmpl"]')
+    let targetEl =$_('template')
+    //console.log(typeof targetEl.innerHTML)
+    console.log(targetEl.content.children[0].attributes)
+    //console.log(targetEl.childNodes[0].getAttribute('v-for'))
+    targetEl.childNodes.forEach(element => {
+      console.log(element)
+      console.log(element)
+
+    });
+
+    let tmplEl = `${targetEl.innerHTML}`;
+    let newEl = document.createElement('div',)
+    newEl.innerHTML = 'loading';
+    newEl.className = 'result';
+    insertAfter(newEl,targetEl)
+    
+    newEl.innerHTML = `${targetEl.content.children[0]}`
+
+  }
+  function insertAfter(newElement, targetElement){
+    var parent = targetElement.parentNode;
+    if (parent.lastChild == targetElement) {
+        // 如果最后的节点是目标元素，则直接添加。因为默认是最后
+        parent.appendChild(newElement);
+    } else {
+        parent.insertBefore(newElement, targetElement.nextSibling);
+        //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
+    }
+  }
+  //console.log(es6Template)
+  // const template = `
+  //   <ul>
+  //     ${arrColors.map(item => `
+  //       <span style="background:${item}">
+  //         ${item}
+  //       </span> 
+  //     `).join('')}
+  //   </ul>
+  // `
+  //console.log(template)
+  
 </script>
 </html>
