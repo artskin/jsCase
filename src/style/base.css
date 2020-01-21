@@ -17,6 +17,10 @@ button,input{
 	padding: .5em;
 	line-height: 1;
 }
+input[type='text']{
+	border: 1px solid #ccc;
+	padding: 5px;
+}
 .btn{
 	background: #fc0;
 	border-radius: 3px;
