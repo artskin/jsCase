@@ -21,14 +21,17 @@
   <form action="">
     <p>
       <label for="">用户名</label>
-      <input id="userName" type="text" value="123">
+      <input id="userName" type="text" value="">
     </p>
     <p>
       <label for="">年 龄</label>
-      <input id="userAge" type="text" value="123">
+      <input id="userAge" type="text" value="">
     </p>
   </form>
-  <div id="output"></div>
+  <hr>
+  <div id="output">
+
+  </div>
 
 </body>
 <script>
@@ -40,23 +43,47 @@
     name:'artskin',
     age:'18'
   }
-  $('#output').innerHTML = "用户名："+$('#userName').value+"<br>年龄："+$('#userAge').value;
+  // console.log(Object.getOwnPropertyDescriptor(user,'name'))
+  // Object.defineProperty(user,'name',{
+  //   writable:false
+  // })
 
   let handler = {
-    get(target,name){
-      return name in target ? target[name]:37
+    get(target,key,receiver){
+      //console.log(target,key,receiver)
+      //return name in target ? target[name]:37
+      return Reflect.get(target,key,receiver)
     },
-    set(target,name){
-      console.log(target,name)
+    set(target,key,value,receiver){
+      //console.log(`setting,${target},${key}`)
+      console.log(target,key,value,receiver)
+      if(key == 'name'){
+        console.log('监听')
+        $('input').value = value;
+        $('#output').innerHTML = value;
+      }
+      return Reflect.set(target,key,value,receiver)
     }
   }
-  //console.log(handler)
+  // //console.log(handler)
+ 
+  $('#userName').value = user.name;
+  $('#userAge').value = user.age;
   let pp = new Proxy(user,handler)
-  console.log(pp)
-  pp.a = 1
+  // pp.name = $('#userName').value;
+  // pp.age  = $('#userAge').value;
 
-  let target = {}
-  let p = new Proxy(target,{})
+  $('input').addEventListener('keyup',(e)=>{
+    console.log(e)
+    pp.name = e.target.value
+  })
+  
+  
+  // pp.name = 'hanmeimei'
+  // console.log(pp)
+  $('#output').innerHTML = "用户名："+pp.name+"<br>年龄："+pp.age;
+  // let target = {}
+  // let p = new Proxy(target,{})
   // console.log('外2');
   // setTimeout(()=>{ console.log('5')},5)
   // setTimeout(()=>{ console.log('4')},4)
