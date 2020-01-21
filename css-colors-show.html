@@ -39,7 +39,8 @@
     {{~}}
   </script>
   <template>
-    <span v-for="item in arrColors">{{item}}</span>
+    <span id="name" t-for="item in arrColors" key="id">{{item}}</span>
+    <em v-if="time">212:30</em>
   </template>
 
   <script type="text/amu-tmpl" id="amutmpl">
@@ -76,6 +77,14 @@
   let arrColors;
   function $_(el){
     return document.querySelector(el);
+  }
+  function insertAfter(newElement, targetElement){
+    var parent = targetElement.parentNode;
+    if (parent.lastChild == targetElement) {
+      parent.appendChild(newElement);
+    } else {
+      parent.insertBefore(newElement, targetElement.nextSibling);
+    }
   }
   
   function showColor(){
@@ -125,7 +134,6 @@
   //   return 
   // }
   function es6Tmpl(){
-    
     const es6Template = `
       ${arrColors.map(item =>`
       <span style="background:${item}">
@@ -139,14 +147,38 @@
   function es6Template(tmpl,data){
     //let targetEl =$_('script[type="text/amu-tmpl"]')
     let targetEl =$_('template')
-    //console.log(typeof targetEl.innerHTML)
-    console.log(targetEl.content.children[0].attributes)
-    //console.log(targetEl.childNodes[0].getAttribute('v-for'))
-    targetEl.childNodes.forEach(element => {
-      console.log(element)
-      console.log(element)
+    //console.log(typeof targetEl.content,targetEl.content)
+    //console.log(typeof targetEl.content,targetEl.content)
+    //console.log(targetEl.content.children.item(2))
+    //console.log(targetEl.content.children[0].attributes)
+    let els = targetEl.content.children;
 
-    });
+    let length = targetEl.content.children.length;
+    for(let i=0;i<length;i++){
+      //console.log(els.namedItem('name'))
+
+      if(els.item(i).attributes['t-for']){
+        console.log(els.item(i).attributes.getNamedItem('t-for'))
+        console.log(els.item(i).outerHTML,els.item(i).attributes['t-for'].value)
+        let attrs = els.item(i).attributes['t-for'].value.split(' ');
+        console.log(attrs)
+        console.log(`${typeof attrs[0]}`)
+        // const tmplRender = `
+        //   ${attrs[2].map(arrt[0] =>`
+        //     <span>${attrs[0]}</span>`
+        //   ).join('')}
+        // `;
+      }
+      //console.log(els.item(i).attributes['t-for'] = true)
+    }
+
+    // targetEl.content.item().map((item)=>{
+    //   console.log(item)
+    // })
+    
+    // targetEl.childNodes.forEach(element => {
+    //   console.log(element)
+    // });
 
     let tmplEl = `${targetEl.innerHTML}`;
     let newEl = document.createElement('div',)
@@ -157,16 +189,7 @@
     newEl.innerHTML = `${targetEl.content.children[0]}`
 
   }
-  function insertAfter(newElement, targetElement){
-    var parent = targetElement.parentNode;
-    if (parent.lastChild == targetElement) {
-        // 如果最后的节点是目标元素，则直接添加。因为默认是最后
-        parent.appendChild(newElement);
-    } else {
-        parent.insertBefore(newElement, targetElement.nextSibling);
-        //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
-    }
-  }
+  
   //console.log(es6Template)
   // const template = `
   //   <ul>
