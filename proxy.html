@@ -32,10 +32,85 @@
   <div id="output">
 
   </div>
+  <div id="app"></div>
 
 </body>
 <script>
+  class Rusk {
+    constructor(option){
+      this.$el = option.el;
+      this.$data = option.data;
+      this.proxyData(this.$data)
+      this.init()
+    }
+    proxyData(data){
+      console.log(data)
+      return new Proxy(data,{
+        get(target,key,receiver){
+          console.log(`get`,target,key)
+          return Reflect.get(target,key,receiver)
+        },
+        set(target,key,value,receiver){
+          console.log(`set`,target,key,value)
+          return Reflect.set(target,key,value,receiver)
+        }
+      })
+    }
+    install(){
+      
+    }
+    init(){
+      console.log('init')
+    }
+  }
+  
+  let App = new Rusk({
+    el:'#app',
+    data:{
+      title:'lili',
+      con:'hello'
+    },
+    init(){
+      console.log(this)
+    }
+  })
+  console.log(App)
+  App.init()
   //let person = new Proxy(target,handler);
+
+/*-----------------------*/
+  let title = 'Generator 函数 处理异步流程的应用'
+  function* prd() {
+    console.log('需求收集整理')
+    yield 'dev';
+    console.log('产品完善')
+    yield 'dev'
+    console.log('开始研发')
+  }
+
+  function* dev(){
+    console.log('第一次产品需求评审');
+    yield 'prd'
+    console.log('研发技术调研')
+    yield 'prd'
+    
+  }
+  let prdStep = prd();
+  let devStep = dev();
+
+  function step(gen) {
+    let v = gen.next();
+    console.log(v)
+    if(v.value === 'dev'){
+      step(devStep)
+    }else if(v.value ==='prd'){
+      step(prdStep)
+    }
+  }
+  step(prdStep)
+
+/*-----------------------*/
+
   function $(el){
     return document.querySelector(el)
   }

@@ -68,8 +68,9 @@
   <p><a target="_blank" href="https://www.jianshu.com/p/187d04d44e82">es6模板部分</a></p>
   <p><a target="_blank" href="https://juejin.im/post/5d99d9a0f265da5b8601264c">Vue3.x源码调试</a></p>
   <p><a target="_blank" href="https://juejin.im/post/5d977f47e51d4578453274b3">Vue 3 源码导读</a></p>
+  <p><a target="_blank" href="http://www.luyixian.cn/javascript_show_131765.aspx">JS模板实现方法</a></p>
 
-  
+  <div id="result"></div>
 </body>
 
 <script src="https://cdn.bootcss.com/dot/2.0.0-beta.0/doT.js"></script>
@@ -109,23 +110,7 @@
   }
   showColor()
 
-  // let userList=[
-  //   {
-  //     name:'lulu',
-  //     age:17,
-  //     height:180
-  //   },
-  //   {
-  //     name:'张三',
-  //     age:23,
-  //     height:170
-  //   },
-  //   {
-  //     name:'李小四',
-  //     age:27,
-  //     height:175
-  //   }
-  // ]
+  
   
   // const msg = outStr`我是${userList[0].name},我的年龄是${userList[0].age}`
   
@@ -143,6 +128,7 @@
       `;
     $_('.es6-tmpl').innerHTML = es6Template;
   }
+
   es6Template()
   function es6Template(tmpl,data){
     //let targetEl =$_('script[type="text/amu-tmpl"]')
@@ -201,6 +187,62 @@
   //   </ul>
   // `
   //console.log(template)
+
+/**
+* 替换字符串中的字段.
+* @param {String} str 模版字符串
+* @param {Object} o json data
+* @param {RegExp} [regexp] 匹配字符串的正则表达式
+*/
+
+function substitute(str,o,regexp){
+  return str.replace(regexp || /\\?\{([^{}]+)\}/g, function (match, name) {
+    return (o[name] === undefined) ? '' : o[name];
+  });
+}
+
+var config = {
+  data : {value : '123',text:'abc'},
+  userList:[
+    {
+      name:'lulu',
+      age:17,
+      height:180
+    },
+    {
+      name:'张三',
+      age:23,
+      height:170
+    },
+    {
+      name:'李小四',
+      age:27,
+      height:175
+    }
+  ],
+  template : '<label>{text}</label><input type="text" value="{value}"/>',
+  renderer:function(obj){
+    if(obj.name){
+      el =document.createElement('i');
+      el.innerHTML = obj.name
+      return el;
+    }else{
+      return '<img title="' + obj.height + '" src=""/>';
+    }
+  }
+};
+var str = substitute(config.template,config.data);
+
+$_('#result').innerHTML =str;
+console.log($_('#result'))
+for(let i=0;i<config.userList.length;i++){
+  let obj = config.userList[i];
+  str = config.renderer(obj);
+  //console.log(str.nodeType());
+  //$_('#result').appendChild('<i>ss</i>')
+  document.body.appendChild(str)
+}
+//console.log(str)
   
 </script>
 </html>
