@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>jsClass练习</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/case.css?v=2">
+</head>
+<body>
+  
+    <div id="main" style="width: 600px;height:400px;"></div>
+</body>
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts-en.common.min.js"></script>
+<script>
+let myChart = echarts.init(document.querySelector('#main'))
+    
+var base = +new Date(2020, 1, 1);
+var oneDay = 24 * 3600 * 1000;
+let date = [],
+ data = [];
+
+let obj = [{
+        date:'2019/12/31',
+        total:27
+    },{
+        date:'2020/01/03',
+        total:44
+    },{
+        date:'2020/01/11',
+        total:41
+    },{
+        date:'2020/01/21',
+        total:291
+    },{
+        date:'2020/01/22',
+        total:440
+    },{
+        date:'2019/12/23',
+        total:614
+    }]
+obj.map((item)=>{
+    date.push(item.date);
+    data.push(item.total+'');
+})
+console.log(date,data)
+
+// for (var i = 1; i < 20; i++) {
+//     var now = new Date(base += oneDay);
+//     console.log([now.getFullYear(), now.getMonth(), now.getDate()].join('/'))
+//     date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+//     data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+// }
+
+let option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        }
+    },
+    title: {
+        left: 'center',
+        text: '大数据量面积图',
+    },
+    toolbox: {
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: date
+    },
+    yAxis: {
+        type: 'value',
+        //boundaryGap: [0, '100%']
+    },
+    dataZoom: [{
+            type: 'slider',
+            xAxisIndex: 0,
+            filterMode: 'empty'
+        },
+        {
+            type: 'inside',
+            xAxisIndex: 0,
+            filterMode: 'empty'
+        }],
+    series: [
+        {
+            name: '模拟数据',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+                color: 'rgb(255, 70, 131)'
+            },
+            areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgb(255, 158, 68)'
+                }, {
+                    offset: 1,
+                    color: 'rgb(255, 70, 131)'
+                }])
+            },
+            data: data
+        }
+    ]
+};
+myChart.setOption(option);
+</script>
+</html>
