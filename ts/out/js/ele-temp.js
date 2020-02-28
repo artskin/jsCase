@@ -6,7 +6,10 @@ customElements.define('my-par', class extends HTMLElement {
         this.attachShadow({ mode: 'open' }).appendChild(tmplCon.cloneNode(true));
     }
 });
-const slottedSpan = document.querySelector('my-par span');
-console.log(slottedSpan.slot);
-console.log(slottedSpan.assignedSlot);
+console.log(window.customElements);
+console.log(DocumentFragment);
+const slottedSpan = DocumentFragment.querySelector('my-par');
+console.log(slottedSpan);
+// console.log(slottedSpan.slot);
+// console.log(slottedSpan.assignedSlot)
 //# sourceMappingURL=ele-temp.js.map

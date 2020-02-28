@@ -8,12 +8,15 @@ customElements.define('my-par',
             
             this.attachShadow({mode:'open'}).appendChild(
                 tmplCon.cloneNode(true)
-            )
+            );
         }
     }
 )
+console.log(window.customElements)
+console.log(DocumentFragment)
 
-const slottedSpan = document.querySelector('my-par span');
+const slottedSpan = DocumentFragment.querySelector('my-par');
 
-console.log(slottedSpan.slot);
-console.log(slottedSpan.assignedSlot)
+console.log(slottedSpan);
+// console.log(slottedSpan.slot);
+// console.log(slottedSpan.assignedSlot)
