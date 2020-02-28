@@ -5,17 +5,14 @@ function greeter(person) {
 }
 exports.greeter = greeter;
 console.log(1212);
-var dogs = ['阿黄'];
+let dogs = ['阿黄'];
 console.log(typeof dogs, dogs);
-var Num = [1, 2, 3];
+let Num = [1, 2, 3];
 console.log(Num);
-var objs = [{ a: 1 }, { a: 2 }];
+let objs = [{ a: 1 }, { a: 2 }];
 console.log(objs);
-var Observable = /** @class */ (function () {
-    function Observable() {
-    }
-    return Observable;
-}());
+class Observable {
+}
 // Array.prototype.toObservable = function () {
 //   return new Observable();
 // }
