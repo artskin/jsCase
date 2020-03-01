@@ -9,38 +9,51 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
-  <script src="js/ele-temp.js"></script>
+  <script>
+    customElements.define('my-button',
+      class extends HTMLElement {
+        constructor(){
+          super();
+
+          const tmpl = document.getElementById('vdom-button');
+          const tmplCon = tmpl.content;
+          
+          this.attachShadow({mode:'open'}).appendChild(
+              tmplCon.cloneNode(true)
+          );
+        }
+      }
+    )
+  </script>
 </head>
 <body>
   <h3>customElements示例</h3>
   <p><a href="https://github.com/mdn/web-components-examples/tree/master/simple-template">github：web-components-examples</a></p>
   <p><a href="https://github.com/vuejs/vue-web-component-wrapper">Wrap a Vue component as a web component / custom element.</a></p>
   <p><a href="http://www.ruanyifeng.com/blog/2019/08/web_components.html">教程</a></p>
+  <p><a href="https://developers.google.cn/web/fundamentals/web-components/customelements">google web-components文档</a></p>
   
-  <template id="my-par">
+  <template id="vdom-button">
     <style>
       p{
         color: blueviolet;
         background-color: cadetblue;
-        border-radius: 12%;
+        border: 10px solid #ff0;
       }
     </style>
-    <p>
+    <button>
       <slot name="text">
         默认
       </slot>
-    </p>
+    </button>
   </template>
 
-  <my-par>
-    <span slot="text">sd</span>
-  </my-par>
-  <my-par>
-    <ul slot="text">
-      <li>dd</li>
-      <li>ddss</li>
-    </ul>
-  </my-par>
+
+  <my-button>
+    <span slot="text">
+      确定
+    </span>
+  </my-button>
 
 </body>
 </html>
