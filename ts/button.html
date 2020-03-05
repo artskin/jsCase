@@ -22,24 +22,73 @@
 </head>
 <body>
   <h3>customElements:Button示例</h3>
-  <c-button>
+  <s-button>
     默认
-  </c-button>
+  </s-button>
 
-  <c-button class="primary" size="mini">
+  <s-button class="primary" size="mini">
     <span slot="text">主要按钮</span>
-  </c-button>
+  </s-button>
   
-  <c-button class="success" size="medium" disabled>
+  <s-button class="success" size="medium" disabled>
     成功
-  </c-button>
+  </s-button>
 
-  <c-button class="warning" size="mini">
+  <s-button class="warning" size="mini">
     <span slot="text">警告</span>
     <i slot="icon-left" class="heart"></i>
-  </c-button>
+  </s-button>
 
   
+<script>
+  /**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+let nums = [3, 2, 4], target = 6;
+var twoSum = function(nums, target) {
+  let len = nums.length;
+  let result = [];
+  for(let i=0;i<len;i++){
+    nums.map((item,index)=>{
+      if((nums[i]+item) == target && i != index){
+        nums.splice(i)
+        result = [i,index]
+      }
+    }) 
+  }
+  return result;
+};
+//twoSum(nums,target)
+//console.log(twoSum(nums,target))
+
+
+
+function merge(nums1, m, nums2, n) {
+  //let result = new Array(m+n);
+  for(let i=0;i<n;i++){
+    nums1.push(nums2[i])
+  }
   
+  //Object.assign(result,nums1,nums2)
+  console.log(nums1)
+  nums1.sort((a,b)=>a-b)
+  //result.sort((a,b)=>{return a-b})
+  //return result;
+};
+
+let nums1 = [1,2,3,0,0,0], m = 3,
+nums2 = [2,5,6],       n = 3;
+
+console.log(merge(nums1, m, nums2, n));
+
+console.log(~~12132.213)
+console.log(~~-121.00213)
+console.log(12 & 5)
+console.log(12 | 5)
+console.log( ~~~ 12 )
+console.log( a = b + (b = a) * 0)
+</script>
 </body>
 </html>

@@ -51,7 +51,7 @@ class CButton extends HTMLElement {
         this._shadowRoot.appendChild(tmpl.content.cloneNode(true))
     }
 
-    //TODO 怎么获取外部元素属性集合
+    //TODO: 怎么获取外部元素属性集合
     static get observedAttributes(){
         //console.log(this)
         //console.log(this.getAttributeNames())
@@ -75,7 +75,7 @@ class CButton extends HTMLElement {
 
     //当 custom element首次被插入文档DOM时，被调用
     connectedCallback(){
-        console.log("custom element首次被插入")
+        //console.log("custom element首次被插入")
     }
 
     //当 custom element从文档DOM中删除时，被调用
@@ -95,7 +95,7 @@ class CButton extends HTMLElement {
     //TODO 事件交互，内外
 }
 
-customElements.define("c-button",CButton);
+customElements.define("s-button",CButton);
 
 
 
