@@ -63,7 +63,7 @@ class CButton extends HTMLElement {
     //TODO: 按钮大小设置
     static get observedAttributes(){
         //console.log(this.getAttributeNames())
-        return ["type","myclass","size"];
+        return ["type","myclass","size","circle"];
     }
 
     get type(){
@@ -95,11 +95,17 @@ class CButton extends HTMLElement {
     attributeChangedCallback(attr,oldVal,newVal){
         console.log(this)
 
-        //console.log('attribute',attr,oldVal,newVal,this.option.size)
+        console.log('attribute',attr,oldVal,newVal,this.option.size)
         let index = this.option.size.indexOf(newVal)
 
         //console.log(this.option.size[index])
-        this.classList.add('btn--'+newVal)
+        if(newVal){
+            this.classList.add('btn--'+newVal)
+        }
+        
+        if(attr =='circle'){
+            this.classList.add('btn--'+attr)
+        }
         // switch(attr) {
         //     case 'myclass':
         //         console.log('myclass',attr)

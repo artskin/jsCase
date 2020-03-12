@@ -24,13 +24,19 @@
     s-button{
       /* --button-bg:fuchsia; */
       /* margin-right: 10px; */
-      margin: 5px;
+      /* margin: 5px; */
+    }
+    s-button:focus{
+      outline: none;
     }
     .btn--mini{
       --fontSize: 12px;
     }
     .btn--big{
       --fontSize: 18px;
+    }
+    .btn--circle{
+      --borderRadius: 2em;
     }
   </style>
 </head>
@@ -41,11 +47,10 @@
         display:inline-block;
         contain: content; /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
         /*background:var(--button-bg,#fff);外部样式传入*/
-        padding: 3px;
-        
+        padding:1px 3px 5px 1px;
       }
-      :host(:hover){
-        /* background:#c00; */
+      :host(:hover) button{
+        background:#c00;
       }
       :host(.primary) button,
       :host(.success) button,
@@ -56,6 +61,10 @@
       :host(.primary) button{ /* color host when it has class="primary" */
         background-color:var(--primary,royalblue);
         border-color:var(--primary,royalblue);
+      }
+      :host(.primary) button:hover{
+        background-color:var(--primary-hover,royalblue);
+        border-color:var(--primary-hover,royalblue);
       }
       :host(.success) button{
         background-color:var(--success,seagreen);
@@ -75,15 +84,17 @@
         opacity: 0.4;
       }
       button{
-        padding:0.679em 1em;
+        padding:0.8em 1.4em;
         border-width: 1px;
         border-style: solid;
-        border-radius:0.24em;
+        border-radius:var(--borderRadius,0.24em);
         cursor: pointer;
         /* font-size: 14px; */
         font-size: var(--fontSize,14px);
+        line-height:1;
         /* transform: scale(var(--ggs,1)); */
-        box-shadow: 1px 2px 3px rgba(0,0,0,.2);
+        box-shadow: 1px 2px 3px rgba(0,0,0,.15);
+        outline: none;
       }
       
       ::slotted{
@@ -97,26 +108,24 @@
     </button>
   </template>
   
-
-  <br>
-  <h3>customElements:Button示例</h3>
+  <h2>customElements:Button示例</h2>
   <hr>
   <h4>按钮</h4>
   <div class="demo-button">
-    <s-button>
+    <s-button circle>
       默认
     </s-button>
-    <s-button class="primary" size="mini">
+    <s-button class="primary">
       <span slot="text">主要按钮</span>
     </s-button>
-    <s-button class="warning" size="mini">
+    <s-button class="warning">
       <span slot="text">警告</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
     <s-button class="danger">
       危险
     </s-button>
-    <s-button class="success" size="big">
+    <s-button class="success">
       成功
     </s-button>
   </div>
@@ -125,18 +134,34 @@
     <s-button disabled>
       默认
     </s-button>
-    <s-button class="primary" size="mini" disabled>
+    <s-button class="primary" disabled>
       <span slot="text">主要按钮</span>
     </s-button>
-    <s-button class="warning" size="mini" disabled>
+    <s-button class="warning" disabled>
       <span slot="text">警告</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
     <s-button class="danger" disabled>
       危险
     </s-button>
-    <s-button class="success" size="big" disabled>
+    <s-button class="success" disabled>
       成功
+    </s-button>
+  </div>
+  <h4>按钮：大小</h4>
+  <div class="demo-button">
+    <s-button class="primary" size="mini" circle>
+      <span slot="text">mini</span>
+    </s-button>
+    <s-button class="success" size="small">
+      <span slot="text">small</span>
+    </s-button>
+    <s-button class="warning">
+      <span slot="text">正常</span>
+      <i slot="icon-left" class="heart"></i>
+    </s-button>
+    <s-button class="danger" size="big">
+      大按钮big
     </s-button>
   </div>
 <script>
