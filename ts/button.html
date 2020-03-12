@@ -9,86 +9,137 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
-  <script src="js/c-element.js"></script>
+  <script src="js/c-button.js"></script>
   <style>
+    @import url(./css/root.css);
     i{font-style: normal;}
+
     .heart::before{
       content: "❤";
     }
-    c-button{
-      --button-bg:#ccc;
+    .demo-button{
+      letter-spacing: 10px;
+      
+    }
+    s-button{
+      /* --button-bg:fuchsia; */
+      /* margin-right: 10px; */
+      margin: 5px;
+    }
+    .btn--mini{
+      --fontSize: 12px;
+    }
+    .btn--big{
+      --fontSize: 18px;
     }
   </style>
 </head>
 <body>
-  <h3>customElements:Button示例</h3>
-  <s-button>
-    默认
-  </s-button>
-
-  <s-button class="primary" size="mini">
-    <span slot="text">主要按钮</span>
-  </s-button>
-  
-  <s-button class="success" size="medium" disabled>
-    成功
-  </s-button>
-
-  <s-button class="warning" size="mini">
-    <span slot="text">警告</span>
-    <i slot="icon-left" class="heart"></i>
-  </s-button>
-
-  
-<script>
-  /**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-let nums = [3, 2, 4], target = 6;
-var twoSum = function(nums, target) {
-  let len = nums.length;
-  let result = [];
-  for(let i=0;i<len;i++){
-    nums.map((item,index)=>{
-      if((nums[i]+item) == target && i != index){
-        nums.splice(i)
-        result = [i,index]
+  <template id="vdom-button">
+    <style>
+      :host{
+        display:inline-block;
+        contain: content; /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
+        /*background:var(--button-bg,#fff);外部样式传入*/
+        padding: 3px;
+        
       }
-    }) 
-  }
-  return result;
-};
-//twoSum(nums,target)
-//console.log(twoSum(nums,target))
-
-
-
-function merge(nums1, m, nums2, n) {
-  //let result = new Array(m+n);
-  for(let i=0;i<n;i++){
-    nums1.push(nums2[i])
-  }
+      :host(:hover){
+        /* background:#c00; */
+      }
+      :host(.primary) button,
+      :host(.success) button,
+      :host(.warning) button,
+      :host(.danger) button{
+        color: #fff;
+      }
+      :host(.primary) button{ /* color host when it has class="primary" */
+        background-color:var(--primary,royalblue);
+        border-color:var(--primary,royalblue);
+      }
+      :host(.success) button{
+        background-color:var(--success,seagreen);
+        border-color:var(--success,seagreen);
+      }
+      :host(.warning) button{
+        background-color:var(--warning,coral);
+        border-color:var(--warning,coral);
+      }
+      :host(.danger) button{
+        background-color:var(--danger,crimson);
+        border-color:var(--danger,crimson);
+      }
+      :host([disabled]) { /* style when host has disabled attribute. */
+        /* background: grey; */
+        pointer-events: none;
+        opacity: 0.4;
+      }
+      button{
+        padding:0.679em 1em;
+        border-width: 1px;
+        border-style: solid;
+        border-radius:0.24em;
+        cursor: pointer;
+        /* font-size: 14px; */
+        font-size: var(--fontSize,14px);
+        /* transform: scale(var(--ggs,1)); */
+        box-shadow: 1px 2px 3px rgba(0,0,0,.2);
+      }
+      
+      ::slotted{
+        color:red
+      }
+    </style>
+    <button>
+      <slot name="icon-left"></slot>
+      <slot></slot>
+      <slot name="text"></slot>
+    </button>
+  </template>
   
-  //Object.assign(result,nums1,nums2)
-  console.log(nums1)
-  nums1.sort((a,b)=>a-b)
-  //result.sort((a,b)=>{return a-b})
-  //return result;
-};
 
-let nums1 = [1,2,3,0,0,0], m = 3,
-nums2 = [2,5,6],       n = 3;
-
-console.log(merge(nums1, m, nums2, n));
-
-console.log(~~12132.213)
-console.log(~~-121.00213)
-console.log(12 & 5)
-console.log(12 | 5)
-console.log( ~~~ 12 )
-console.log( a = b + (b = a) * 0)
+  <br>
+  <h3>customElements:Button示例</h3>
+  <hr>
+  <h4>按钮</h4>
+  <div class="demo-button">
+    <s-button>
+      默认
+    </s-button>
+    <s-button class="primary" size="mini">
+      <span slot="text">主要按钮</span>
+    </s-button>
+    <s-button class="warning" size="mini">
+      <span slot="text">警告</span>
+      <i slot="icon-left" class="heart"></i>
+    </s-button>
+    <s-button class="danger">
+      危险
+    </s-button>
+    <s-button class="success" size="big">
+      成功
+    </s-button>
+  </div>
+  <h4>按钮：禁用状态</h4>
+  <div class="demo-button">
+    <s-button disabled>
+      默认
+    </s-button>
+    <s-button class="primary" size="mini" disabled>
+      <span slot="text">主要按钮</span>
+    </s-button>
+    <s-button class="warning" size="mini" disabled>
+      <span slot="text">警告</span>
+      <i slot="icon-left" class="heart"></i>
+    </s-button>
+    <s-button class="danger" disabled>
+      危险
+    </s-button>
+    <s-button class="success" size="big" disabled>
+      成功
+    </s-button>
+  </div>
+<script>
 </script>
 </body>
 </html>
