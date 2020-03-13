@@ -35,9 +35,13 @@
     .btn--big{
       --fontSize: 18px;
     }
-    .btn--circle{
+    .is-circle{
       --borderRadius: 2em;
     }
+    /* .is-wire{
+      --transparencyBg: transparent;
+      --wireColor:var(--primary-hover)
+    } */
   </style>
 </head>
 <body>
@@ -49,9 +53,9 @@
         /*background:var(--button-bg,#fff);外部样式传入*/
         padding:1px 3px 5px 1px;
       }
-      :host(:hover) button{
+      /* :host(:hover) button{
         background:#c00;
-      }
+      } */
       :host(.primary) button,
       :host(.success) button,
       :host(.warning) button,
@@ -61,6 +65,7 @@
       :host(.primary) button{ /* color host when it has class="primary" */
         background-color:var(--primary,royalblue);
         border-color:var(--primary,royalblue);
+        /* color: var(--wireColor); */
       }
       :host(.primary) button:hover{
         background-color:var(--primary-hover,royalblue);
@@ -70,13 +75,25 @@
         background-color:var(--success,seagreen);
         border-color:var(--success,seagreen);
       }
+      :host(.success) button:hover{
+        background-color:var(--success-hover,royalblue);
+        border-color:var(--success-hover,royalblue);
+      }
       :host(.warning) button{
         background-color:var(--warning,coral);
         border-color:var(--warning,coral);
       }
+      :host(.warning) button:hover{
+        background-color:var(--warning-hover,coral);
+        border-color:var(--warning-hover,coral);
+      }
       :host(.danger) button{
         background-color:var(--danger,crimson);
         border-color:var(--danger,crimson);
+      }
+      :host(.danger) button:hover{
+        background-color:var(--danger-hover,crimson);
+        border-color:var(--danger-hover,crimson);
       }
       :host([disabled]) { /* style when host has disabled attribute. */
         /* background: grey; */
@@ -112,59 +129,74 @@
   <hr>
   <h4>按钮</h4>
   <div class="demo-button">
-    <s-button circle>
-      默认
-    </s-button>
-    <s-button class="primary">
-      <span slot="text">主要按钮</span>
-    </s-button>
-    <s-button class="warning">
-      <span slot="text">警告</span>
+    <s-button>默认按钮</s-button>
+    <s-button class="primary" onclick="msgBox(this)">主要按钮</s-button>
+    <s-button class="warning">警告按钮
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger">
-      危险
-    </s-button>
-    <s-button class="success">
-      成功
-    </s-button>
+    <s-button class="danger">危险按钮</s-button>
+    <s-button class="success">成功按钮</s-button>
   </div>
   <h4>按钮：禁用状态</h4>
   <div class="demo-button">
-    <s-button disabled>
-      默认
-    </s-button>
+    <s-button disabled>默认按钮</s-button>
     <s-button class="primary" disabled>
       <span slot="text">主要按钮</span>
     </s-button>
     <s-button class="warning" disabled>
-      <span slot="text">警告</span>
+      <span slot="text">警告按钮</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" disabled>
-      危险
-    </s-button>
-    <s-button class="success" disabled>
-      成功
-    </s-button>
+    <s-button class="danger" disabled>危险按钮</s-button>
+    <s-button class="success" disabled>成功按钮</s-button>
   </div>
   <h4>按钮：大小</h4>
+  <div class="demo-button">
+    <s-button class="primary" size="mini">
+      <span slot="text">超小按钮：mini</span>
+    </s-button>
+    <s-button class="success" size="small">
+      <span slot="text">小型按钮：small</span>
+    </s-button>
+    <s-button class="warning">
+      <span slot="text">正常按钮</span>
+      <i slot="icon-left" class="heart"></i>
+    </s-button>
+    <s-button class="danger" size="big">大型按钮</s-button>
+  </div>
+  <h4>按钮：圆角</h4>
   <div class="demo-button">
     <s-button class="primary" size="mini" circle>
       <span slot="text">mini</span>
     </s-button>
-    <s-button class="success" size="small">
+    <s-button class="success" size="small" circle>
       <span slot="text">small</span>
     </s-button>
-    <s-button class="warning">
+    <s-button class="warning" circle>
       <span slot="text">正常</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" size="big">
-      大按钮big
+    <s-button class="danger" size="big" circle>大按钮</s-button>
+  </div>
+
+  <h4>线框按钮：Wire</h4>
+  <div class="demo-button">
+    <s-button class="primary" size="mini" wire>
+      <span slot="text">mini</span>
     </s-button>
+    <s-button class="success" size="small" circle wire>
+      <span slot="text">small</span>
+    </s-button>
+    <s-button class="warning" disabled circle wire>
+      <span slot="text">正常</span>
+      <i slot="icon-left" class="heart"></i>
+    </s-button>
+    <s-button class="danger" size="big" circle>大按钮</s-button>
   </div>
 <script>
+  function msgBox(e){
+    console.log(e)
+  }
 </script>
 </body>
 </html>
