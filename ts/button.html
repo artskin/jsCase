@@ -56,28 +56,36 @@
       /* :host(:hover) button{
         background:#c00;
       } */
-      :host(.primary) button,
+      :host button.btn-primary,
       :host(.success) button,
       :host(.warning) button,
       :host(.danger) button{
         color: #fff;
       }
-      :host(.primary) button{ /* color host when it has class="primary" */
+      :host button.btn-primary{ /* color host when it has class="primary" */
         background-color:var(--primary,royalblue);
         border-color:var(--primary,royalblue);
         /* color: var(--wireColor); */
       }
-      :host(.primary) button:hover{
+      :host button.btn-primary:hover{
         background-color:var(--primary-hover,royalblue);
         border-color:var(--primary-hover,royalblue);
+      }
+      :host button.btn-primary:active{
+        background-color:var(--primary-active,royalblue);
+        border-color:var(---primary-active,royalblue);
       }
       :host(.success) button{
         background-color:var(--success,seagreen);
         border-color:var(--success,seagreen);
       }
       :host(.success) button:hover{
-        background-color:var(--success-hover,royalblue);
-        border-color:var(--success-hover,royalblue);
+        background-color:var(--success-hover,seagreen);
+        border-color:var(--success-hover,seagreen);
+      }
+      :host(.success) button:active{
+        background-color:var(--success-active,seagreen);
+        border-color:var(---success-active,seagreen);
       }
       :host(.warning) button{
         background-color:var(--warning,coral);
@@ -130,12 +138,12 @@
   <h4>按钮</h4>
   <div class="demo-button">
     <s-button>默认按钮</s-button>
-    <s-button class="primary" onclick="msgBox(this)">主要按钮</s-button>
-    <s-button class="warning">警告按钮
+    <s-button type="primary" onclick="msgBox(this)">主要按钮</s-button>
+    <s-button type="warning">警告按钮
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger">危险按钮</s-button>
-    <s-button class="success">成功按钮</s-button>
+    <s-button type="danger">危险按钮</s-button>
+    <s-button type="success">成功按钮</s-button>
   </div>
   <h4>按钮：禁用状态</h4>
   <div class="demo-button">

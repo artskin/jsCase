@@ -79,13 +79,15 @@
 // </button>
 // `
 class CButton extends HTMLElement {
+  option = {}
   constructor(){
     super();
     const tmpl = document.getElementById('vdom-button')
     this._shadowRoot = this.attachShadow({mode:"open"});//open 可通过element.shadowRoot 访问
     this._shadowRoot.appendChild(tmpl.content.cloneNode(true));
     this.option = {
-      size:["mini",'big','large']
+      size:["mini",'big','large'],
+      arrts:["type","myclass","size","circle","wire"]
     }
   }
 
@@ -93,6 +95,7 @@ class CButton extends HTMLElement {
   //FIXME: 按钮大小设置
   
   static get observedAttributes(){
+    console.log(this.option)
     // 指定观察的属性，这样attributeChangedCallback才会起作用
     return ["type","myclass","size","circle","wire"];
   }
@@ -115,7 +118,6 @@ class CButton extends HTMLElement {
 //生命周期函数
   //当 custom element首次被插入文档DOM时，被调用
   connectedCallback(){
-    //console.log(this)
     //console.log("custom element首次被插入")
   }
 
@@ -125,10 +127,14 @@ class CButton extends HTMLElement {
   }
 
   //当 custom element增加、删除、修改自身属性时，被调用
-  attributeChangedCallback(attr,oldVal,newVal){
-    this.shadowRoot.querySelector('button').classList.add(attr)
+  attributeChangedCallback(name,oldVal,newVal){
+    console.log(this)
+    console.log(name,oldVal,newVal,this.option.size)
+    let el = this.shadowRoot.querySelector('button');
 
-    //console.log('attribute',attr,oldVal,newVal,this.option.size)
+    el.classList.add('btn-'+newVal)
+
+    
     let index = this.option.size.indexOf(newVal)
 
     //console.log(this.option.size[index])
@@ -136,11 +142,11 @@ class CButton extends HTMLElement {
       this.classList.add('btn--'+newVal)
     }
     
-    if(attr =='circle'){
-      this.classList.add('is-'+attr)
+    if(name =='circle'){
+      this.classList.add('is-'+name)
     }
-    if(attr =='wire'){
-      this.classList.add('is-'+attr)
+    if(name =='wire'){
+      this.classList.add('is-'+name)
     }
     // switch(attr) {
     //     case 'myclass':
@@ -158,7 +164,7 @@ class CButton extends HTMLElement {
     let childNodes = shadowVdom.childNodes;
     for(let i=0;i<childNodes.length;i++){
       if(childNodes[i].nodeName === 'STYLE'){
-        console.log('childNodes[i]: ', childNodes[i].textContent);
+        //console.log('childNodes[i]: ', childNodes[i].textContent);
       }
       
     }
@@ -176,3 +182,7 @@ customElements.define("s-button",CButton);
 // console.log(slottedSpan);
 // console.log(slottedSpan.slot);
 // console.log(slottedSpan.assignedSlot)
+
+
+//nodejs执行js方法 查看对应js占用内存大小
+//console.log(process.memoryUsage())
