@@ -9,7 +9,9 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
   <script src="js/c-button.js"></script>
+  <script type="module" src="./js/st-element.js"></script>
   <style>
     @import url(./css/root.css);
     i{font-style: normal;}
@@ -45,6 +47,7 @@
   </style>
 </head>
 <body>
+  <my-element></my-element>
   <template id="vdom-button">
     <style>
       :host{
