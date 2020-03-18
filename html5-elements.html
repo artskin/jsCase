@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>html5 元素展示</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    
+  </style>
+ </head>
+<body>
+  <div class="paper">
+    <article>article：定义文档内的文章。    </article>
+    <aside>aside：定义页面内容之外的内容。</aside>
+    <bdi>bdi：</bdi>
+    <details>
+      <summary>summary：</summary>
+      details：
+    </details>
+    <dialog open>dialog：</dialog>
+    <figcaption>figcaption：</figcaption>
+    <figure>figure：</figure>
+    <footer>footer：</footer>
+    <header>header：</header>
+    <main>main：</main>
+    <mark>mark：</mark>
+    <menuitem>menuitem：</menuitem>
+    <meter>meter：</meter>
+    <nav>nav：</nav>
+    <progress value="22" max="100">progress：</progress>
+    <rp>rp：</rp>
+    <rt>rt：</rt>
+    <ruby>ruby：</ruby>
+    <section>section：</section>
+    
+    <time>time：</time>
+    <wbr>wbr：</wbr>
+  </div>
+  
+</body>
+<script>
+  //console.log(document.querySelector('.paper').children)
+  let eles = document.querySelector('.paper').children;
+  let len = eles.length;
+  for(let i=0;i<len;i++){
+    //console.log(eles[i],eles[i].constructor.name)
+    let element = eles[i].constructor;
+    //console.log(element.name =='HTMLElement')
+    if(element.name!=='HTMLElement' && element.name!= 'HTMLUnknownElement'){
+      console.log(element.name,Object.keys(element.prototype))
+    }else{
+      let tagName = firstUpperCase(eles[i].localName);
+      element = "HTML"+tagName+"Element";
+    }
+
+
+    //  console.log(...Object.keys(HTMLDialogElement.prototype))
+    //  console.log(Object.keys(HTMLDialogElement.prototype))
+  }
+
+  function firstUpperCase(str) {
+    return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+  }
+</script>
+</html>

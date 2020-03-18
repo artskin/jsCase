@@ -9,6 +9,8 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="./js/st-element.js"></script>
   <script>
     customElements.define('my-button',
       class extends HTMLElement {
@@ -24,6 +26,16 @@
         }
       }
     )
+    
+// const slottedSpan = document.querySelector('my-par');
+
+// console.log(slottedSpan);
+// console.log(slottedSpan.slot);
+// console.log(slottedSpan.assignedSlot)
+
+
+//nodejs执行js方法 查看对应js占用内存大小
+//console.log(process.memoryUsage())
   </script>
 </head>
 <body>
