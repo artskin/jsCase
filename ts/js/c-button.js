@@ -19,7 +19,7 @@ class CButton extends HTMLElement {
   
   static get observedAttributes(){
     // 指定观察的属性，这样attributeChangedCallback才会起作用
-    return ["type","myclass","size","circle","wire"];
+    return ["type","myclass","size","circle","wire","shadow"];
   }
 
   get type(){
@@ -50,23 +50,38 @@ class CButton extends HTMLElement {
 
   //当 custom element增加、删除、修改自身属性时，被调用
   attributeChangedCallback(name,oldVal,newVal){
-    //console.log(name,oldVal,newVal,this.option.size)
+    //console.log(name,oldVal,newVal)
     let el = this.shadowRoot.querySelector('button');
 
-    el.classList.add('btn-'+newVal)
+    //el.classList.add('btn--'+newVal)
 
     let index = this.option.size.indexOf(newVal)
 
     //console.log(this.option.size[index])
-    if(newVal){
-      this.classList.add('btn--'+newVal)
+    // if(newVal){
+    //   this.classList.add('btn--'+newVal)
+    // }
+    
+    if(name =='size'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('btn--'+newVal)
+    }
+    if(name =='type'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('btn--'+newVal)
     }
     
     if(name =='circle'){
-      this.classList.add('is-'+name)
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('is--'+name)
+    }
+    if(name =='shadow'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('is--'+name)
     }
     if(name =='wire'){
-      this.classList.add('is-'+name)
+      //this.classList.add('is-'+name);//外部添加样式
+      el.classList.add('is--'+name)
     }
     // switch(attr) {
     //     case 'myclass':

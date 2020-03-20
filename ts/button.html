@@ -18,25 +18,20 @@
     }
     .demo-button{
       letter-spacing: 10px;
+      flex-wrap: wrap;
+      display: flex;
+      align-items: center;
     }
     s-button{
       /* --button-bg:fuchsia; */
-      /* margin-right: 10px; */
-      /* margin: 5px; */
       overflow: visible;
+      margin: 0 8px;
     }
     s-button:focus{
       outline: none;
     }
-    .btn--mini{
-      --fontSize: 12px;
-    }
-    .btn--big{
-      --fontSize: 18px;
-    }
-    .is-circle{
-      --borderRadius: 2em;
-    }
+    
+    
     /* .is-wire{
       --transparencyBg: transparent;
       --wireColor:var(--primary-hover)
@@ -47,66 +42,84 @@
   <template id="vdom-button">
     <style>
       :host{
-        display:inline-block;
-        contain: content; /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
+        /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
+        /* contain: content; */
+        contain: layout style;
         /*background:var(--button-bg,#fff);外部样式传入*/
         /* padding:1px 3px 5px 1px; */
-        padding: 4px;
+        /* padding: 4px; */
+        /* overflow: visible; */
+        /* display: inline-flex; */
+        /* vertical-align: top;
+        outline: none; */
       }
       /* :host(:hover) button{
         background:#c00;
       } */
-      :host button.btn-primary,
-      :host(.success) button,
-      :host(.warning) button,
-      :host(.danger) button{
+      :host button.btn--primary,
+      :host button.btn--success,
+      :host button.btn--warning,
+      :host button.btn--danger{
         color: #fff;
       }
-      :host button.btn-primary{ /* color host when it has class="primary" */
+      :host button.btn--primary{ /* color host when it has class="primary" */
         background-color:var(--primary,royalblue);
         border-color:var(--primary,royalblue);
         /* color: var(--wireColor); */
       }
-      :host button.btn-primary:hover{
+      :host button.btn--primary:hover{
         background-color:var(--primary-hover,royalblue);
         border-color:var(--primary-hover,royalblue);
       }
-      :host button.btn-primary:active{
+      :host button.btn--primary:active{
         background-color:var(--primary-active,royalblue);
         border-color:var(---primary-active,royalblue);
       }
-      :host(.success) button{
+      :host button.btn--success{
         background-color:var(--success,seagreen);
         border-color:var(--success,seagreen);
       }
-      :host(.success) button:hover{
+      :host button.btn--success:hover{
         background-color:var(--success-hover,seagreen);
         border-color:var(--success-hover,seagreen);
       }
-      :host(.success) button:active{
+      :host button.btn--success:active{
         background-color:var(--success-active,seagreen);
         border-color:var(---success-active,seagreen);
       }
-      :host(.warning) button{
+      :host button.btn--warning{
         background-color:var(--warning,coral);
         border-color:var(--warning,coral);
       }
-      :host(.warning) button:hover{
+      :host button.btn--warning:hover{
         background-color:var(--warning-hover,coral);
         border-color:var(--warning-hover,coral);
       }
-      :host(.danger) button{
+      :host button.btn--danger{
         background-color:var(--danger,crimson);
         border-color:var(--danger,crimson);
       }
-      :host(.danger) button:hover{
+      :host button.btn--danger:hover{
         background-color:var(--danger-hover,crimson);
         border-color:var(--danger-hover,crimson);
+      }
+      :host(.parent-class) {
+        /*父级className对应样式*/
+        font-size: 21px;
       }
       :host([disabled]) { /* style when host has disabled attribute. */
         /* background: grey; */
         pointer-events: none;
         opacity: 0.4;
+      }
+      .is--circle{
+        --borderRadius: 2em;
+      }
+      .btn--mini{
+        --fontSize: 12px;
+      }
+      .btn--big{
+        --fontSize: 18px;
       }
       button{
         padding:0.8em 1.4em;
@@ -114,25 +127,49 @@
         border-style: solid;
         border-radius:var(--borderRadius,0.24em);
         cursor: pointer;
+        /* height: 36px; */
         /* font-size: 14px; */
         font-size: var(--fontSize,14px);
         line-height:1;
         /* transform: scale(var(--ggs,1)); */
         /* box-shadow: 1px 2px 3px rgba(0,0,0,.15); */
         outline: none;
-        display: inline-flex;
-        box-sizing: border-box;
+        /* display: inline-flex;
+        box-sizing: border-box; */
       }
-      button:focus{border:1px solid green;box-shadow: 1px 2px 6px rgba(0,0,0,.35);}
+      button:focus{border:1px solid green;}
+      button::before{
+        content: '';
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        top: calc(-50%);
+        left: calc(-50%);
+        width: 200%;
+        height: 200%;
+      }
+      button slot{
+        pointer-events: none;
+      }
+      button.is--shadow{
+        /* position: relative;
+        z-index: 100; */
+        /* flex: 1 1 auto; */
+        /* box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); */
+        box-shadow:0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12)
+      }
+      button.is--shadow:focus{
+        box-shadow: 1px 2px 6px rgba(0,0,0,.35);
+      }
 
-      button.shadow{
-        box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+      :host .is--wire{
+        background-color: transparent;
       }
       ::slotted{
         color:red
       }
     </style>
-    <button class="shadow">
+    <button>
       <slot name="icon-left"></slot>
       <slot></slot>
       <slot name="text"></slot>
@@ -141,6 +178,7 @@
 
   <h2>CustomElements:Button示例</h2>
   <hr>
+  <main>
   <h4>按钮</h4>
   <div class="demo-button">
     <s-button>默认按钮</s-button>
@@ -154,58 +192,58 @@
   <h4>按钮：禁用状态</h4>
   <div class="demo-button">
     <s-button disabled>默认按钮</s-button>
-    <s-button class="primary" disabled>
+    <s-button type="primary" disabled>
       <span slot="text">主要按钮</span>
     </s-button>
-    <s-button class="warning" disabled>
+    <s-button type="warning" disabled>
       <span slot="text">警告按钮</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" disabled>危险按钮</s-button>
-    <s-button class="success" disabled>成功按钮</s-button>
+    <s-button type="danger" disabled>危险按钮</s-button>
+    <s-button type="success" disabled>成功按钮</s-button>
   </div>
-  <h4>按钮：大小</h4>
+  <h4>按钮：大小及阴影</h4>
   <div class="demo-button">
-    <s-button class="primary" size="mini">
+    <s-button type="primary" size="mini" shadow>
       <span slot="text">超小按钮：mini</span>
     </s-button>
-    <s-button class="success" size="small">
+    <s-button type="success" size="small" shadow>
       <span slot="text">小型按钮：small</span>
     </s-button>
-    <s-button class="warning">
+    <s-button type="warning" shadow>
       <span slot="text">正常按钮</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" size="big">大型按钮</s-button>
+    <s-button type="danger" size="big" shadow>大型按钮</s-button>
   </div>
   <h4>按钮：圆角</h4>
   <div class="demo-button">
-    <s-button class="primary" size="mini" circle>
+    <s-button type="primary" size="mini" circle>
       <span slot="text">mini</span>
     </s-button>
-    <s-button class="success" size="small" circle>
+    <s-button type="success" size="small" circle>
       <span slot="text">small</span>
     </s-button>
-    <s-button class="warning" circle>
+    <s-button type="warning" circle>
       <span slot="text">正常</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" size="big" circle>大按钮</s-button>
+    <s-button type="danger" size="big" circle>大按钮</s-button>
   </div>
 
   <h4>线框按钮：Wire</h4>
   <div class="demo-button">
-    <s-button class="primary" size="mini" wire>
+    <s-button type="primary" size="mini" wire>
       <span slot="text">mini</span>
     </s-button>
-    <s-button class="success" size="small" circle wire>
+    <s-button type="success" size="small" circle wire>
       <span slot="text">small</span>
     </s-button>
-    <s-button class="warning" disabled circle wire>
+    <s-button type="warning" disabled circle wire>
       <span slot="text">正常</span>
       <i slot="icon-left" class="heart"></i>
     </s-button>
-    <s-button class="danger" size="big" circle>大按钮</s-button>
+    <s-button type="danger" size="big" circle>大按钮</s-button>
   </div>
   <h4>字母换行</h4>
   <div class="word format1">
@@ -220,7 +258,7 @@
   <div class="word format3" width="271">
     Use 8-20 characters containing at least three of the following forms: 1. capital letters; 2. lowercase letters; 3. numbers; 4. symbols
   </div>
-
+</main>
   <script>
     function msgBox(e){
       console.log(e)
