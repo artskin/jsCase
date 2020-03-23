@@ -41,6 +41,7 @@
 <body>
   <template id="vdom-button">
     <style>
+      /* @import url(./css/root.css); */
       :host{
         /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
         /* contain: content; */
@@ -56,50 +57,50 @@
       /* :host(:hover) button{
         background:#c00;
       } */
-      :host button.btn--primary,
-      :host button.btn--success,
-      :host button.btn--warning,
-      :host button.btn--danger{
+      :host .btn--primary,
+      :host .btn--success,
+      :host .btn--warning,
+      :host .btn--danger{
         color: #fff;
       }
-      :host button.btn--primary{ /* color host when it has class="primary" */
+      :host .btn--primary{ /* color host when it has class="primary" */
         background-color:var(--primary,royalblue);
         border-color:var(--primary,royalblue);
         /* color: var(--wireColor); */
       }
-      :host button.btn--primary:hover{
+      :host .btn--primary:hover{
         background-color:var(--primary-hover,royalblue);
         border-color:var(--primary-hover,royalblue);
       }
-      :host button.btn--primary:active{
+      :host .btn--primary:active{
         background-color:var(--primary-active,royalblue);
         border-color:var(---primary-active,royalblue);
       }
-      :host button.btn--success{
+      :host .btn--success{
         background-color:var(--success,seagreen);
         border-color:var(--success,seagreen);
       }
-      :host button.btn--success:hover{
+      :host .btn--success:hover{
         background-color:var(--success-hover,seagreen);
         border-color:var(--success-hover,seagreen);
       }
-      :host button.btn--success:active{
+      :host .btn--success:active{
         background-color:var(--success-active,seagreen);
         border-color:var(---success-active,seagreen);
       }
-      :host button.btn--warning{
+      :host .btn--warning{
         background-color:var(--warning,coral);
         border-color:var(--warning,coral);
       }
-      :host button.btn--warning:hover{
+      :host .btn--warning:hover{
         background-color:var(--warning-hover,coral);
         border-color:var(--warning-hover,coral);
       }
-      :host button.btn--danger{
+      :host .btn--danger{
         background-color:var(--danger,crimson);
         border-color:var(--danger,crimson);
       }
-      :host button.btn--danger:hover{
+      :host .btn--danger:hover{
         background-color:var(--danger-hover,crimson);
         border-color:var(--danger-hover,crimson);
       }
@@ -112,15 +113,21 @@
         pointer-events: none;
         opacity: 0.4;
       }
-      .is--circle{
+      :host .is--circle{
         --borderRadius: 2em;
+        
       }
-      .btn--mini{
+      :host .btn--mini{
         --fontSize: 12px;
       }
-      .btn--big{
+      :host .btn--big{
         --fontSize: 18px;
       }
+      :host .is--wire{
+        background-color: transparent;
+        color: rgb(0,0,0);
+      }
+
       button{
         padding:0.8em 1.4em;
         border-width: 1px;
@@ -162,9 +169,7 @@
         box-shadow: 1px 2px 6px rgba(0,0,0,.35);
       }
 
-      :host .is--wire{
-        background-color: transparent;
-      }
+      
       ::slotted{
         color:red
       }
