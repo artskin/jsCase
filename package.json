@@ -5,7 +5,7 @@
     "@spectrum-web-components/tab-list": "^0.3.5",
     "@webcomponents/webcomponentsjs": "^2.4.2",
     "lit-element": "^2.2.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.13",
     "segment-js": "^1.1.2",
     "typescript": "^3.8.3"
   },
