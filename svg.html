@@ -149,22 +149,22 @@ var lenB = myPathB.getTotalLength();
 // }).animate({"stroke-dashoffset": 10}, 2500,mina.easeinout);
 
 // SVG B - Circle
-// var CircleB = snapB.circle(16,16,8);
-// CircleB.attr({
-//   fill: "red",
-//   stroke: "#fff",
-//   strokeWidth: 2
-// });
+var CircleB = snapB.circle(16,16,8);
+CircleB.attr({
+  fill: "red",
+  stroke: "#fff",
+  strokeWidth: 2
+});
 
 //let planeC = snapB.path("M-2.282-6.074l0.001,3.926l-3.318,2.101C-5.7-0.66-6.141-1.885-6.775-1.891c-0.734,0.003-1.203,1.596-1.208,2.062l0.001,1.29l-2.328,1.474v2.858l2.327-0.827v0.116h2.406l0.001-0.972l3.299-1.172l0.593,4.73l-2.83,2.773v1.611l3.217-1.877h2.588l3.214,1.877v-1.611l-3.007-2.95l0.776-4.552L5.58,4.107V5.08l2.401-0.006V4.959l2.327,0.825V2.926L7.982,1.452L7.981,0.169c0-0.461-0.472-2.058-1.208-2.062c-0.629-0.01-1.08,1.227-1.182,1.838L2.277-2.162V-6.08c-0.006-1.333-0.89-5.986-2.286-5.972C-1.388-12.056-2.282-7.413-2.282-6.074z")
 
 //let plane = document.querySelector('#pathSkajtdyvxg')
 
-var Triangle = snapB.polyline("0,30 15,0 30,30");
-  Triangle.attr({
-    id: "plane",
-    fill: "green"
-  });  
+// var Triangle = snapB.polyline("0,30 15,0 30,30");
+//   Triangle.attr({
+//     id: "plane",
+//     fill: "green"
+//   });  
 
   var triangleGroup = snapB.g( Triangle ); // Group polyline
 // setTimeout( function() {
@@ -176,9 +176,9 @@ var Triangle = snapB.polyline("0,30 15,0 30,30");
 function run2(){
   Snap.animate(0, lenB, function( value ) {
     movePoint = myPathB.getPointAtLength( value );
-    //CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+    CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
     //planeC.attr({cx: movePoint.x, cy: movePoint.y})
-    triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
+    //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
   }, 3000,mina.easeinout);
 }
 
