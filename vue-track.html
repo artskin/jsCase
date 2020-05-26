@@ -37,21 +37,34 @@
     ol li .img-layer img{
       height:100%;
     }
-      
+    .track-layer{
+      width: 656px;
+      height: 283px;
+      transform-origin: left top;
+      position: absolute;
+      z-index: 99;
+    }
     
   </style>
  </head>
 <body class="paper">
   <div id="app">
     <h2>Todos:</h2>
+    <button @click="pathRun">播放</button>
     <div class="map">
+      <div class="track-layer"  style="transform: scale(0.725641);">
+        <svg ref="svgPath" width="100%" height="100%" viewBox="0 0 656 283" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
       <ol>
         <li v-for="item in newData">
           <div class="img-layer">
             <img :src="item.url" alt="">
+            
             <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
               <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">★</i>
+              
             </div>
+            
           </div>
         </li>
       </ol>
@@ -65,6 +78,7 @@
   <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
   <script src="./lib/snap.svg.js"></script>
   <script>
+    // import "snapsvg-cjs";
     new Vue({
       el: "#app",
       data() {
@@ -117,7 +131,10 @@
               height:450
             }
           ],
-          newData:[]
+          newData:[],
+          trackData:[],
+          CircleB:'',
+          pathLine:''
         }
         
       },
@@ -143,8 +160,10 @@
         
       },
       methods: {
+        
         dataUpdate(){
           let self = this;
+          this.trackData = []
           this.imgList.map((item)=>{
             //console.log(item)
             item.scale = 283 / item.height
@@ -153,12 +172,76 @@
                 //console.log(d)item.devices
                 d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px";
                 //console.log(d.deviceItem)
+                this.trackData.push(d.points)
               })
             }
           })
+          if(this.trackData && this.trackData.length >0){
+            this.pathData(this.trackData)
+          }
+          //console.log(this.trackData)
           setTimeout(()=>{
-            self.newData = this.imgList
+            self.newData = this.imgList;
+            self.pathInit()
           },100)
+        },
+        pathData(points){
+          //console.log(...points)
+          let pathStr = ""
+          let subPath = ''
+          //console.log(points)
+          if(points && points.length >0){
+            points.map((it,index)=>{
+              if(index === 0){
+                subPath = "M "+ it.join(' ')
+              }else{
+                subPath = " L "+it.join(' ')
+              }
+              pathStr = pathStr+subPath
+            })
+            console.log(pathStr)
+            return pathStr
+          }
+         
+        },
+        run2Track(){
+
+        },
+        pathInit(){
+          let svgEl = Snap(this.$refs.svgPath);
+          //console.log(svgEl)
+          this.pathLine = svgEl.path(this.pathData(this.trackData));
+          this.pathLine.attr({
+            id: "squiggle",
+            fill: "none",
+            strokeWidth: "4",
+            stroke: "#666666",
+            strokeMiterLimit: "10",
+            //strokeDasharray: "9 9",
+            strokeDashOffset: "988.01"
+          })
+          
+          this.CircleB = snapB.circle(16,16,8);
+          this.CircleB.attr({
+            fill: "red",
+            stroke: "#fff",
+            strokeWidth: 2
+          });
+          console.log( this.pathLine.getPointAtLength(100))
+         
+        },
+        pathRun(){
+          let self = this;
+          console.log( this.pathLine.getPointAtLength(100))
+          let pathLength = this.pathLine.getTotalLength();
+          console.log(this.pathLine)
+          Snap.animate(0, pathLength, function( value ) {
+            //console.log(value)
+            movePoint = self.pathLine.getPointAtLength( value );
+            self.CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+            //planeC.attr({cx: movePoint.x, cy: movePoint.y})
+            //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
+          }, 3000,mina.easeinout);
         },
         toggle: function(todo){
           todo.done = !todo.done
@@ -192,8 +275,11 @@
 
     //var triangleGroup = snapB.g( Triangle ); // Group polyline
     function run2(){
+      console.log(myPathB)
       Snap.animate(0, lenB, function( value ) {
+        
         movePoint = myPathB.getPointAtLength( value );
+        //console.log(movePoint)
         CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
         //planeC.attr({cx: movePoint.x, cy: movePoint.y})
         //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
