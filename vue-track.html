@@ -5,26 +5,37 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <meta name="renderer" content="webkit">
-  <title>vue  实验</title>
+  <title>vue 轨迹绘制及播放实验</title>
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
-    #app{overflow:auto}
-    ol{
+    .paper{max-width: 2000px;}
+    h2{vertical-align: middle;}
+    .map{
+      position: relative;
+      overflow-x:auto;
+      height:380px;
+    }
+    ul{
       margin:0;
       padding:0;
       display:flex;
-      height:300px;
-      overflow-x:auto;
-      width:880px;
+      height: 100%;
+      list-style: none;
+      white-space:nowrap;
+      justify-content: space-between;
+      width: auto; 
+      min-width: 100%;
+      float: left;
     }
-    ol li{height:100%;}
-    ol li .img-layer{
+    ul li{height:100%;flex-shrink:0}
+    ul li .img-layer{
       height:100%;
       position:relative;
+      border: 1px dashed #ccc;
     }
     .device-list{
       position:absolute;
@@ -32,173 +43,279 @@
       top:0;
     }
     .device-list i{
-      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red
+      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
+      width: 1em;
+      text-align: center;
     }
-    ol li .img-layer img{
+    .device-list i em{
+      font-size: 12px;
+      color: #000;
+    }
+    ul li .img-layer img{
       height:100%;
     }
-      
-    
-  </style>
- </head>
-<body class="paper">
-  <div id="app">
-    <h2>Todos:</h2>
-    <div class="map">
-      <ol>
-        <li v-for="item in newData">
-          <div class="img-layer">
-            <img :src="item.url" alt="">
-            <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-              <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">★</i>
-            </div>
-          </div>
-        </li>
-      </ol>
-      <svg id="svgB" width="100%" height="100%" viewBox="0 0 620 120" preserveAspectRatio="xMidYMid meet">
-        <!-- <path class="ad-Path" d="M 13 12 L 59 83 L 142 47 L 340 70 " stroke="#999" stroke-width="2px" /> -->
-      </svg>
-      <button onclick="run2()">播放</button>
-    </div>
-    
-  </div>
-  <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
-  <script src="./lib/snap.svg.js"></script>
-  <script>
-    new Vue({
-      el: "#app",
-      data() {
-        return{
-          imgList: [
-            { 
-              text: "Build something awesome", 
-              url: './assets/images/20180130093710127.jpg',
-              width:907,
-              height:390,
-              devices:[
-                {
-                  deviceId: 1,
-                  deviceName: "mock设备0",
-                  points:[200, 93],
-                },
-                {
-                  deviceId: 12,
-                  deviceName: "mock设备1",
-                  points:[408, 59],
-                },
-                {
-                  deviceId: 16,
-                  deviceName: "mock设备2",
-                  points:[652, 207],
-                },
-                {
-                  deviceId: 18,
-                  deviceName: "mock设备3",
-                  points:[812, 143],
-                }
-              ]
-            },
-            { 
-              text: "Learn JavaScript", 
-              url:'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041021323.jpg',
-              width:700,
-              height:464
-            },
-            { 
-              text: "Learn Vue", 
-              url: 'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041030104.jpg',
-              width:600,
-              height:706
-            },
-            { 
-              text: "Play around in JSFiddle", 
-              url: 'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041030403.jpg',
-              width:600,
-              height:450
-            }
-          ],
-          newData:[]
-        }
-        
-      },
-      watch:{
-        imgList:{
-          handler:function(val,oldval){
-            console.log(val,oldval)
-          },
-          deep:true//对象内部的属性监听，也叫深度监听
-        }
-      },
-      computed:{
-        
-      },
-      mounted(){
-        
-        this.$nextTick(()=>{
-          
-        })
-        
-        this.dataUpdate()
-    
-        
-      },
-      methods: {
-        dataUpdate(){
-          let self = this;
-          this.imgList.map((item)=>{
-            //console.log(item)
-            item.scale = 283 / item.height
-            if(item.devices && item.devices.length >0 ){
-              item.devices.map((d)=>{
-                //console.log(d)item.devices
-                d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px";
-                //console.log(d.deviceItem)
-              })
-            }
-          })
-          setTimeout(()=>{
-            self.newData = this.imgList
-          },100)
-        },
-        toggle: function(todo){
-          todo.done = !todo.done
-        }
-      }
-    })
-
-    var snapB = Snap("#svgB");
-    var myPathB = snapB.path("M 13 12 L 59 83 L 142 47 L 340 70")
-    .attr({
-      id: "squiggle",
-      fill: "none",
-      strokeWidth: "4",
-      stroke: "#666666",
-      strokeMiterLimit: "10",
-      //strokeDasharray: "9 9",
-      strokeDashOffset: "988.01"
-    });
-    var lenB = myPathB.getTotalLength();
-    // var Triangle = snapB.polyline("0,30 15,0 30,30");
-    // Triangle.attr({
-    //   id: "plane",
-    //   fill: "green"
-    // });
-    var CircleB = snapB.circle(16,16,8);
-    CircleB.attr({
-      fill: "red",
-      stroke: "#fff",
-      strokeWidth: 2
-    });
-
-    //var triangleGroup = snapB.g( Triangle ); // Group polyline
-    function run2(){
-      Snap.animate(0, lenB, function( value ) {
-        movePoint = myPathB.getPointAtLength( value );
-        CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
-        //planeC.attr({cx: movePoint.x, cy: movePoint.y})
-        //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
-      }, 3000,mina.easeinout);
+    ul li h4{
+      margin: .2em 0;
+      font-size: 14px;
     }
-  </script>
+    
+    .svg-layer{
+      position: absolute;
+      z-index: 9;
+      left: 0;
+      top: 0;
+      height:363px;
+      width: 1600px;
+    }
+    .player{
+      background: blueviolet;
+      color: #fff;
+    }
+    .player:hover{
+      background: rgb(107, 28, 180);
+    }
+  </style>
+</head>
+<body class="paper">
+<div id="app">
+  <h2>轨迹绘制及播放实验:</h2>
+  <div class="map">
+    <ul>
+      <li v-for="item in newData">
+        <div class="img-layer">
+          <img :src="item.url" alt="">
+          <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
+            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">★<em>{{d.points}}</em></i>
+          </div>
+        </div>
+        <h4>{{item.floorName}}</h4>
+      </li>
+    </ul>
+    <div class="svg-layer">
+      <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
+      </svg>
+    </div>
+  </div>
+  <button class="player" @click="pathRun">▶</button>
+</div>
+<script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+<script src="./lib/snap.svg.js"></script>
+<script>
+  new Vue({
+    el: "#app",
+    data() {
+      return {
+        imgList: [
+          {
+            floorName: "隧道地图",
+            url: './assets/images/map01.jpg',
+            width:907,
+            height:390,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[207, 96],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[423, 62],
+              },
+              {
+                deviceId: 16,
+                deviceName: "mock设备2",
+                points:[678, 210],
+              },
+              {
+                deviceId: 18,
+                deviceName: "mock设备3",
+                points:[846, 144],
+              }
+            ]
+          },
+          { 
+            floorName: "复兴岛公园",
+            url:'./assets/images/map02.png',
+            width:475,
+            height:784,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[60, 387],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[326, 717],
+              }
+            ]
+          },
+          { 
+            floorName: "商场3层",
+            url: './assets/images/map03.png',
+            width:2144,
+            height:846,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[342, 441],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[835, 616],
+              }
+            ]
+          },
+          { 
+            floorName: "上海师大徐汇校区",
+            url: './assets/images/map04.png',
+            width:727,
+            height:917
+          }
+        ],
+        newData:[],
+        pathLine:'',
+        pathEl:'',
+        snapObj:'',
+        pointArr:[]
+      }
+      
+    },
+    watch:{
+      imgList:{
+        handler:function(val,oldval){
+          console.log(val,oldval)
+        },
+        deep:true//对象内部的属性监听，也叫深度监听
+      }
+    },
+    mounted(){
+      this.dataUpdate()
+    },
+    methods: {
+      dataUpdate(){
+        let self = this;
+        this.pointsArr = []
+        let offsetX=[]
+        this.imgList.map((item,index)=>{
+          //console.log(item)
+          item.scale = 363 / item.height;
+          offsetX.push(item.width);
+          //console.log(offsetX)
+          if(item.devices && item.devices.length >0 ){
+            
+            item.devices.map((d)=>{
+              d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px";
+              //console.log(d.deviceItem)
+              if(index === 0){
+                //this.pointArr.push(d.points)
+                d.points = d.points
+              }else if(index === 1){
+                console.log(offsetX)
+                d.points[0] = offsetX[0]+ d.points[0] * item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }else if(index === 2){
+                d.points[0] =  offsetX[0] + offsetX[1] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }
+              this.pointArr.push(d.points)
+            })
+          }
+        })
+        setTimeout(()=>{
+          self.newData = this.imgList;
+          console.log(...this.pointArr)
+          this.pathDraw()
+        },100)
+      },
+      pathStr(arr){
+        let strAll='',subStr='';
+        console.log(strAll,subStr)
+        if(arr && arr.length > 0){
+          arr.map((item,index)=>{
+            if(index === 0){
+              subStr = "M "+ item.join(" ")
+            }else{
+              subStr = " L "+ item.join(" ")
+            }
+            strAll += subStr
+          })
+        }
+        console.log(strAll)
+        return strAll
+      },
+      pathDraw(){
+        this.snapObj = Snap(this.$refs.svglayer)
+        this.pathLine = this.snapObj.path(this.pathStr(this.pointArr))
+        this.pathLine.attr({
+          id: "squiggle",
+          fill: "none",
+          strokeWidth: "2",
+          stroke: "#ff9966",
+          strokeMiterLimit: "10",
+          strokeDasharray: "9 9",
+          strokeDashOffset: "988.01"
+        })
+        this.$nextTick(()=>{
+          //console.log(this.pathLine.$el.getBoundingClientRect())
+        })
+       
+      },
+      pathRun(){
+        let self = this;
+        let pathLength = this.pathLine.getTotalLength();
+        let CircleB = this.snapObj.circle(16,16,8);
+        CircleB.attr({
+          fill: "red",
+          stroke: "#fff",
+          strokeWidth: 2
+        });
+
+        Snap.animate(0, pathLength, function( value ) {
+          movePoint = self.pathLine.getPointAtLength( value );
+          CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+        }, 10000,mina.easeinout);
+      }
+    }
+  })
+
+  // var snapB = Snap("#svgB");
+  // var myPathB = snapB.path("M 13 12 L 59 83 L 142 47 L 340 70")
+  // .attr({
+  //   id: "squiggle",
+  //   fill: "none",
+  //   strokeWidth: "4",
+  //   stroke: "#666666",
+  //   strokeMiterLimit: "10",
+  //   //strokeDasharray: "9 9",
+  //   strokeDashOffset: "988.01"
+  // });
+  // var lenB = myPathB.getTotalLength();
+  // // var Triangle = snapB.polyline("0,30 15,0 30,30");
+  // // Triangle.attr({
+  // //   id: "plane",
+  // //   fill: "green"
+  // // });
+  // var CircleB = snapB.circle(16,16,8);
+  // CircleB.attr({
+  //   fill: "red",
+  //   stroke: "#fff",
+  //   strokeWidth: 2
+  // });
+
+  // //var triangleGroup = snapB.g( Triangle ); // Group polyline
+  // function run2(){
+  //   Snap.animate(0, lenB, function( value ) {
+  //     movePoint = myPathB.getPointAtLength( value );
+  //     CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+  //     //planeC.attr({cx: movePoint.x, cy: movePoint.y})
+  //     //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
+  //   }, 3000,mina.easeinout);
+  // }
+</script>
 </body>
 </html>
