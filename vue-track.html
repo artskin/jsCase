@@ -18,6 +18,7 @@
       position: relative;
       overflow-x:auto;
       height:380px;
+      padding-bottom: 30px;
     }
     ul{
       margin:0;
@@ -31,16 +32,17 @@
       min-width: 100%;
       float: left;
     }
-    ul li{height:100%;flex-shrink:0}
+    ul li{height:100%;flex-shrink:0;margin-right: 16px;box-shadow: 0 3px 6px rgba(0,0,0,.2);}
     ul li .img-layer{
       height:100%;
       position:relative;
-      border: 1px dashed #ccc;
+      
     }
     .device-list{
       position:absolute;
       left:0;
       top:0;
+      z-index: 999;
     }
     .device-list i{
       position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
@@ -50,6 +52,7 @@
     .device-list i em{
       font-size: 12px;
       color: #000;
+      font-weight: normal;
     }
     ul li .img-layer img{
       height:100%;
@@ -64,15 +67,28 @@
       z-index: 9;
       left: 0;
       top: 0;
-      height:363px;
-      width: 1600px;
+      height: 363px;
+      padding: 4px 0 0 4px;
     }
     .player{
+      position: relative;
+      text-align: center;
+      padding-top: 6px;
+    }
+    .player button{
       background: blueviolet;
       color: #fff;
     }
-    .player:hover{
+    .player button:hover{
       background: rgb(107, 28, 180);
+    }
+    .pause{
+      
+    }
+    .pause i{
+      display: inline-block;
+      font-style: normal;
+      transform: rotate(90deg);
     }
   </style>
 </head>
@@ -80,12 +96,12 @@
 <div id="app">
   <h2>轨迹绘制及播放实验:</h2>
   <div class="map">
-    <ul>
+    <ul ref="mapLayers">
       <li v-for="item in newData">
         <div class="img-layer">
           <img :src="item.url" alt="">
           <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">★<em>{{d.points}}</em></i>
+            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">📍<em>{{d.points}}</em></i>
           </div>
         </div>
         <h4>{{item.floorName}}</h4>
@@ -93,10 +109,15 @@
     </ul>
     <div class="svg-layer">
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
+        <circle ref="runer" r="6" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
       </svg>
     </div>
   </div>
-  <button class="player" @click="pathRun">▶</button>
+  <div class="player">
+    <button @click="pathRun">▶</button>
+    <button class="pause" @click="pathPause"><i>〓</i></button>
+  </div>
+  
 </div>
 <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
 <script src="./lib/snap.svg.js"></script>
@@ -115,22 +136,22 @@
               {
                 deviceId: 1,
                 deviceName: "mock设备0",
-                points:[207, 96],
+                points:[200, 96],
               },
               {
                 deviceId: 12,
                 deviceName: "mock设备1",
-                points:[423, 62],
+                points:[408, 62],
               },
               {
                 deviceId: 16,
                 deviceName: "mock设备2",
-                points:[678, 210],
+                points:[652, 210],
               },
               {
                 deviceId: 18,
                 deviceName: "mock设备3",
-                points:[846, 144],
+                points:[812, 144],
               }
             ]
           },
@@ -174,14 +195,32 @@
             floorName: "上海师大徐汇校区",
             url: './assets/images/map04.png',
             width:727,
-            height:917
+            height:917,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[46, 202],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[320, 217],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[357, 474],
+              }
+            ]
           }
         ],
         newData:[],
         pathLine:'',
-        pathEl:'',
         snapObj:'',
-        pointArr:[]
+        pointArr:[],
+        mapHeight:'',
+        isLoad:true
       }
       
     },
@@ -193,8 +232,24 @@
         deep:true//对象内部的属性监听，也叫深度监听
       }
     },
+    computed: {
+      getMapHeight:()=>{
+        //console.log(this.$refs.mapLayers.getBoundingClientRect())
+        //return this.$refs.mapLayers.getBoundingClientRect().height
+      }
+    },
     mounted(){
       this.dataUpdate()
+      this.$nextTick(()=>{
+        //console.log(this.$refs.mapLayers.getBoundingClientRect())
+        
+        this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
+        // let mapImg = new Image;
+        // mapImg.src = this.imgList[0].url
+        // mapImg.onload = (e)=>{
+        //   console.log(e)
+        // }
+      })
     },
     methods: {
       dataUpdate(){
@@ -204,7 +259,8 @@
         this.imgList.map((item,index)=>{
           //console.log(item)
           item.scale = 363 / item.height;
-          offsetX.push(item.width);
+          item.scaleW = (item.width * item.scale)+16
+          offsetX.push(item.scaleW);
           //console.log(offsetX)
           if(item.devices && item.devices.length >0 ){
             
@@ -213,28 +269,36 @@
               //console.log(d.deviceItem)
               if(index === 0){
                 //this.pointArr.push(d.points)
-                d.points = d.points
+                //d.points = d.points
+                d.points[0] = d.points[0] * item.scale
+                //d.points[1] = d.points[1] * item.scale
               }else if(index === 1){
-                console.log(offsetX)
+                //console.log(offsetX)
                 d.points[0] = offsetX[0]+ d.points[0] * item.scale;
                 d.points[1] = d.points[1]*item.scale;
               }else if(index === 2){
                 d.points[0] =  offsetX[0] + offsetX[1] + d.points[0]* item.scale;
                 d.points[1] = d.points[1]*item.scale;
+              }else if(index === 3){
+                d.points[0] =  offsetX[0] + offsetX[1] + offsetX[2] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
               }
+              d.points[0] = parseFloat(d.points[0].toFixed(2))
+              d.points[1] = parseFloat(d.points[1].toFixed(2))
               this.pointArr.push(d.points)
             })
           }
         })
         setTimeout(()=>{
           self.newData = this.imgList;
-          console.log(...this.pointArr)
+          this.isLoad = false;
+          console.log(this.$refs.mapLayers.getBoundingClientRect())
+          //console.log(...this.pointArr)
           this.pathDraw()
-        },100)
+        },1000)
       },
       pathStr(arr){
         let strAll='',subStr='';
-        console.log(strAll,subStr)
         if(arr && arr.length > 0){
           arr.map((item,index)=>{
             if(index === 0){
@@ -254,10 +318,10 @@
         this.pathLine.attr({
           id: "squiggle",
           fill: "none",
-          strokeWidth: "2",
+          strokeWidth: "1",
           stroke: "#ff9966",
           strokeMiterLimit: "10",
-          strokeDasharray: "9 9",
+          strokeDasharray: "6 6",
           strokeDashOffset: "988.01"
         })
         this.$nextTick(()=>{
@@ -268,8 +332,9 @@
       pathRun(){
         let self = this;
         let pathLength = this.pathLine.getTotalLength();
-        let CircleB = this.snapObj.circle(16,16,8);
-        CircleB.attr({
+        //let CircleB = this.snapObj.circle(12,12,6);
+        this.CircleB = Snap(this.$refs.runer);
+        this.CircleB.attr({
           fill: "red",
           stroke: "#fff",
           strokeWidth: 2
@@ -277,45 +342,18 @@
 
         Snap.animate(0, pathLength, function( value ) {
           movePoint = self.pathLine.getPointAtLength( value );
-          CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
-        }, 10000,mina.easeinout);
+          self.CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+        }, 10000,mina.easeinout,() => {
+          console.log("动画结束")
+        });
+        
+      },
+      pathPause(){
+        console.log(this.CircleB.status)
+        this.CircleB.inAnim()[0].mina.pause()
       }
     }
   })
-
-  // var snapB = Snap("#svgB");
-  // var myPathB = snapB.path("M 13 12 L 59 83 L 142 47 L 340 70")
-  // .attr({
-  //   id: "squiggle",
-  //   fill: "none",
-  //   strokeWidth: "4",
-  //   stroke: "#666666",
-  //   strokeMiterLimit: "10",
-  //   //strokeDasharray: "9 9",
-  //   strokeDashOffset: "988.01"
-  // });
-  // var lenB = myPathB.getTotalLength();
-  // // var Triangle = snapB.polyline("0,30 15,0 30,30");
-  // // Triangle.attr({
-  // //   id: "plane",
-  // //   fill: "green"
-  // // });
-  // var CircleB = snapB.circle(16,16,8);
-  // CircleB.attr({
-  //   fill: "red",
-  //   stroke: "#fff",
-  //   strokeWidth: 2
-  // });
-
-  // //var triangleGroup = snapB.g( Triangle ); // Group polyline
-  // function run2(){
-  //   Snap.animate(0, lenB, function( value ) {
-  //     movePoint = myPathB.getPointAtLength( value );
-  //     CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
-  //     //planeC.attr({cx: movePoint.x, cy: movePoint.y})
-  //     //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
-  //   }, 3000,mina.easeinout);
-  // }
 </script>
 </body>
 </html>
