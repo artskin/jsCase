@@ -5,286 +5,436 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <meta name="renderer" content="webkit">
-  <title>vue  实验</title>
+  <title>vue 轨迹绘制及播放实验</title>
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
-    #app{overflow:auto}
-    ol{
+    ::-webkit-scrollbar {
+      margin-right: 3px;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0);
+    }
+    ::-webkit-scrollbar-thumb {
+      margin-right: 3px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .paper{max-width: 2000px;}
+    h2{vertical-align: middle;}
+    .map{
+      position: relative;
+      overflow-x:auto;
+      height:380px;
+      padding-bottom: 30px;
+    }
+    ul{
       margin:0;
       padding:0;
       display:flex;
-      height:300px;
-      overflow-x:auto;
-      width:880px;
+      height: 100%;
+      list-style: none;
+      white-space:nowrap;
+      justify-content: space-between;
+      width: auto; 
+      min-width: 100%;
+      float: left;
     }
-    ol li{height:100%;}
-    ol li .img-layer{
+    ul li{height:100%;flex-shrink:0;margin-right: 16px;box-shadow: 0 3px 6px rgba(0,0,0,.2);}
+    ul li .img-layer{
       height:100%;
       position:relative;
+      
     }
     .device-list{
       position:absolute;
       left:0;
       top:0;
+      z-index: 999;
     }
     .device-list i{
-      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red
+      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
+      width: 1em;
+      text-align: center;
     }
-    ol li .img-layer img{
+    .device-list i em{
+      font-size: 12px;
+      color: #000;
+      font-style: normal;
+      position: absolute;
+      bottom: -14px;
+      left: -30px;
+    }
+    ul li .img-layer img{
       height:100%;
     }
-    .track-layer{
-      width: 656px;
-      height: 283px;
-      transform-origin: left top;
-      position: absolute;
-      z-index: 99;
+    ul li h4{
+      margin: .2em 0;
+      font-size: 14px;
     }
     
+    .svg-layer{
+      position: absolute;
+      z-index: 9;
+      left: 0;
+      top: 0;
+      height: 363px;
+    }
+    .player{
+      position: relative;
+      text-align: center;
+      padding-top: 6px;
+    }
+    .player button{
+      background: blueviolet;
+      color: #fff;
+    }
+    .player button:hover{
+      background: rgb(107, 28, 180);
+    }
+    .pause{
+      
+    }
+    .pause i{
+      display: inline-block;
+      font-style: normal;
+      transform: rotate(90deg);
+    }
+    .run-circle{
+      box-shadow: 0 0 5px rgba(0,0,0,.5);
+      position: relative;
+      z-index: 9999;
+    }
   </style>
- </head>
+</head>
 <body class="paper">
-  <div id="app">
-    <h2>Todos:</h2>
-    <button @click="pathRun">播放</button>
-    <div class="map">
-      <div class="track-layer"  style="transform: scale(0.725641);">
-        <svg ref="svgPath" width="100%" height="100%" viewBox="0 0 656 283" preserveAspectRatio="xMidYMid meet"></svg>
-      </div>
-      <ol>
-        <li v-for="item in newData">
-          <div class="img-layer">
-            <img :src="item.url" alt="">
-            
-            <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-              <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">★</i>
-              
-            </div>
-            
+<div id="app">
+  <h2>轨迹绘制及播放实验:</h2>
+  <div class="map" ref="mapOuter">
+    <ul ref="mapLayers">
+      <li v-for="item in newData">
+        <div class="img-layer">
+          <img :src="item.url" alt="">
+          <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
+            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">📍<em>{{d.points}}</em></i>
           </div>
-        </li>
-      </ol>
-      <svg id="svgB" width="100%" height="100%" viewBox="0 0 620 120" preserveAspectRatio="xMidYMid meet">
-        <!-- <path class="ad-Path" d="M 13 12 L 59 83 L 142 47 L 340 70 " stroke="#999" stroke-width="2px" /> -->
+        </div>
+        <h4>{{item.floorName}}</h4>
+      </li>
+    </ul>
+    <div class="svg-layer">
+      <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
+        <circle class="run-circle" ref="runer" r="6" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
       </svg>
-      <button onclick="run2()">播放</button>
     </div>
-    
   </div>
-  <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
-  <script src="./lib/snap.svg.js"></script>
-  <script>
-    // import "snapsvg-cjs";
-    new Vue({
-      el: "#app",
-      data() {
-        return{
-          imgList: [
-            { 
-              text: "Build something awesome", 
-              url: './assets/images/20180130093710127.jpg',
-              width:907,
-              height:390,
-              devices:[
-                {
-                  deviceId: 1,
-                  deviceName: "mock设备0",
-                  points:[200, 93],
-                },
-                {
-                  deviceId: 12,
-                  deviceName: "mock设备1",
-                  points:[408, 59],
-                },
-                {
-                  deviceId: 16,
-                  deviceName: "mock设备2",
-                  points:[652, 207],
-                },
-                {
-                  deviceId: 18,
-                  deviceName: "mock设备3",
-                  points:[812, 143],
-                }
-              ]
-            },
-            { 
-              text: "Learn JavaScript", 
-              url:'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041021323.jpg',
-              width:700,
-              height:464
-            },
-            { 
-              text: "Learn Vue", 
-              url: 'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041030104.jpg',
-              width:600,
-              height:706
-            },
-            { 
-              text: "Play around in JSFiddle", 
-              url: 'http://yccdn.itzjj.cn/uploads/userfiles/1/images/pageimg/20191204/1-1912041030403.jpg',
-              width:600,
-              height:450
-            }
-          ],
-          newData:[],
-          trackData:[],
-          CircleB:'',
-          pathLine:''
-        }
-        
-      },
-      watch:{
-        imgList:{
-          handler:function(val,oldval){
-            console.log(val,oldval)
+  <div class="player">
+    <button @click="pathRun2">测试 ▶</button>
+    <button @click="pathRun">▶</button>
+    <button class="pause" @click="pathPause"><i>〓</i></button>
+    <button @click="pathResume">↷</button>
+    <button @click="pathStop">■</button>
+  </div>
+  
+</div>
+<script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+<script src="./lib/snap.svg.js"></script>
+<script>
+  Snap.plugin(( Snap, Element )=> {
+    Element.prototype.pause = () => {
+      console.log(this)
+      let anims = this.inAnim();
+      this.inAnim()[0].mina.pause();
+      // for (let i = 0; i < anims.length; i ++) {
+      //   anims[i].mina.pause();
+      // }
+    }
+    Element.prototype.resume = () =>{
+      this.animate({ dummy: 0 } ,1); 
+      this.inAnim()[0].mina.resume();
+    }
+  });
+  new Vue({
+    el: "#app",
+    data() {
+      return {
+        imgList: [
+          {
+            floorName: "隧道地图",
+            url: './assets/images/map01.jpg',
+            width:907,
+            height:390,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[200, 96],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[408, 62],
+              },
+              {
+                deviceId: 16,
+                deviceName: "mock设备2",
+                points:[652, 210],
+              },
+              {
+                deviceId: 18,
+                deviceName: "mock设备3",
+                points:[812, 144],
+              }
+            ]
           },
-          deep:true//对象内部的属性监听，也叫深度监听
+          { 
+            floorName: "复兴岛公园",
+            url:'./assets/images/map02.png',
+            width:475,
+            height:784,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[60, 387],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[326, 717],
+              }
+            ]
+          },
+          { 
+            floorName: "商场3层",
+            url: './assets/images/map03.png',
+            width:2144,
+            height:846,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[342, 441],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[835, 616],
+              }
+            ]
+          },
+          { 
+            floorName: "上海师大徐汇校区",
+            url: './assets/images/map04.png',
+            width:727,
+            height:917,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[46, 202],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[320, 217],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[357, 474],
+              }
+            ]
+          }
+        ],
+        newData:[],
+        pathLine:'',
+        snapObj:'',
+        pointArr:[],
+        mapHeight:'',
+        isLoad:true,
+        rectC:'',
+        mapInfo:{},
+        runTimer:''
+      }
+      
+    },
+    watch:{
+      imgList:{
+        handler:function(val,oldval){
+          console.log(val,oldval)
+        },
+        deep:true//对象内部的属性监听，也叫深度监听
+      }
+    },
+    computed: {
+      getMapHeight:()=>{
+        //console.log(this.$refs.mapLayers.getBoundingClientRect())
+        //return this.$refs.mapLayers.getBoundingClientRect().height
+      }
+    },
+    mounted(){
+      
+      this.$nextTick(()=>{
+        //console.log(this.$refs.mapLayers.getBoundingClientRect())
+        
+        this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
+        this.mapInfo = this.$refs.mapOuter.getBoundingClientRect()
+        // let mapImg = new Image;
+        // mapImg.src = this.imgList[0].url
+        // mapImg.onload = (e)=>{
+        //   console.log(e)
+        // }
+        this.dataUpdate()
+      })
+    },
+    methods: {
+      dataUpdate(){
+        let self = this;
+        this.pointsArr = []
+        let offsetX=[]
+        this.imgList.map((item,index)=>{
+          //console.log(item)
+          item.scale = this.mapHeight / item.height;
+          item.restoreScale = 1 /item.scale;
+          item.scaleW = (item.width * item.scale)+16
+          offsetX.push(item.scaleW);
+          //console.log(offsetX)
+          if(item.devices && item.devices.length >0 ){
+            
+            item.devices.map((d)=>{
+              d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
+              if(index === 0){
+                //this.pointArr.push(d.points)
+                //d.points = d.points
+                d.points[0] = d.points[0] * item.scale
+                //d.points[1] = d.points[1] * item.scale
+              }else if(index === 1){
+                //console.log(offsetX)
+                d.points[0] = offsetX[0]+ d.points[0] * item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }else if(index === 2){
+                d.points[0] =  offsetX[0] + offsetX[1] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }else if(index === 3){
+                d.points[0] =  offsetX[0] + offsetX[1] + offsetX[2] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }
+              d.points[0] = parseFloat(d.points[0].toFixed(2))
+              d.points[1] = parseFloat(d.points[1].toFixed(2))
+              this.pointArr.push(d.points)
+            })
+          }
+        })
+        setTimeout(()=>{
+          self.newData = this.imgList;
+          this.isLoad = false;
+          //console.log(this.$refs.mapLayers.getBoundingClientRect())
+          //console.log(...this.pointArr)
+          this.pathDraw()
+        },200)
+      },
+      pathStr(arr){
+        let strAll='',subStr='';
+        if(arr && arr.length > 0){
+          arr.map((item,index)=>{
+            if(index === 0){
+              subStr = "M "+ item.join(" ")
+            }else{
+              subStr = " L "+ item.join(" ")
+            }
+            strAll += subStr
+          })
         }
+        return strAll
       },
-      computed:{
-        
-      },
-      mounted(){
-        
+      pathDraw(){
+        this.snapObj = new Snap(this.$refs.svglayer)
+        //console.log(this.pointArr)
+        this.pathLine = this.snapObj.path(this.pathStr(this.pointArr))
+        this.pathLine.attr({
+          id: "squiggle",
+          fill: "none",
+          strokeWidth: "1",
+          stroke: "#ff9966",
+          strokeMiterLimit: "10",
+          strokeDasharray: "6 6",
+          strokeDashOffset: "988.01"
+        })
+
+        this.CircleB = Snap(this.$refs.runer);
+        this.CircleB.attr({
+          fill: "red",
+          stroke: "#fff",
+          strokeWidth: 2
+        });
+        //this.CircleB.transform('translate(' + this.pointArr[0][0] + ',' + this.pointArr[0][1] + ')'); //初始化位置
         this.$nextTick(()=>{
+          //console.log(this.pathLine.$el.getBoundingClientRect())
+        })
+      },
+      pathRun2(){
+        this.CircleA = this.snapObj.circle(12,12,10).attr({
+          fill: "orange",
+          stroke: "#fff",
+          strokeWidth: 4,
+          cx:this.pointArr[0][0],
+          cy:this.pointArr[0][1]
+        });
+        // this.CircleA.animate({cx:this.pointArr[1][0], cy:this.pointArr[1][1]}, 1000,mina.linear ,()=>{
+        //   this.CircleA.animate({cx:this.pointArr[2][0], cy:this.pointArr[2][1]}, 1000,mina.linear)
+        // });
+        
+        this.pointArr.map((item,index)=>{
+          //console.log(item,index)
+          this.runTimer = setTimeout(()=>{
+            this.CircleA.animate({cx:item[0], cy:item[1]}, 1000,mina.linear)
+          },index*1000)
           
         })
-        
-        this.dataUpdate()
-    
-        
       },
-      methods: {
-        
-        dataUpdate(){
-          let self = this;
-          this.trackData = []
-          this.imgList.map((item)=>{
-            //console.log(item)
-            item.scale = 283 / item.height
-            if(item.devices && item.devices.length >0 ){
-              item.devices.map((d)=>{
-                //console.log(d)item.devices
-                d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px";
-                //console.log(d.deviceItem)
-                this.trackData.push(d.points)
-              })
+      pathRun(){
+        let self = this;
+        let pathLength = this.pathLine.getTotalLength();
+        if(this.CircleB){
+          Snap.animate(0, pathLength, (step)=>{
+            movePoint = self.pathLine.getPointAtLength( step );
+            let scrollX = step - this.mapInfo.width/2;
+            if(scrollX > 0){
+              self.$refs.mapOuter.scrollLeft = scrollX
             }
-          })
-          if(this.trackData && this.trackData.length >0){
-            this.pathData(this.trackData)
-          }
-          //console.log(this.trackData)
-          setTimeout(()=>{
-            self.newData = this.imgList;
-            self.pathInit()
-          },100)
-        },
-        pathData(points){
-          //console.log(...points)
-          let pathStr = ""
-          let subPath = ''
-          //console.log(points)
-          if(points && points.length >0){
-            points.map((it,index)=>{
-              if(index === 0){
-                subPath = "M "+ it.join(' ')
-              }else{
-                subPath = " L "+it.join(' ')
-              }
-              pathStr = pathStr+subPath
-            })
-            console.log(pathStr)
-            return pathStr
-          }
-         
-        },
-        run2Track(){
+            //self.CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+            self.CircleB.transform('translate(' + movePoint.x + ',' + movePoint.y + ')');
+          }, 15000,mina.linear,(e) => {
+            console.log("动画结束",e)
+            let isEnd = confirm('播放完毕，点击确定重播，点击取消停留到当前。');
+            if(isEnd == true){
+              this.CircleB.transform('translate(' + this.pointArr[0][0] + ',' + this.pointArr[0][1] + ')');
+              self.$refs.mapOuter.scrollLeft = 0
+            }else{
 
-        },
-        pathInit(){
-          let svgEl = Snap(this.$refs.svgPath);
-          //console.log(svgEl)
-          this.pathLine = svgEl.path(this.pathData(this.trackData));
-          this.pathLine.attr({
-            id: "squiggle",
-            fill: "none",
-            strokeWidth: "4",
-            stroke: "#666666",
-            strokeMiterLimit: "10",
-            //strokeDasharray: "9 9",
-            strokeDashOffset: "988.01"
-          })
-          
-          this.CircleB = snapB.circle(16,16,8);
-          this.CircleB.attr({
-            fill: "red",
-            stroke: "#fff",
-            strokeWidth: 2
+            }
           });
-          console.log( this.pathLine.getPointAtLength(100))
-         
-        },
-        pathRun(){
-          let self = this;
-          console.log( this.pathLine.getPointAtLength(100))
-          let pathLength = this.pathLine.getTotalLength();
-          console.log(this.pathLine)
-          Snap.animate(0, pathLength, function( value ) {
-            //console.log(value)
-            movePoint = self.pathLine.getPointAtLength( value );
-            self.CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
-            //planeC.attr({cx: movePoint.x, cy: movePoint.y})
-            //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
-          }, 3000,mina.easeinout);
-        },
-        toggle: function(todo){
-          todo.done = !todo.done
         }
+      },
+      pathStop(){
+        this.CircleA.stop();
+      },
+      pathPause(){
+        this.CircleA.inAnim()[0].mina.pause();
+        console.log(this.runTimer)
+        clearTimeout(this.runTimer)
+        this.runTimer = null
+        //this.CircleB.inAnim()[0].mina.pause()
+      },
+      pathResume(){
+        this.CircleA.inAnim()[0].mina.resume();
       }
-    })
-
-    var snapB = Snap("#svgB");
-    var myPathB = snapB.path("M 13 12 L 59 83 L 142 47 L 340 70")
-    .attr({
-      id: "squiggle",
-      fill: "none",
-      strokeWidth: "4",
-      stroke: "#666666",
-      strokeMiterLimit: "10",
-      //strokeDasharray: "9 9",
-      strokeDashOffset: "988.01"
-    });
-    var lenB = myPathB.getTotalLength();
-    // var Triangle = snapB.polyline("0,30 15,0 30,30");
-    // Triangle.attr({
-    //   id: "plane",
-    //   fill: "green"
-    // });
-    var CircleB = snapB.circle(16,16,8);
-    CircleB.attr({
-      fill: "red",
-      stroke: "#fff",
-      strokeWidth: 2
-    });
-
-    //var triangleGroup = snapB.g( Triangle ); // Group polyline
-    function run2(){
-      console.log(myPathB)
-      Snap.animate(0, lenB, function( value ) {
-        
-        movePoint = myPathB.getPointAtLength( value );
-        //console.log(movePoint)
-        CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
-        //planeC.attr({cx: movePoint.x, cy: movePoint.y})
-        //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
-      }, 3000,mina.easeinout);
     }
-  </script>
+  })
+</script>
 </body>
 </html>
