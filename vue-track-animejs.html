@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>vue 轨迹绘制及播放实验</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    ::-webkit-scrollbar {
+      margin-right: 3px;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0);
+    }
+    ::-webkit-scrollbar-thumb {
+      margin-right: 3px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .paper{max-width: 2000px;}
+    h2{vertical-align: middle;font-size: 20px;}
+    .map{
+      position: relative;
+      overflow-x:auto;
+      height:380px;
+      padding-bottom: 30px;
+    }
+    ul{
+      margin:0;
+      padding:0;
+      display:flex;
+      height: 100%;
+      list-style: none;
+      white-space:nowrap;
+      justify-content: space-between;
+      width: auto; 
+      min-width: 100%;
+      float: left;
+    }
+    ul li{height:100%;flex-shrink:0;margin-right: 16px;box-shadow: 0 3px 6px rgba(0,0,0,.2);}
+    ul li .img-layer{
+      height:100%;
+      position:relative;
+      
+    }
+    .device-list{
+      position:absolute;
+      left:0;
+      top:0;
+      z-index: 999;
+    }
+    .device-list i{
+      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
+      width: 1em;
+      text-align: center;
+    }
+    .device-list i em{
+      font-size: 12px;
+      color: #000;
+      font-style: normal;
+      position: absolute;
+      bottom: -14px;
+      left: -30px;
+    }
+    ul li .img-layer img{
+      height:100%;
+    }
+    ul li h4{
+      margin: .2em 0;
+      font-size: 14px;
+    }
+    
+    .svg-layer{
+      position: absolute;
+      z-index: 9;
+      left: 0;
+      top: 0;
+      height: 363px;
+    }
+    .player{
+      position: relative;
+      text-align: center;
+      padding-top: 6px;
+    }
+    .player button{
+      background: blueviolet;
+      color: #fff;
+    }
+    .player button:hover{
+      background: rgb(107, 28, 180);
+    }
+    .pause i{
+      display: inline-block;
+      font-style: normal;
+      transform: rotate(90deg);
+    }
+    .run-circle{
+      box-shadow: 0 0 5px rgba(0,0,0,.5);
+      position: relative;
+      z-index: 9999;
+    }
+    .square{
+      width: 14px;
+      height: 14px;
+      background: #cc0000;
+    }
+  </style>
+</head>
+<body class="paper">
+<div id="app">
+  <h2>轨迹绘制及播放实验:</h2>
+  <div class="map" ref="mapOuter">
+    <ul ref="mapLayers">
+      <li v-for="item in newData">
+        <div class="img-layer">
+          <img :src="item.url" alt="">
+          <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
+            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">📍<em>{{d.points}}</em></i>
+          </div>
+        </div>
+        <h4>{{item.floorName}}</h4>
+      </li>
+    </ul>
+    <div class="svg-layer">
+      <div ref="square" class="square"></div>
+      <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
+        <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1; stroke-dasharray: 6, 6;"></path>
+        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
+        <!-- <animateMotion xlink:href="#ant" begin="click" ref="runPath" class="run" path="M 0 0 L 100 100 A 200 200 0 1 0 0 -100" dur="10s" rotate="auto" fill="freeze">
+          <mpath xlink:href="#path" />
+        </animateMotion> -->
+        
+      </svg>
+    </div>
+  </div>
+  <div class="player">
+    <button @click="pathRun">pathRun:▶</button>
+    <button class="pause" @click="pathPause">pathPause:<i>〓</i></button>
+    <button @click="pathResume">pathResume:↷</button>
+    <button @click="pathRestart">pathRestart:■</button>
+  </div>
+</div>
+<script src="./lib/vue.2.6.11.js"></script>
+<script src="./lib/anime.min.js"></script>
+<script>
+  new Vue({
+    el: "#app",
+    data() {
+      return {
+        imgList: [
+          {
+            floorName: "隧道地图",
+            url: './assets/images/map01.jpg',
+            width:907,
+            height:390,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[200, 96],
+                images:[
+                  {id:1,url:"./assets/images/002.jpg"},
+                  {id:1,url:"./assets/images/003.jpg"},
+                  {id:1,url:"./assets/images/004.jpg"}
+                ]
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[408, 62],
+              },
+              {
+                deviceId: 16,
+                deviceName: "mock设备2",
+                points:[652, 210],
+              },
+              {
+                deviceId: 18,
+                deviceName: "mock设备3",
+                points:[812, 144],
+              }
+            ]
+          },
+          { 
+            floorName: "复兴岛公园",
+            url:'./assets/images/map02.png',
+            width:475,
+            height:784,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[60, 387],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[326, 717],
+              }
+            ]
+          },
+          { 
+            floorName: "商场3层",
+            url: './assets/images/map03.png',
+            width:2144,
+            height:846,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[342, 441],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[835, 616],
+              }
+            ]
+          },
+          { 
+            floorName: "上海师大徐汇校区",
+            url: './assets/images/map04.png',
+            width:727,
+            height:917,
+            devices:[
+              {
+                deviceId: 1,
+                deviceName: "mock设备0",
+                points:[46, 202],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[320, 217],
+              },
+              {
+                deviceId: 12,
+                deviceName: "mock设备1",
+                points:[357, 474],
+              }
+            ]
+          }
+        ],
+        newData:[],
+        pathLine:'',
+        snapObj:'',
+        pointArr:[],
+        mapHeight:'',
+        isLoad:true,
+        rectC:'',
+        mapInfo:{},
+        runTimer:'',
+        animation:'',
+        dirChanges:0
+      }
+    },
+    mounted(){
+      this.$nextTick(()=>{
+        this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
+        this.mapInfo = this.$refs.mapOuter.getBoundingClientRect()
+        this.dataUpdate()
+      })
+    },
+    methods: {
+      pathInit(){
+        //console.log(this.pointArr)
+        this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
+        //this.$refs.square.style
+        //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
+      },
+      pathRun(){
+        let self = this
+        let path = anime.path(this.$refs.pathObj);
+        let halfW = this.mapInfo.width/2
+        
+        this.animation = anime({
+          targets: this.$refs.runer,
+          translateX: path('x'),
+          translateY: path('y'),
+          rotate: path('angle'),
+          easing: 'linear',
+          duration: 10000,
+          loop: false,
+          begin(e){
+            console.log('开始',e)
+          },
+          changeComplete(e){
+            // self.dirChanges ++
+            // console.log(self.dirChanges,e)
+          },
+          change(e) {
+            let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
+            let scrollX = step - halfW;
+            if(scrollX > 0){
+              self.$refs.mapOuter.scrollLeft = scrollX
+            }
+            self.dirChanges ++;
+            //console.log(self.dirChanges)
+          },
+          loopComplete(){
+            console.log("第一段")
+          },
+          complete(e){
+            console.log('结束',e)
+          }
+        });
+        console.log(this.animation)
+      },
+      dataUpdate(){
+        let self = this;
+        let offsetX = []
+        this.pointsArr = []
+        
+        this.imgList.map((item,index)=>{
+          item.scale = this.mapHeight / item.height;
+          item.restoreScale = 1 /item.scale;
+          item.scaleW = (item.width * item.scale)+16
+          offsetX.push(item.scaleW);
+          //console.log(offsetX)
+          if(item.devices && item.devices.length > 0 ){
+            
+            item.devices.map((d)=>{
+              d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
+              if(index === 0){
+                d.points[0] = d.points[0] * item.scale
+              }else if(index === 1){
+                //console.log(offsetX)
+                d.points[0] = offsetX[0]+ d.points[0] * item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }else if(index === 2){
+                d.points[0] =  offsetX[0] + offsetX[1] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }else if(index === 3){
+                d.points[0] =  offsetX[0] + offsetX[1] + offsetX[2] + d.points[0]* item.scale;
+                d.points[1] = d.points[1]*item.scale;
+              }
+
+              d.points[0] = parseFloat(d.points[0].toFixed(2))
+              d.points[1] = parseFloat(d.points[1].toFixed(2))
+
+              this.pointArr.push(d.points)
+            })
+          }
+        })
+        setTimeout(()=>{
+          self.newData = this.imgList;
+          this.isLoad = false;
+          this.pathInit()
+        },200)
+      },
+      pathStr(arr){
+        let strAll='',subStr='';
+        if(arr && arr.length > 0){
+          arr.map((item,index)=>{
+            if(index === 0){
+              subStr = "M "+ item.join(" ")
+            }else{
+              subStr = " L "+ item.join(" ")
+            }
+            strAll += subStr
+          })
+        }
+        console.log(strAll)
+        return strAll
+      },
+      pathPause(){
+        this.animation.pause()
+      },
+      pathResume(){
+        this.animation.play()
+      },
+      pathRestart(){
+        this.animation.restart()
+      },
+      pathStop(){
+
+      }
+    }
+  })
+</script>
+</body>
+</html>
