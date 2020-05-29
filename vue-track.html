@@ -24,7 +24,7 @@
       border-radius: 10px;
     }
     .paper{max-width: 2000px;}
-    h2{vertical-align: middle;}
+    h2{vertical-align: middle;font-size: 20px;}
     .map{
       position: relative;
       overflow-x:auto;
@@ -108,6 +108,11 @@
       position: relative;
       z-index: 9999;
     }
+    .square{
+      width: 20px;
+      height: 20px;
+      background: #cc0000;
+    }
   </style>
 </head>
 <body class="paper">
@@ -126,8 +131,13 @@
       </li>
     </ul>
     <div class="svg-layer">
+      <div ref="square" class="square"></div>
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
-        <circle class="run-circle" ref="runer" r="6" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
+        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
+        <animateMotion xlink:href="#ant" begin="click" ref="runPath" class="run" path="M 0 0 L 100 100 A 200 200 0 1 0 0 -100" dur="10s" rotate="auto" fill="freeze">
+          <mpath xlink:href="#path" />
+        </animateMotion>
+        <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1; stroke-dasharray: 6, 6;"></path>
       </svg>
     </div>
   </div>
@@ -138,10 +148,10 @@
     <button @click="pathResume">↷</button>
     <button @click="pathStop">■</button>
   </div>
-  
 </div>
 <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
 <script src="./lib/snap.svg.js"></script>
+<script src="./lib/anime.min.js"></script>
 <script>
   Snap.plugin(( Snap, Element )=> {
     Element.prototype.pause = () => {
@@ -258,7 +268,9 @@
         isLoad:true,
         rectC:'',
         mapInfo:{},
-        runTimer:''
+        runTimer:'',
+        animation:'',
+        dirChanges:0
       }
       
     },
@@ -277,10 +289,7 @@
       }
     },
     mounted(){
-      
       this.$nextTick(()=>{
-        //console.log(this.$refs.mapLayers.getBoundingClientRect())
-        
         this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
         this.mapInfo = this.$refs.mapOuter.getBoundingClientRect()
         // let mapImg = new Image;
@@ -349,21 +358,23 @@
             strAll += subStr
           })
         }
+        console.log(strAll)
         return strAll
       },
       pathDraw(){
         this.snapObj = new Snap(this.$refs.svglayer)
         //console.log(this.pointArr)
-        this.pathLine = this.snapObj.path(this.pathStr(this.pointArr))
-        this.pathLine.attr({
-          id: "squiggle",
-          fill: "none",
-          strokeWidth: "1",
-          stroke: "#ff9966",
-          strokeMiterLimit: "10",
-          strokeDasharray: "6 6",
-          strokeDashOffset: "988.01"
-        })
+        //this.pathLine = this.snapObj.path(this.pathStr(this.pointArr))
+        this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
+        // this.pathLine.attr({
+        //   id: "squiggle",
+        //   fill: "none",
+        //   strokeWidth: "1",
+        //   stroke: "#ff9966",
+        //   strokeMiterLimit: "10",
+        //   strokeDasharray: "6 6",
+        //   strokeDashOffset: "988.01"
+        // })
 
         this.CircleB = Snap(this.$refs.runer);
         this.CircleB.attr({
@@ -375,26 +386,48 @@
         this.$nextTick(()=>{
           //console.log(this.pathLine.$el.getBoundingClientRect())
         })
+        //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
       },
       pathRun2(){
+        let self = this
         this.CircleA = this.snapObj.circle(12,12,10).attr({
           fill: "orange",
           stroke: "#fff",
-          strokeWidth: 4,
+          strokeWidth: 2,
           cx:this.pointArr[0][0],
           cy:this.pointArr[0][1]
+        });
+
+        let path3 = anime.path(this.$refs.pathObj);
+        console.log(path3('x'))
+        this.animation = anime({
+          targets: this.$refs.square,
+          translateX: path3('x'),
+          translateY: path3('y'),
+          rotate: path3('angle'),
+          easing: 'linear',
+          duration: 10000,
+          loop: false,
+          change: function(e) {
+            console.log(self.dirChanges,e)
+            self.dirChanges ++
+            console.log(this.dirChanges)
+          }
         });
         // this.CircleA.animate({cx:this.pointArr[1][0], cy:this.pointArr[1][1]}, 1000,mina.linear ,()=>{
         //   this.CircleA.animate({cx:this.pointArr[2][0], cy:this.pointArr[2][1]}, 1000,mina.linear)
         // });
         
-        this.pointArr.map((item,index)=>{
-          //console.log(item,index)
-          this.runTimer = setTimeout(()=>{
-            this.CircleA.animate({cx:item[0], cy:item[1]}, 1000,mina.linear)
-          },index*1000)
+        // this.pointArr.map((item,index)=>{
+        //   //console.log(item,index)
+        //   this.runTimer = setTimeout(()=>{
+        //     this.CircleA.animate({cx:item[0], cy:item[1]}, 1000,mina.linear)
+        //   },index*1000)
           
-        })
+        // })
+        //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
+        //this.$refs.runPath.pause()
+        //this.$refs.runPath.attr("path",this.pathStr(this.pointArr))
       },
       pathRun(){
         let self = this;
@@ -424,14 +457,20 @@
         this.CircleA.stop();
       },
       pathPause(){
-        this.CircleA.inAnim()[0].mina.pause();
-        console.log(this.runTimer)
-        clearTimeout(this.runTimer)
-        this.runTimer = null
+        // this.CircleA.inAnim()[0].mina.pause();
+        // console.log(this.runTimer)
+        // clearTimeout(this.runTimer)
+        // this.runTimer = null;
+        //暂停
+        //this.$refs.svglayer.pauseAnimations();
         //this.CircleB.inAnim()[0].mina.pause()
+        console.log(this.animation)
+        this.animation.pause()
       },
       pathResume(){
-        this.CircleA.inAnim()[0].mina.resume();
+        this.animation.play()
+        //this.$refs.runPath.unpauseAnimation();
+        //this.CircleA.inAnim()[0].mina.resume();
       }
     }
   })
