@@ -105,10 +105,8 @@
       position: relative;
       z-index: 9999;
     }
-    .square{
-      width: 14px;
-      height: 14px;
-      background: #cc0000;
+    #runer{
+      stroke-width: 2;
     }
   </style>
 </head>
@@ -121,17 +119,17 @@
         <div class="img-layer">
           <img :src="item.url" alt="">
           <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-            <i v-for="d in item.devices" :style="d.deviceItem" :key="d.index">📍<em>{{d.points}}</em></i>
+            <i v-for="d in item.devices" :style="d.deviceStyle" :key="d.index">📍<em>{{d.points}}</em></i>
           </div>
         </div>
         <h4>{{item.floorName}}</h4>
       </li>
     </ul>
     <div class="svg-layer">
-      <div ref="square" class="square"></div>
+      
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
         <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1; stroke-dasharray: 6, 6;"></path>
-        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" style="stroke-width: 2;"></circle>
+        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
         <!-- <animateMotion xlink:href="#ant" begin="click" ref="runPath" class="run" path="M 0 0 L 100 100 A 200 200 0 1 0 0 -100" dur="10s" rotate="auto" fill="freeze">
           <mpath xlink:href="#path" />
         </animateMotion> -->
@@ -144,11 +142,14 @@
     <button class="pause" @click="pathPause">pathPause:<i>〓</i></button>
     <button @click="pathResume">pathResume:↷</button>
     <button @click="pathRestart">pathRestart:■</button>
+    <button @click="pathRunKeyframes">pathRunKeyframes </button>
+    <button @click="pathRunTimeline">pathRunTimeline </button>
   </div>
 </div>
 <script src="./lib/vue.2.6.11.js"></script>
 <script src="./lib/anime.min.js"></script>
 <script>
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
   new Vue({
     el: "#app",
     data() {
@@ -163,12 +164,7 @@
               {
                 deviceId: 1,
                 deviceName: "mock设备0",
-                points:[200, 96],
-                images:[
-                  {id:1,url:"./assets/images/002.jpg"},
-                  {id:1,url:"./assets/images/003.jpg"},
-                  {id:1,url:"./assets/images/004.jpg"}
-                ]
+                points:[200, 96]
               },
               {
                 deviceId: 12,
@@ -179,6 +175,11 @@
                 deviceId: 16,
                 deviceName: "mock设备2",
                 points:[652, 210],
+                images:[
+                  {id:1,url:"./assets/images/002.jpg"},
+                  {id:1,url:"./assets/images/003.jpg"},
+                  {id:1,url:"./assets/images/004.jpg"}
+                ]
               },
               {
                 deviceId: 18,
@@ -202,6 +203,9 @@
                 deviceId: 12,
                 deviceName: "mock设备1",
                 points:[326, 717],
+                images:[
+                  {id:1,url:"./assets/images/004.jpg"}
+                ]
               }
             ]
           },
@@ -215,6 +219,10 @@
                 deviceId: 1,
                 deviceName: "mock设备0",
                 points:[342, 441],
+                images:[
+                  {id:1,url:"./assets/images/002.jpg"},
+                  {id:1,url:"./assets/images/003.jpg"}
+                ]
               },
               {
                 deviceId: 12,
@@ -257,7 +265,10 @@
         mapInfo:{},
         runTimer:'',
         animation:'',
-        dirChanges:0
+        animationLine:'',
+        dirChanges:0,
+        startPos:"",
+        deviceMap:new Map()
       }
     },
     mounted(){
@@ -268,11 +279,110 @@
       })
     },
     methods: {
+      pathRunTimeline(){
+        let self = this
+        let path = anime.path(this.$refs.pathObj);
+        let halfW = this.mapInfo.width/2;
+        this.animationLine = anime.timeline({
+          targets: this.$refs.runer,
+          duration: 100,
+          easing: 'linear',
+        })
+
+        this.pointArr.map((item,index)=>{
+          //console.log(item.images)
+          let endDelayTime = 10
+          if(self.deviceMap.get(index)){
+            endDelayTime =  self.deviceMap.get(index).length*1000 + 10
+          }
+          this.animationLine.add({
+            translateX: item[0],
+            translateY: item[1],
+            duration: 1000,
+            endDelay:endDelayTime,
+            change(e) {
+              let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
+              let scrollX = step - halfW;
+              if(scrollX > 0){
+                self.$refs.mapOuter.scrollLeft = scrollX
+              }
+            },
+            changeComplete(e) {
+              //console.log(index,e,self.deviceMap)
+              if(self.deviceMap.get(index)){
+                self.deviceMap.get(index).map((item,index)=>{
+                  setTimeout(()=>{
+                    console.log(item.url)
+                  },index*1000)
+                })
+              }
+            }
+          })
+        })
+      },
       pathInit(){
         //console.log(this.pointArr)
         this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
-        //this.$refs.square.style
         //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
+        this.startPos = "transform: translateX("+this.pointArr[0][0]+"px) translateY("+this.pointArr[0][1]+"px)";
+      },
+      dataUpdate(){
+        let self = this;
+        let offsetX = []
+        this.pointsArr = []
+        this.imgList.map((item,index)=>{
+          item.scale = this.mapHeight / item.height;
+          item.restoreScale = 1 /item.scale;
+          item.scaleW = (item.width * item.scale)+16
+          offsetX.push(item.scaleW);
+          if(item.devices && item.devices.length > 0 ){
+            item.devices.map((d)=>{
+              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
+              
+              let offsetXW;
+              offsetXW = offsetX.reduce(reducer) - offsetX[offsetX.length-1];
+              d.points[0] = parseFloat((offsetXW + d.points[0] * item.scale).toFixed(2));
+              d.points[1] = parseFloat((d.points[1]*item.scale).toFixed(2));
+
+              this.pointArr.push(d.points)
+              this.deviceMap.set(this.pointArr.length-1,d.images)
+            })
+          }
+        })
+        setTimeout(()=>{
+          self.newData = this.imgList;
+          this.isLoad = false;
+          console.log(this.deviceMap)
+          this.pathInit()
+        },200)
+      },
+      pathStr(arr){
+        let strAll='',subStr='';
+        if(arr && arr.length > 0){
+          arr.map((item,index)=>{
+            //console.log(arr)
+            if(index === 0){
+              subStr = "M "+ item.join(" ")
+            }else{
+              subStr = " L "+ item.join(" ")
+            }
+            strAll += subStr
+          })
+        }
+        console.log(strAll)
+        return strAll
+      },
+      pathPause(){
+        this.animationLine.pause()
+      },
+      pathResume(){
+        this.animationLine.play()
+      },
+      pathRestart(){
+        this.animationLine.restart()
+      },
+      pathStop(){
+
       },
       pathRun(){
         let self = this
@@ -312,75 +422,33 @@
         });
         console.log(this.animation)
       },
-      dataUpdate(){
-        let self = this;
-        let offsetX = []
-        this.pointsArr = []
-        
-        this.imgList.map((item,index)=>{
-          item.scale = this.mapHeight / item.height;
-          item.restoreScale = 1 /item.scale;
-          item.scaleW = (item.width * item.scale)+16
-          offsetX.push(item.scaleW);
-          //console.log(offsetX)
-          if(item.devices && item.devices.length > 0 ){
-            
-            item.devices.map((d)=>{
-              d.deviceItem = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
-              if(index === 0){
-                d.points[0] = d.points[0] * item.scale
-              }else if(index === 1){
-                //console.log(offsetX)
-                d.points[0] = offsetX[0]+ d.points[0] * item.scale;
-                d.points[1] = d.points[1]*item.scale;
-              }else if(index === 2){
-                d.points[0] =  offsetX[0] + offsetX[1] + d.points[0]* item.scale;
-                d.points[1] = d.points[1]*item.scale;
-              }else if(index === 3){
-                d.points[0] =  offsetX[0] + offsetX[1] + offsetX[2] + d.points[0]* item.scale;
-                d.points[1] = d.points[1]*item.scale;
-              }
-
-              d.points[0] = parseFloat(d.points[0].toFixed(2))
-              d.points[1] = parseFloat(d.points[1].toFixed(2))
-
-              this.pointArr.push(d.points)
-            })
+      pathRunKeyframes(){
+        let self = this
+        let path = anime.path(this.$refs.pathObj);
+        let halfW = this.mapInfo.width/2;
+        this.animation = anime({
+          targets: this.$refs.runer,
+          translateX: [
+            { value: this.pointArr[0][0] },
+            { value: this.pointArr[1][0] },
+            { value: this.pointArr[2][0] },  // 第三帧
+            { value: this.pointArr[3][0] },
+          ],
+          translateY: [
+            { value: this.pointArr[0][1] },
+            { value: this.pointArr[1][1] },
+            { value: this.pointArr[2][1] },  // 第三帧
+            { value: this.pointArr[3][1] },
+          ],
+          easing: 'linear',
+          duration: 3000,
+          changeComplete(e) {
+            console.log(e)
           }
         })
-        setTimeout(()=>{
-          self.newData = this.imgList;
-          this.isLoad = false;
-          this.pathInit()
-        },200)
       },
-      pathStr(arr){
-        let strAll='',subStr='';
-        if(arr && arr.length > 0){
-          arr.map((item,index)=>{
-            if(index === 0){
-              subStr = "M "+ item.join(" ")
-            }else{
-              subStr = " L "+ item.join(" ")
-            }
-            strAll += subStr
-          })
-        }
-        console.log(strAll)
-        return strAll
-      },
-      pathPause(){
-        this.animation.pause()
-      },
-      pathResume(){
-        this.animation.play()
-      },
-      pathRestart(){
-        this.animation.restart()
-      },
-      pathStop(){
-
-      }
+      
+      
     }
   })
 </script>
