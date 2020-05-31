@@ -92,6 +92,17 @@
   <div class="paper">
     <h1>css3</h1>
     <hr>
+    <button onclick="setTimeout((e)=>{console.log(e); alert('缓存清理完成！')},1000)">清理缓存</button>
+    <button onclick="clearTimer()">清除定时器</button>
+    <button onclick="consoleTimer()">打印Timer</button>
+    <br>
+    <button onclick="timedCount()">开始</button>
+    <input id="txt" type="text">
+    <button onclick="stopCount()">结束</button>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="box"> </div>
     <div class="box2"> </div>
     <div class="box3"></div>
@@ -102,6 +113,8 @@
       <i style="transform: translateY(-4em);">3</i>
       <i style="transform: translateY(-4em);">4</i> -->
     </div>
+
+    
   </div>
   <canvas id="matrix"></canvas>
 </body>
@@ -119,7 +132,7 @@ function creatNumber(nowNumber){
     itemDom.innerHTML = item;
     fragment.appendChild(itemDom)
   })
-  console.log(fragment.children[2]);
+  //console.log(fragment.children[2]);
   numberDom.appendChild(fragment);
 }
 
@@ -141,7 +154,7 @@ let tt = setInterval(()=>{
   updateNumber(newNumber,nowNumber)
   
 },3000)
-console.log(tt)
+//console.log(tt)
 
 
     //文字
@@ -180,6 +193,34 @@ console.log(tt)
     }
     setInterval(drawMatrix,23);
 
+    let delayTimer = null;
+    
+    delayTimer  = setTimeout(()=>{
+      console.log("定时器打印")
+    },2000)
+    console.log(delayTimer)
+    function clearTimer(){
+      console.log(delayTimer)
+      clearTimeout(3)
+      //delayTimer = null;
+    }
+    function consoleTimer(){
+      console.log(delayTimer)
+    }
+    //delayTimer = null;
+    //
+    let c=0
+    let t
+    function timedCount(){
+      t = null
+      console.log(t)
+      document.getElementById('txt').value=c
+      c=c+1
+      t=setTimeout("timedCount()",1000)
+    }
 
+    function stopCount(){
+      clearTimeout(t)
+    }
 </script>
 </html>

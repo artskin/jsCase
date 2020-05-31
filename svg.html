@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>svg path</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    *{ margin:0; padding:0;}
+    .main{ width: 600px; height: auto; margin: 20px auto;}
+    #svg1{ background-color: #ffc; border: 1px solid #900;}
+    /*#svg1:hover{ cursor: move;}*/
+    #pathborder{ stroke-width: 1; stroke: #f00; fill: none;}
+    
+    #perlist_path .p{ stroke-width:1; fill:none;}
+    #perlist_path .p.hide{ display: none;}
+    #perlist_per .c{ stroke-width:1; stroke:#900; fill:#fff;}
+    #perlist_per .t{ fill:#900;}
+    .ad-Path {
+      fill: none;
+      stroke: #555;
+      stroke-linecap: round;
+    }
+    .ad-PointGroup--first .ad-Point {
+      stroke: #00E676;
+    }
+    .ad-Point {
+      cursor: pointer;
+      fill: #fff;
+      stroke: #555;
+      stroke-width: 5px;
+      -webkit-transition: fill .2s;
+      transition: fill .2s;
+    }
+    svg {
+      background: rgba(25,25,25,0.3);
+      width: 100%;
+      max-width: 580px;
+      height: 200px;
+      padding: 50px;
+      border: 3px solid rgba(255,255,255,0.2);
+      box-sizing:border-box;
+      -moz-box-sizing:border-box;
+      -webkit-box-sizing:border-box;
+    }
+
+    </style>
+ </head>
+<body>
+<div class="main" unselectable="on" onselectstart="return false;">
+  <svg id="svg1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="600" viewBox="0 0 600 600" currentScale="1">
+    <path id="pathborder" width="600" height="600" d="M0 0 L600 0 L600 600 L0 600 Z" />
+    <g id="perlist_path" style="display: block;"></g>
+    <g id="perlist_per"></g>
+  </svg>
+  <div>
+    <button id="btn_fresh">刷新位置</button>
+    <button id="btn_showPath">显示路径</button>
+    <button id="btn_hidePath">隐藏路径</button>
+    <button id="btn_empty">清空所有</button>
+  </div>
+</div>
+<button onclick="run()">run</button>
+<br>
+<svg width="500" height="200">
+  <path class="ad-Path" d="M 13 12 L 59 83 L 142 47 L 340 70 " stroke="#999" stroke-width="2px" />
+  <path class="ad-Path" id="my-path" d="M 13 12 L 59 83 L 142 47 L 340 70 " stroke="#2980B9" stroke-width="4px" />
+  <g class="ad-Points">
+    <g class="ad-PointGroup  ad-PointGroup--first"><circle class="ad-Point" cx="13" cy="12" r="8" data-reactid=".0.0.0.0.2.0.0"></circle></g>
+    <g class="ad-PointGroup"><circle class="ad-Point" cx="59" cy="83" r="8" data-reactid=".0.0.0.0.2.1.0"></circle></g>
+    <g class="ad-PointGroup  is-active"><circle class="ad-Point" cx="142" cy="47" r="8" data-reactid=".0.0.0.0.2.2.0"></circle></g>
+    <g class="ad-PointGroup"><circle id="plan" class="ad-Point" cx="340" cy="70" r="8" data-reactid=".0.0.0.0.2.3.0"></circle></g>
+  </g>
+  
+</svg>
+
+<h2>SVG B<button onclick="run2()">run2</button></h2>
+<svg id="svgB" width="100%" height="100%" viewBox="0 0 620 120" preserveAspectRatio="xMidYMid meet">
+  <!-- <path class="ad-Path" d="M 13 12 L 59 83 L 142 47 L 340 70 " stroke="#999" stroke-width="2px" /> -->
+</svg>
+</div>
+
+<div class="plane">飞机</div>
+<!-- <script src="src/js/movezoom.js"></script>
+<script src="src/js/perTrail.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/segment-js/1.1.2/segment.js"></script>
+<script src="./lib/snap.svg.js"></script>
+
+</body>
+<script>
+  //import Segment from ''
+  var myPath = document.getElementById("my-path"),
+    segment = new Segment(myPath);
+  function run(){
+    //console.log('运动')
+    segment.draw("100%", "100% - 10", 6);
+  }
+  //console.log(Snap())
+  let plane = document.querySelector('#pathSkajtdyvxg')
+  console.log(plane)
+  var length = Snap.path.getTotalLength(myPath); // 获取path的长度
+  Snap.animate(0, length, function(val) {
+      var point = Snap.path.getPointAtLength(myPath, val); // 根据path长度变化获取坐标
+      var m = new Snap.Matrix();
+      m.translate(point.x, point.y);
+      m.rotate(point.alpha-90); // 使飞机总是朝着曲线方向。point.alpha：点的切线和水平线形成的夹角
+      //plane.transform(m);
+  }, 30000, mina.easeout(), function() {
+      console.log('animation end');
+  });
+
+
+  // ---------
+//  SVG B
+// ---------
+
+var snapB = Snap("#svgB");
+
+// SVG B - "Squiggly" Path
+//var myPathB = snapB.path("M62.9 14.9c-25-7.74-56.6 4.8-60.4 24.3-3.73 19.6 21.6 35 39.6 37.6 42.8 6.2 72.9-53.4 116-58.9 65-18.2 191 101 215 28.8 5-16.7-7-49.1-34-44-34 11.5-31 46.5-14 69.3 9.38 12.6 24.2 20.6 39.8 22.9 91.4 9.05 102-98.9 176-86.7 18.8 3.81 33 17.3 36.7 34.6 2.01 10.2.124 21.1-5.18 30.1").attr({
+var myPathB = snapB.path("M 13 12 L 59 83 L 142 47 L 340 70").attr({
+  id: "squiggle",
+  fill: "none",
+  strokeWidth: "4",
+  stroke: "#ffffff",
+  strokeMiterLimit: "10",
+  //strokeDasharray: "9 9",
+  strokeDashOffset: "988.01"
+});
+
+// SVG B - Draw Path
+var lenB = myPathB.getTotalLength();
+
+// // SVG B - Animate Path
+// myPathB.attr({
+//   stroke: '#fff',
+//   strokeWidth: 4,
+//   fill: 'none',
+//   // Draw Path
+//   "stroke-dasharray": lenB + " " + lenB,
+//   "stroke-dashoffset": lenB
+// }).animate({"stroke-dashoffset": 10}, 2500,mina.easeinout);
+
+// SVG B - Circle
+var CircleB = snapB.circle(16,16,8);
+CircleB.attr({
+  fill: "red",
+  stroke: "#fff",
+  strokeWidth: 2
+});
+
+//let planeC = snapB.path("M-2.282-6.074l0.001,3.926l-3.318,2.101C-5.7-0.66-6.141-1.885-6.775-1.891c-0.734,0.003-1.203,1.596-1.208,2.062l0.001,1.29l-2.328,1.474v2.858l2.327-0.827v0.116h2.406l0.001-0.972l3.299-1.172l0.593,4.73l-2.83,2.773v1.611l3.217-1.877h2.588l3.214,1.877v-1.611l-3.007-2.95l0.776-4.552L5.58,4.107V5.08l2.401-0.006V4.959l2.327,0.825V2.926L7.982,1.452L7.981,0.169c0-0.461-0.472-2.058-1.208-2.062c-0.629-0.01-1.08,1.227-1.182,1.838L2.277-2.162V-6.08c-0.006-1.333-0.89-5.986-2.286-5.972C-1.388-12.056-2.282-7.413-2.282-6.074z")
+
+//let plane = document.querySelector('#pathSkajtdyvxg')
+
+// var Triangle = snapB.polyline("0,30 15,0 30,30");
+//   Triangle.attr({
+//     id: "plane",
+//     fill: "green"
+//   });  
+
+  var triangleGroup = snapB.g( Triangle ); // Group polyline
+// setTimeout( function() {
+//   Snap.animate(0, lenB, function( value ) {
+//      movePoint = myPathB.getPointAtLength( value );
+//      CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+//   }, 5500,mina.easeinout);
+// });
+function run2(){
+  Snap.animate(0, lenB, function( value ) {
+    movePoint = myPathB.getPointAtLength( value );
+    CircleB.attr({ cx: movePoint.x, cy: movePoint.y }); // move along path via cx & cy attributes
+    //planeC.attr({cx: movePoint.x, cy: movePoint.y})
+    //triangleGroup.transform( 't' + parseInt(movePoint.x - 15) + ',' + parseInt( movePoint.y - 15) + 'r' + (movePoint.alpha - 90));
+  }, 3000,mina.easeinout);
+}
+
+</script>
+</html>

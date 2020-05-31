@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>正则</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+
+</head>
+<body>
+  <h2></h2>
+  
+  <script>
+    let reg ={
+      integer:/^(([^0][0-9]+|0)$)|^(([1-9]+)$)/
+    }
+    console.log(reg.integer.test(10))
+
+    function fiterStr(str1,str2){
+      var l = str1.length > str2.length ? str2.length : str1.length, //取短的
+        i = 0
+      while(i < l){
+        if(str1[i] !== str2[i])break
+        i++
+      }
+      return str1.substr(0,i)
+    }
+    let beforeStr = '【低至2999元 享12期免息】华为旗下荣耀V30双模5G麒麟990旗舰芯片李现同款'
+    let aftereStr = '【低至5999元 享6期免息】华为旗下荣耀V30双模5G麒麟990旗舰芯片全友同款'
+    //fiterStr(beforeStr,aftereStr);
+    console.log(fiterStr(beforeStr,aftereStr))
+  </script>
+</body>
+</html>

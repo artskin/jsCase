@@ -1,128 +1,112 @@
 // const tmpl = document.createElement("template");
 // tmpl.innerHTML = `
-// <style>
-// :host{
-//     display:inline-block;
-//     margin:10px;
-//     contain: content; /* CSS containment FTW. https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain*/
-//     background:var(--button-bg,#fff);/*外部样式传入*/
-// }
-// :host(:hover){
-//     background:#c00;
-// }
-// :host button{
-    
-// }
-// :host(.primary)  button{ /* color host when it has class="primary" */
-//     //background-color:#409eff;
-//     background-color:var(--primary);
-// }
-// :host(.success)  button{
-//     background-color:#67c23a;
-// }
-// :host(.warning)  button{
-//     background-color:#e6a23c;
-//     color:pink
-// }
-// :host([disabled]) { /* style when host has disabled attribute. */
-//     background: grey;
-//     //pointer-events: none;
-//     opacity: 0.4;
-// }
-// button{
-//     padding:8px 16px;
-//     border:1px solid green;
-//     border-radius:2px;
-//     color:#fff;
-//     cu
-// }
 
-// ::slotted{
-//     color:red
-// }
-
-// </style>
-// <button>
-//     <slot name="icon-left"></slot>
-//     <slot></slot>
-//     <slot name="text"></slot>
-// </button>
 // `
+
 class CButton extends HTMLElement {
-    constructor(){
-        super();
-        const tmpl = document.getElementById('vdom-button')
-        this._shadowRoot = this.attachShadow({mode:"open"});
-        this._shadowRoot.appendChild(tmpl.content.cloneNode(true));
-        this.option = {
-            size:["mini",'big','large']
-        }
+  constructor(){
+    super();
+    const tmpl = document.getElementById('vdom-button');
+    this._shadowRoot = this.attachShadow({mode:"open"});//open 可通过element.shadowRoot 访问
+    this._shadowRoot.appendChild(tmpl.content.cloneNode(true));
+    this.option = {
+      size:["mini",'big','large'],
+      arrts:["type","myclass","size","circle","wire"]
     }
+  }
 
-    //TODO: 怎么获取外部元素属性集合
-    //TODO: 按钮大小设置
-    static get observedAttributes(){
-        //console.log(this.getAttributeNames())
-        return ["type","myclass","size","circle"];
+  //FIXME: 按钮大小设置
+  
+  static get observedAttributes(){
+    // 指定观察的属性，这样attributeChangedCallback才会起作用
+    return ["type","myclass","size","circle","wire","shadow"];
+  }
+
+  get type(){
+    return this.hasAttribute('disabled');
+  }
+  set type(type){
+    this.setAttribute["type",type]
+  }
+
+  get myclass(){
+    return this.hasAttribute('class');
+  }
+  set myclass(val){
+    this.setAttribute["myclass",val]
+  }
+
+
+//生命周期函数
+  //当 custom element首次被插入文档DOM时，被调用
+  connectedCallback(){
+    //console.log("custom element首次被插入")
+  }
+
+  //当 custom element从文档DOM中删除时，被调用
+  disconnectedCallback(){
+    console.log("custom element从文档DOM中删除时")
+  }
+
+  //当 custom element增加、删除、修改自身属性时，被调用
+  attributeChangedCallback(name,oldVal,newVal){
+    //console.log(name,oldVal,newVal)
+    let el = this.shadowRoot.querySelector('button');
+
+    //el.classList.add('btn--'+newVal)
+
+    let index = this.option.size.indexOf(newVal)
+
+    //console.log(this.option.size[index])
+    // if(newVal){
+    //   this.classList.add('btn--'+newVal)
+    // }
+    
+    if(name =='size'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('btn--'+newVal)
     }
-
-    get type(){
-        return this.hasAttribute('disabled');
+    if(name =='type'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('btn--'+newVal)
     }
-    set type(type){
-        this.setAttribute["type",type]
+    
+    if(name =='circle'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('is--'+name)
     }
-
-    get myclass(){
-        return this.hasAttribute('class');
+    if(name =='shadow'){
+      //this.classList.add('is--'+name);//外部添加样式
+      el.classList.add('is--'+name)
     }
-    set myclass(myclass){
-        this.setAttribute["myclass",myclass]
+    if(name =='wire'){
+      //this.classList.add('is-'+name);//外部添加样式
+      el.classList.add('is--'+name)
     }
-
-    //当 custom element首次被插入文档DOM时，被调用
-    connectedCallback(){
-        //console.log(this)
-        //console.log("custom element首次被插入")
+    // switch(attr) {
+    //     case 'myclass':
+    //         console.log('myclass',attr)
+    //     case 'type':
+    //         console.log('type',attr)
+    //     case 'size':
+            
+    // }
+    this._updateRendering();
+  }
+  // 根据变化的属性，改变组件的UI
+  _updateRendering(){
+    let shadowVdom = this.shadowRoot;
+    let childNodes = shadowVdom.childNodes;
+    for(let i=0;i<childNodes.length;i++){
+      if(childNodes[i].nodeName === 'STYLE'){
+        //console.log('childNodes[i]: ', childNodes[i].textContent);
+      }
+      
     }
+  }
 
-    //当 custom element从文档DOM中删除时，被调用
-    disconnectedCallback(){
-        console.log("custom element从文档DOM中删除时")
-    }
-
-    //当 custom element增加、删除、修改自身属性时，被调用
-    attributeChangedCallback(attr,oldVal,newVal){
-        console.log(this)
-
-        console.log('attribute',attr,oldVal,newVal,this.option.size)
-        let index = this.option.size.indexOf(newVal)
-
-        //console.log(this.option.size[index])
-        if(newVal){
-            this.classList.add('btn--'+newVal)
-        }
-        
-        if(attr =='circle'){
-            this.classList.add('btn--'+attr)
-        }
-        // switch(attr) {
-        //     case 'myclass':
-        //         console.log('myclass',attr)
-        //     case 'type':
-        //         console.log('type',attr)
-        //     case 'size':
-                
-        // }
-    }
-
-    //TODO 事件交互，内外
+  //TODO: 事件交互，内外
+  
 }
 
 customElements.define("s-button",CButton);
-
-// const slottedSpan = document.querySelector('my-par');
-
-// console.log(slottedSpan);
-// console.log(slottedSpan.slot);
-// console.log(slottedSpan.assignedSlot)

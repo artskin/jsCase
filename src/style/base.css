@@ -21,6 +21,15 @@ input[type='text']{
 	border: 1px solid #ccc;
 	padding: 5px;
 }
+button{
+	padding: .4em 1em;
+	border-radius: 3px;
+	background: #ccc;
+	cursor: pointer;
+}
+button:hover{
+	background: #ddd;
+}
 .btn{
 	background: #fc0;
 	border-radius: 3px;

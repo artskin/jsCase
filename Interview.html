@@ -13,8 +13,8 @@
   <style>
     h2{margin: 0;position: absolute;}
       #block{
-          border: 2px solid #ccc;
-          padding: 10px;
+        border: 2px solid #ccc;
+        padding: 10px;
       }
       /* 方法一 */
       html,body{height: 100%;}
@@ -29,17 +29,17 @@
 
       /* 方法二
       #block{
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%,-50%);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
       }*/
       
       /* 方法三*/
       /* #block{
-          position: absolute;
-          left: 50%;
-          top: 50%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
           
       } */
       
@@ -60,13 +60,50 @@
   </div>
   
   <script>
-      
-    console.log(1,[] == false)
-    console.log(2,{} == false)
-    console.log(3,[])
+    // console.log(1,[] == false)
+    // console.log(2,{} == false)
+    // console.log(3,[])
 
-    console.log([1]==[1])
-
+    // console.log([1]==[1])
+    let person1= {
+      name:'lili',
+      age:28,
+      say:function(){
+        return ['en','cn']
+      },
+      skils:['js','css','vue']
+    }
+    console.log(person1)
+    let person2 = deepClone(person1);
+    person2.name = 'tony'
+    person2.skils[3] = 'react';
+    person2.say = ()=>{
+      return ['en','cn','jp']
+    }
+    console.log(person2)
+    function deepClone(obj){
+      let o;
+      if (typeof obj === 'object') {
+        if (obj === null) {
+          o = null;
+        }else {
+          if (obj instanceof Array) {
+            o = [];
+            for (let i = 0, len = obj.length; i < len; i++) {
+              o.push(deepClone(obj[ i ]));
+            }
+          } else {
+            o = {};
+            for (var j in obj) {
+              o[ j ] = deepClone(obj[ j ]);
+            }
+          }
+        }
+      } else {
+        o = obj;
+      }
+      return o;
+    };
   </script>
 </body>
 </html>

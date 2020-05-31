@@ -3,7 +3,12 @@
   "lockfileVersion": 1,
   "dependencies": {
     "lit-html": "^1.1.2",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "@spectrum-web-components/tab-list": "^0.3.5",
+    "@webcomponents/webcomponentsjs": "^2.4.2",
+    "lit-element": "^2.2.1",
+    "segment-js": "^1.1.2",
+    "typescript": "^3.8.3"
   },
   "name": "jscase",
   "description": "js经典问题在线调试",

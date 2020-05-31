@@ -9,6 +9,8 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="./js/st-element.js"></script>
   <script>
     customElements.define('my-button',
       class extends HTMLElement {
@@ -24,6 +26,16 @@
         }
       }
     )
+    
+// const slottedSpan = document.querySelector('my-par');
+
+// console.log(slottedSpan);
+// console.log(slottedSpan.slot);
+// console.log(slottedSpan.assignedSlot)
+
+
+//nodejs执行js方法 查看对应js占用内存大小
+//console.log(process.memoryUsage())
   </script>
 </head>
 <body>
@@ -38,6 +50,11 @@
   <p><a href="https://github.com/karol-f/vue-custom-element">vue-custom-element</a></p>
   <p><a href="https://karol-f.github.io/vue-custom-element/#/">vue-custom-element demo</a></p>
   <p><a href="https://css.gg/">css.gg</a></p>
+  <p><a href="https://www.webcomponents.org/">www.webcomponents.org</a></p>
+  https://www.polymer-project.org/
+  https://mwc-demos.glitch.me/demos/index.html
+  html5-video-player
+
 
   <p>关于兼容性对于Web Components规范的兼容性，目前还是需要使用webcomponentsjs polyfills的方式支持开发，总的来说，目前Safari 10， Google Chrome (53）兼容的更好；虽然兼容性并不好，还在推进过程中，但是对其进行学习还是很有必要的。类库推荐几个常见的Web组件类库：Polymer: Google推出的web组件库，支持数据的单向和双向绑定，兼容性较好，跨浏览器性能也较好；X-Tag: 微软推出的开源库，支持Web Components规范，兼容Web ComponentsAPI；Slim.js:轻量级的web组件库，专注于帮助开发者更好的编写原生web组件，而不依赖于其他框架，但是也提供了良好的拓展性，开发者可以自由拓展。
 </p>
