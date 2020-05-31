@@ -2,6 +2,7 @@
   "requires": true,
   "lockfileVersion": 1,
   "dependencies": {
+    "lit-html": "^1.1.2",
     "lodash": "^4.17.10"
   },
   "name": "jscase",
