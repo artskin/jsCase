@@ -131,7 +131,7 @@
   <div class="device-img">
     <img :src="deviceImg" alt="">
   </div>
-  <div class="map" ref="mapOuter">
+  <div class="map" ref="mapOuter" @scroll="userScroll" @mousedown="userClick">
     <ul ref="mapLayers">
       <li v-for="item in newData">
         <div class="img-layer">
@@ -286,7 +286,8 @@
         deviceMap:new Map(),
         deviceImg:'',
         playStatus:'0',
-        playText:"▶"
+        playText:"▶",
+        canAutoScroll:true
       }
     },
     mounted(){
@@ -297,23 +298,32 @@
       })
     },
     methods: {
+      userScroll(e){
+        //console.log(e)
+        //if(!this.canAutoScroll){
+          //this.canAutoScroll = false
+        //}
+        //console.log(this.canAutoScroll)
+        
+      },
+      userClick(){
+        this.canAutoScroll = false;
+        this.pathPause()
+      },
       playControl(){
+        console.log(this.playStatus)
         if(this.playStatus=="0"){
           this.pathRunTimeline()
-          this.playText = "〢"
-          this.playStatus="1"
         }else if(this.playStatus=="1"){
           this.pathPause()
-          this.playText = "〢"
-          this.playStatus="2"
         }else{
           this.pathResume()
-          this.playText = "▶"
-          this.playStatus="1"
         }
       },
       pathRunTimeline(){
         let self = this
+        this.playText = "||"
+        this.playStatus="1"
         let path = anime.path(this.$refs.pathObj);
         let halfW = this.mapInfo.width/2;
         this.animationLine = anime.timeline({
@@ -341,7 +351,7 @@
             change(e) {
               let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
               let scrollX = step - halfW;
-              if(scrollX > 0){
+              if(self.canAutoScroll && scrollX > 0){
                 self.$refs.mapOuter.scrollLeft = scrollX
               }
             },
@@ -351,7 +361,7 @@
                 self.deviceMap.get(index).map((item,index)=>{
                   setTimeout(()=>{
                     self.deviceImg = item.url
-                    console.log(item.url)
+                    //console.log(item.url)
                   },index*1000)
                 })
               }
@@ -414,9 +424,14 @@
       },
       pathPause(){
         this.animationLine.pause()
+        this.playText = "继续▶"
+        this.playStatus="2"
       },
       pathResume(){
         this.animationLine.play()
+        this.playText = "||"
+        this.playStatus="1"
+        this.canAutoScroll = true
       },
       pathRestart(){
         this.animationLine.restart()
