@@ -20,6 +20,7 @@
     ul{
       list-style: none;
     }
+    ul li em{display: inline-block;width:2em;text-align: center;}
     #app strong{color: green;}
   </style>
 </head>
@@ -44,7 +45,7 @@
       <hr>
       <ul>
         <li v-for="(item,index) in incomeList">
-          <span>第{{index+1}}月----收益：<strong> +{{item.monthInterest}}</strong></span>
+          <span>第<em>{{index+1}}</em>月--收益：<strong> +{{item.monthInterest}}</strong></span>
         </li>
       </ul>
       <hr>
