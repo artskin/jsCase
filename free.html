@@ -52,6 +52,7 @@
         <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
       <div ref="result" class="result" :style="'display:'+show">
+        合计价值:<strong> +{{totalIncome}}</strong>元
         <hr>
         <ul>
           <li v-for="(item,index) in incomeList">
@@ -59,7 +60,6 @@
           </li>
         </ul>
         <hr>
-        合计价值:<strong> +{{totalIncome}}</strong>元
         <p class="gray">月收益采用四舍五入保留3位小数</p>
       </div>
     </div>
@@ -87,7 +87,6 @@
         let rateNumber  = Number(state.form.rate)/100
         let priceNumber = Number(state.form.price)
         let monthNumber = Number(state.form.month)
-
         let monthPrice = priceNumber/monthNumber;
         
         if(state.form.month && monthNumber>0){
