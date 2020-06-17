@@ -37,12 +37,23 @@ button:hover{
 	padding-left: 15px;
 	padding-right: 15px;
 	color: #fff;
+	line-height: 1;
 }
 .btn-green{
 	background: rgb(21, 179, 34);
 	border: 1px solid rgb(21, 179, 34);
 }
-
+.btn-blue{
+	background: #007bff;
+	border: 1px solid #007bff;
+	color: #fff;
+	padding: .6em 2em;
+	width: 80%;
+}
+.btn-blue:hover{
+	background: #1687ff;
+	border: 1px solid #1687ff;
+}
 table{
 	border-spacing: 0;
 	border-collapse: collapse;

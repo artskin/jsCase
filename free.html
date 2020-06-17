@@ -13,6 +13,12 @@
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
     body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;}
+    h3{
+      margin-top: 0.2em;
+    }
+    .center{
+      text-align: center;
+    }
     form label{
       display: inline-block;
       width: 100px;
@@ -23,19 +29,20 @@
       padding-left: 0;
       margin-left: 0;
     }
-    ul li em{display: inline-block;width:2em;text-align: center;}
+    ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
     #app strong{color: green;}
   </style>
 </head>
 <body class="paper">
-  <h3>商品*期免息价值计算</h3>
+  <h3 class="center">商品*期免息价值计算</h3>
+  <hr>
   <div id="app">
     <div class="container">
       <form>
         <p><label for="price">商品金额：</label><input id="price" v-model="form.price" /></p>
         <p><label for="month">免息期数：</label><input id="month" v-model="form.month" /></p>
         <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
-        <p><label for="month"></label><button type="button" @click="countFn">计算</button></p>
+        <p class="center"><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
       <div class="result" v-if="totalIncome">
         <hr>
@@ -49,7 +56,6 @@
       </div>
     </div>
   </div>
-<!-- <script src="./lib/vue.2.6.11.js"></script> -->
 <script src="./lib/vue.global.js"></script>
 <script>
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
