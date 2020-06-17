@@ -26,11 +26,15 @@
     }
     ul{
       list-style: none;
-      padding-left: 0;
+      padding-left: .2em;
       margin-left: 0;
     }
     ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
     #app strong{color: green;}
+    .gray{
+      color: #ccc;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body class="paper">
@@ -48,11 +52,13 @@
         <hr>
         <ul>
           <li v-for="(item,index) in incomeList">
-            第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest}}</strong>
+            第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest.toFixed(3)}}</strong>
           </li>
         </ul>
+        
         <hr>
         合计价值:<strong> +{{totalIncome}}</strong>元
+        <p class="gray">月收益采用四舍五入保留3位小数</p>
       </div>
     </div>
   </div>
