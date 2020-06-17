@@ -24,7 +24,7 @@
       width: 100px;
       text-align: right;
     }
-    form input{width: 62%;}
+    form input{width: 52%;}
     ul{
       list-style: none;
       padding-left: .2em;
@@ -36,6 +36,7 @@
       color: #ccc;
       font-size: 12px;
     }
+    .btn-blue{width: 55%;}
   </style>
 </head>
 <body class="paper">
@@ -47,7 +48,7 @@
         <p><label for="price">商品金额：</label><input id="price" v-model="form.price" /></p>
         <p><label for="month">免息期数：</label><input id="month" v-model="form.month" /></p>
         <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
-        <p class="center"><button class="btn-blue" type="button" @click="countFn">计算</button></p>
+        <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
       <div class="result" v-if="totalIncome">
         <hr>
