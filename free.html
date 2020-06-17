@@ -12,6 +12,7 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css?v=1">
   <style>
+    body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;}
     form label{
       display: inline-block;
       width: 100px;
@@ -19,6 +20,8 @@
     }
     ul{
       list-style: none;
+      padding-left: 0;
+      margin-left: 0;
     }
     ul li em{display: inline-block;width:2em;text-align: center;}
     #app strong{color: green;}
@@ -29,27 +32,21 @@
   <div id="app">
     <div class="container">
       <form>
-        <p>
-          <label for="price">商品金额：</label><input id="price" v-model="form.price" />
-        </p>
-        <p>
-          <label for="month">免息期数：</label><input id="month" v-model="form.month" />
-        </p>
-        <p>
-          <label for="rate">理财年化：</label><input id="rate" v-model="form.rate" />%
-        </p>
-        <p>
-          <label for="month"></label><button type="button" @click="countFn">计算</button>
-        </p>
+        <p><label for="price">商品金额：</label><input id="price" v-model="form.price" /></p>
+        <p><label for="month">免息期数：</label><input id="month" v-model="form.month" /></p>
+        <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
+        <p><label for="month"></label><button type="button" @click="countFn">计算</button></p>
       </form>
-      <hr>
-      <ul>
-        <li v-for="(item,index) in incomeList">
-          <span>第<em>{{index+1}}</em>月--收益：<strong> +{{item.monthInterest}}</strong></span>
-        </li>
-      </ul>
-      <hr>
-      合计:<strong> +{{totalIncome}}</strong>元
+      <div class="result" v-if="totalIncome">
+        <hr>
+        <ul>
+          <li v-for="(item,index) in incomeList">
+            第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest}}</strong>
+          </li>
+        </ul>
+        <hr>
+        合计价值:<strong> +{{totalIncome}}</strong>元
+      </div>
     </div>
   </div>
 <!-- <script src="./lib/vue.2.6.11.js"></script> -->
@@ -60,7 +57,6 @@
   var App = {
     template: ``,
     setup(props, ctx) {
-      console.log(props)
       const state = reactive({
         form:{
           price:'1599',
@@ -71,8 +67,7 @@
         totalIncome:''
       })
 
-      const countFn = ()=>{
-        console.log(ctx)
+      countFn = ()=>{
         let rateNumber  = Number(state.form.rate)/100
         let priceNumber = Number(state.form.price)
         let monthNumber = Number(state.form.month)
@@ -101,12 +96,10 @@
         ...toRefs(state),
         countFn
       }
-      
     }
   }
   
   Vue.createApp(App).mount('#app')
-  
 </script>
 </body>
 </html>
