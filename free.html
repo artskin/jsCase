@@ -51,7 +51,7 @@
         <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
         <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
-      <div ref="result" class="result" v-if="totalIncome" style="display:block">
+      <div ref="result" class="result" :style="'display:'+show">
         <hr>
         <ul>
           <li v-for="(item,index) in incomeList">
@@ -77,11 +77,13 @@
           rate:'4',
           month:'24'
         },
+        show:"none",
         incomeList:[],
         totalIncome:''
       })
 
       countFn = ()=>{
+        state.show = 'block'
         let rateNumber  = Number(state.form.rate)/100
         let priceNumber = Number(state.form.price)
         let monthNumber = Number(state.form.month)
@@ -110,9 +112,6 @@
         ...toRefs(state),
         countFn
       }
-    },
-    onUpdated(){
-
     }
   }
   
