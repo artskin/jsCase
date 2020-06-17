@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <meta name="renderer" content="webkit">
-  <title>免息计算器</title>
+  <title>商品*期免息价值计算</title>
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
@@ -30,6 +30,7 @@
       padding-left: .2em;
       margin-left: 0;
     }
+    .result{display: none;}
     ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
     #app strong{color: green;}
     .gray{
@@ -50,14 +51,13 @@
         <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
         <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
-      <div class="result" v-if="totalIncome">
+      <div ref="result" class="result" v-if="totalIncome" style="display:block">
         <hr>
         <ul>
           <li v-for="(item,index) in incomeList">
             第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest.toFixed(3)}}</strong>
           </li>
         </ul>
-        
         <hr>
         合计价值:<strong> +{{totalIncome}}</strong>元
         <p class="gray">月收益采用四舍五入保留3位小数</p>
@@ -110,6 +110,9 @@
         ...toRefs(state),
         countFn
       }
+    },
+    onUpdated(){
+
     }
   }
   
