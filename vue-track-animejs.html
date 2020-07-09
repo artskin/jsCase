@@ -150,7 +150,13 @@
     </ul>
     <div class="svg-layer">
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
-        <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path>
+        <!-- <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path> -->
+        <g ref="svgGroup" fill="none" stroke="#ff9966">
+          <!-- <path fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path>
+          <path fill="none" stroke-dasharray="5,5" stroke="#ff9966" style="stroke-width: 1;"></path> -->
+          <polyline v-for="item in imgList" :points="item.deviceCoords"/>
+          <polyline v-for="item in imgList" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
+        </g>
         <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
       </svg>
     </div>
@@ -429,7 +435,7 @@
       },
       pathInit(){
         //console.log(this.pointArr)
-        this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
+        //this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
         //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
         this.startPos = "transform: translateX("+this.pointArr[0][0]+"px) translateY("+this.pointArr[0][1]+"px)";
       },
@@ -437,11 +443,16 @@
         let self = this;
         let offsetX = []
         this.pointsArr = []
+        
         this.imgList.map((item,index)=>{
+          //console.log(item)
           item.scale = this.mapHeight / item.height;
           item.restoreScale = 1 /item.scale;
           item.scaleW = (item.width * item.scale)+16;
           offsetX.push(item.scaleW);
+          item.deviceCoords = [];
+          item.crossMapCoords = []
+          
           if(item.devices && item.devices.length > 0 ){
             item.devices.map((d)=>{
               d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
@@ -452,19 +463,39 @@
               d.points[1] = parseFloat((d.points[1]*item.scale).toFixed(2));
 
               this.pointArr.push(d.points)
+              item.deviceCoords.push(d.points)
               this.deviceMap.set(this.pointArr.length-1,d.images)
+              
+              item.crossMapCoords[0] = d.points
+              
+              // if(index > 0){
+              //   item.crossMapPiont[1] = item.piontArr[0]
+              // }
             })
           }
+          //item.crossMapCoords[1] = this.pointArr[this.pointArr.length]
         })
         setTimeout(()=>{
+          console.log(this.imgList)
           self.newData = this.imgList;
+          let currentLength = 0
+          this.imgList.map((item,index)=>{
+            console.log(index , this.imgList.length-1)
+            
+            currentLength += item.deviceCoords.length
+            item.crossMapCoords[1] = this.pointArr[currentLength]
+            if(index == this.imgList.length-1){
+              item.crossMapCoords = []
+            }
+          })
           this.isLoad = false;
          
-          // console.log(this.deviceMap)
+          //console.log(this.deviceMap)
           this.pathInit()
         },200)
       },
       pathStr(arr){
+        //console.log(arr)
         let strAll='',subStr='';
         if(arr && arr.length > 0){
           arr.map((item,index)=>{

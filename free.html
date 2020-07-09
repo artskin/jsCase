@@ -52,8 +52,9 @@
         <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
       </form>
       <div ref="result" class="result" :style="'display:'+show">
-        合计价值:<strong> +{{totalIncome}}</strong>元
+        每月应还：<strong>-{{perMonth.toFixed(2)}}</strong>元
         <hr>
+        合计价值: <strong>+{{totalIncome.toFixed(4)}}</strong>元
         <ul>
           <li v-for="(item,index) in incomeList">
             第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest.toFixed(3)}}</strong>
@@ -64,7 +65,7 @@
       </div>
     </div>
   </div>
-<script src="./lib/vue.global.js"></script>
+<script src="./lib/3.0.0-beta.18.vue.global.js"></script>
 <script>
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const { reactive,toRefs } = Vue
@@ -79,7 +80,8 @@
         },
         show:"none",
         incomeList:[],
-        totalIncome:''
+        totalIncome:0,
+        perMonth:0
       })
 
       countFn = ()=>{
@@ -103,7 +105,8 @@
             }
           }
           state.totalIncome =  incomeArr.reduce(reducer);
-          state.incomeList = comeList
+          state.incomeList = comeList;
+          state.perMonth = priceNumber/monthNumber
         }
       }
 
