@@ -27,10 +27,6 @@
 <script src="https://cdn.bootcss.com/proj4leaflet/1.0.2/proj4leaflet.js"></script>
 <script src="../../lib/tileLayer.baidu.js"></script>
 <script>
-//Installing
-//npm install proj4
-
-
   //let mapUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   let mapUrl = 'http://api.map.baidu.com/staticimage?zoom=6'
   //var map = L.map('mapid').setView([51.505, -0.09], 13);
@@ -46,7 +42,6 @@
   });
 
   L.control.zoom({position: 'bottomright' }).addTo(map);
-
 
   //控制地图底图
   L.control.layers(
@@ -67,23 +62,14 @@
   //获取GPS坐标
   navigator.geolocation.watchPosition((pos)=>{
     console.log(pos)
-    //const coords = [pos.coords.longitude, pos.coords.latitude];
-    //console.log(pos.coords)
     let centerPos = {
       lat:pos.coords.latitude,
       lng:pos.coords.longitude
     }
-    //map.options.center =pos.coords
-    map.setView(centerPos)
-    //console.log(map.getCenter())
 
+    map.setView(centerPos)
     L.marker(centerPos).addTo(map).bindPopup(`经度：${centerPos.lng},<br>纬度：${centerPos.lat}`)
-    //const accuracy = circular(coords, pos.coords.accuracy);
-    // source.clear(true);
-    // source.addFeatures([
-    //   new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
-    //   new Feature(new Point(fromLonLat(coords)))
-    // ]);
+
   })
   
  
