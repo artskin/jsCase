@@ -304,7 +304,6 @@
           //this.canAutoScroll = false
         //}
         //console.log(this.canAutoScroll)
-        
       },
       userClick(){
         this.canAutoScroll = false;
@@ -356,12 +355,10 @@
               }
             },
             changeComplete(e) {
-              //console.log(index,e,self.deviceMap)
               if(self.deviceMap.get(index)){
                 self.deviceMap.get(index).map((item,index)=>{
                   setTimeout(()=>{
-                    self.deviceImg = item.url
-                    //console.log(item.url)
+                    self.deviceImg = item.url;
                   },index*1000)
                 })
               }
