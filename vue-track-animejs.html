@@ -315,6 +315,7 @@
       }
     },
     mounted(){
+      //window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
       this.$nextTick(()=>{
         this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
         this.mapInfo = this.$refs.mapOuter.getBoundingClientRect()
@@ -385,7 +386,10 @@
         this.playText = "||"
         this.playStatus="1"
         let path = anime.path(this.$refs.pathObj);
+        console.log(path)
+        console.log(this.$refs.runer)
         let halfW = this.mapInfo.width/2;
+        
         this.animationLine = anime.timeline({
           targets: this.$refs.runer,
           duration: 100,
@@ -398,7 +402,7 @@
         })
 
         this.pointArr.map((item,index)=>{
-          console.log(item)
+          //console.log(item)
           let endDelayTime = 10
           if(self.deviceMap.get(index)){
             endDelayTime =  self.deviceMap.get(index).length*1000 + 10
@@ -412,7 +416,7 @@
               console.log(self.$refs.mapOuter.scrollLeft)
             },
             change(e) {
-              console.log(e)
+              //console.log(e)
               let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
               let scrollX = step - halfW;
               if(self.canAutoScroll && scrollX > 0){
@@ -592,10 +596,22 @@
           }
         })
       },
+      // beforeunloadHandler (ev) {
+      //   // Cancel the event as stated by the standard.
+      //   ev.preventDefault();
+      //     // Chrome requires returnValue to be set.
+      //   ev.returnValue = '';
+      // },
+      // beforeDestroy(){
+      //   alert("22")
+      // }
       
       
     }
   })
+  // window.addEventListener('unload', function(event) {
+  //       console.log('I am the 3rd one.');
+  //     });
 </script>
 </body>
 </html>

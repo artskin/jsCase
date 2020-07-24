@@ -12,8 +12,18 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css" rel="stylesheet">
   <style>
+    html,body{
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    body{
+      padding:1%;
+    }
     #mapid{
-      height: 500px;
+      width: 100% ;
+      height: 100%;
     }
   </style>
 </head>
@@ -21,11 +31,17 @@
   <div id="mapid">
     loading
   </div>
+  <svg id="svg2" pointer-events="none" width="484" height="978" viewBox="-40 -81 484 978" style="transform: translate3d(-40px, -81px, 0px);">
+    <g>
+      <path class="leaflet-interactive" stroke="red" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M201 408L194 222L90 118L62 19"></path>
+    </g>
+  </svg>
 </body>
-<script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
-<script src="https://cdn.bootcss.com/proj4js/2.5.0/proj4.js"></script>
-<script src="https://cdn.bootcss.com/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+<script src="../../lib/leaflet.js"></script>
+<script src="../../lib/proj4.js"></script>
+<script src="../../lib/proj4leaflet.js"></script>
 <script src="../../lib/tileLayer.baidu.js"></script>
+<script src="../../lib/anime.min.3.2.0.js"></script>
 <script>
   //let mapUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   let mapUrl = 'http://api.map.baidu.com/staticimage?zoom=6'
@@ -37,8 +53,8 @@
     maxZoom: 18,
     attributionControl: false,
     zoomControl:false,
-    center: [31.834912, 117.220102],
-    zoom: 12
+    center: [22.3193039, 114.16936109999999],
+    zoom: 16
   });
 
   L.control.zoom({position: 'bottomright' }).addTo(map);
@@ -59,9 +75,8 @@
     { position: "topright" }
   ).addTo(map);
 
-  //获取GPS坐标
-  navigator.geolocation.watchPosition((pos)=>{
-    console.log(pos)
+  function getPos(pos){
+    //console.log(pos)
     let centerPos = {
       lat:pos.coords.latitude,
       lng:pos.coords.longitude
@@ -69,9 +84,107 @@
 
     map.setView(centerPos)
     L.marker(centerPos).addTo(map).bindPopup(`经度：${centerPos.lng},<br>纬度：${centerPos.lat}`)
+  }
 
-  })
+  function error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  };
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+
+  //获取GPS坐标
+  let localPos = navigator.geolocation.getCurrentPosition(getPos,error,options)
+
+  navigator.geolocation.watchPosition(getPos,error,options)
+
+  let iconCar = L.icon({
+    iconUrl:'../../assets/images/car.svg',
+    iconSize:[24,24]
+  });
+
+  let carEl = L.marker([22.3193039, 114.16936109999999],{icon:iconCar}).addTo(map)
+  let coods = [
+    [22.3193039, 114.16936109999999],
+    [22.3230039, 114.16920109999999],
+    [22.3255039, 114.16910109999999],
+    [22.3290039, 114.16536109999999],
+    [22.3323039, 114.16436109999999],
+  ]
+
+  L.polyline([
+    [22.3193039, 114.16936109999999],
+    [22.3230039, 114.16920109999999],
+    [22.3255039, 114.16910109999999],
+    [22.3290039, 114.16536109999999],
+    [22.3323039, 114.16436109999999],
+  ],{
+    color:'red'
+  },{
+    auto:true,
+    duration:5000,
+    //easing:L.Motion.Ease.easeInOutQuart
+  },{
+    removeOnEnd:false,
+    //icon:iconCar
+  }).addTo(map);
   
+  map.on('click',(e)=>{
+    let path = anime.path(L.DomUtil.get('mapid').querySelector('path'));
+    
+
+    console.log(path().el)
+    //console.log(L.DomUtil.get('mapid ').querySelector('img'))
+    anime({
+      targets: carEl._icon,
+      translateX: path('x'),
+      translateY: path('y'),
+      rotate: path('angle'),
+      easing: 'linear',
+      duration: 2000,
+      //loop: true,
+      change(e) {
+        console.log(e)
+      }
+    });
+
+    // var animationLine = anime.timeline({
+    //     targets: carEl._icon,
+    //     duration: 100,
+    //     easing: 'linear',
+    //     complete(){
+    //       console.log('播放完成')
+    //       self.playText = "▶"
+    //       self.playStatus="0"
+    //     }
+    //   })
+      // coods.forEach((item)=>{
+      //   console.log(item)
+      //   animationLine.add({
+      //     translateX: item[0],
+      //     translateY: item[1],
+      //     duration: 1000,
+      //     endDelay:100,
+      //     changeBegin: function(anim) {
+      //       //console.log(anim)
+      //     },
+      //     change(e) {
+      //       // //console.log(e)
+      //       // let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
+      //       // let scrollX = step - halfW;
+      //       // if(self.canAutoScroll && scrollX > 0){
+      //       //   self.$refs.mapOuter.scrollLeft = scrollX
+      //       // }
+      //     },
+      //     changeComplete(e) {
+      //     }
+      //   })
+      // })
+      // console.log(animationLine)
+    
+  })
  
 </script>
 </html>
