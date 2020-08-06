@@ -136,7 +136,7 @@
     limitName.push([...userName].reverse().join(''))
 
     let keyWords = [...limitName]
-    
+    console.log(keyWords)
     function verifyPWD(el){
       let result = document.querySelector(el).value
       let i = 0;
@@ -160,6 +160,15 @@
 
       }else{
         console.log('内容长度不合要求')
+      }
+      function hasLower(){
+        
+      }
+      function hasUpper(){
+        
+      }
+      function hasNumber(){
+
       }
       console.log(i)
       let rules = {
@@ -185,6 +194,10 @@
         symbol:{
           regExp:'~!@#$^*()_+',
           errTip:'需至少含有一个特殊字符'
+        },
+        continuous:{
+          regExp:'',
+          errTip:'有连续数字或字母'
         }
       }
 
@@ -196,11 +209,11 @@
       // }
  
       // return stateM[i]
-      return {
-        len: allowLen,
-        isKeyWord: isKeyWord,
-        size: allowSize,
-      }
+      // return {
+      //   len: allowLen,
+      //   isKeyWord: isKeyWord,
+      //   size: allowSize,
+      // }
       
     }
   </script>
