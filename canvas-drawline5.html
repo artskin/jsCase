@@ -11,6 +11,8 @@
 <script>
 const canvas = document.getElementById("canvas")
 const context = canvas.getContext("2d")
+const ctx = canvas.getContext("2d")
+
 const COLOR = "#1890ff"
 const LINEWIDTH = 2
 const DOTRADIUS = 3
@@ -40,11 +42,8 @@ function drawLine(locStart, locEnd) {
     context.stroke();
 }
 
-
 function drawPolygon(points) {
-
     context.clearRect(0, 0, canvas.width, canvas.height);
-    
     const length = points.length
     for (let i = 0; i < parseInt(length / 2); i++) {
         drawDot(points[i * 2])
@@ -57,10 +56,10 @@ function drawPolygon(points) {
         console.log("close")
         drawLine(points[length - 1], points[0])
     }
+    console.log(...points)
 }
 function drawSegment(points){
     context.clearRect(0, 0, canvas.width, canvas.height);
-    
 }
 
 let points = []
@@ -100,6 +99,21 @@ canvas.addEventListener("mouseup", e => {
 
     }
 })
+
+ctx.save();
+
+ctx.shadowOffsetX = 10;
+ctx.shadowOffsetY = 10;
+ctx.shadowBlur = 5;
+ctx.shadowColor = 'rgba(0,0,0,0.5)';
+
+ctx.fillStyle = '#FF0000';
+ctx.fillRect(10,10,100,100);
+
+//ctx.restore();
+
+ctx.fillStyle = '#000000';
+ctx.fillRect(180,10,150,100);
 </script>
 </body>
 </html>
