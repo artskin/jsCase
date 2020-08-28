@@ -119,7 +119,7 @@
   </head>
   <body class="paper">
     
-    <input type="text" value="*Ass122~" maxlength="20" id="pwd">
+    <input type="text" value="Ass122232" maxlength="20" id="pwd">
     <button onclick="verifyPWD('#pwd')">校验</button>
     <div id="box">
       <com-a></com-a>
@@ -216,5 +216,9 @@
       // }
       
     }
+    ////                \
+    let regEnSymbol = /[-`~!@#$%^&*()_=+?:"{}|,\\<.>\/;'[\]]/im;
+    let value = document.querySelector('#pwd').value
+    console.log(regEnSymbol.test(value))
   </script>
 </html>
