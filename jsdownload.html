@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>商品*期免息价值计算</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+
+</head>
+<body class="paper">
+
+<button onclick="download('data.txt',JSON.stringify(data))">下载</button>
+<script>
+  function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+    if (document.createEvent) {
+      var event = document.createEvent('MouseEvents');
+      event.initEvent('click', true, true);
+      pom.dispatchEvent(event);
+    } else {
+      pom.click();
+    }
+  }
+  var data = {
+    a:11,
+    b:[{a:1,b:3}]
+  }
+  
+</script>
+</body>
+</html>

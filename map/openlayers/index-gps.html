@@ -10,7 +10,7 @@
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
-  <link href="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css" rel="stylesheet">
   <style>
     #mapid{
       height: 500px;
@@ -22,15 +22,11 @@
     loading
   </div>
 </body>
-<script src="https://cdn.bootcss.com/leaflet/1.5.1/leaflet.js"></script>
-<script src="https://cdn.bootcss.com/proj4js/2.5.0/proj4.js"></script>
-<script src="https://cdn.bootcss.com/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js"></script>
+<!-- <script src="https://cdn.bootcss.com/proj4js/2.5.0/proj4.js"></script>
+<script src="https://cdn.bootcss.com/proj4leaflet/1.0.2/proj4leaflet.js"></script> -->
 <script src="../../lib/tileLayer.baidu.js"></script>
 <script>
-//Installing
-//npm install proj4
-
-
   //let mapUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   let mapUrl = 'http://api.map.baidu.com/staticimage?zoom=6'
   //var map = L.map('mapid').setView([51.505, -0.09], 13);
@@ -64,7 +60,33 @@
     { position: "topright" }
   ).addTo(map);
 
-  
- 
+  //获取GPS坐标
+  navigator.geolocation.watchPosition((pos)=>{
+    console.log(pos)
+    const coords = [pos.coords.longitude, pos.coords.latitude];
+    const accuracy = circular(coords, pos.coords.accuracy);
+    source.clear(true);
+    source.addFeatures([
+      new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
+      new Feature(new Point(fromLonLat(coords)))
+    ]);
+  })
+
+
+  // const locate = document.createElement('div');
+  // locate.className = 'ol-control ol-unselectable locate';
+  // locate.innerHTML = '<button title="Locate me">◎</button>';
+  // locate.addEventListener('click', function() {
+  //   if (!source.isEmpty()) {
+  //     map.getView().fit(source.getExtent(), {
+  //       maxZoom: 18,
+  //       duration: 500
+  //     });
+  //   }
+  // });
+  // map.addControl(new Control({
+  //   element: locate
+  // }));
+
 </script>
 </html>

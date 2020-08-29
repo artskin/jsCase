@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>draw demo</title>
+</head>
+<body>
+ 
+<canvas id="canvas" width="600" height="400" style="border:1px solid #999;">您的浏览器不支持canvas!</canvas>
+ 
+<script>
+const canvas = document.getElementById("canvas")
+const context = canvas.getContext("2d")
+const ctx = canvas.getContext("2d")
+
+const COLOR = "#1890ff"
+const LINEWIDTH = 2
+const DOTRADIUS = 3
+
+context.fillStyle = COLOR
+context.strokeStyle = COLOR
+context.lineWidth = LINEWIDTH
+
+function windowToCanvas(canvas, x, y) {
+    var bbox = canvas.getBoundingClientRect();
+    return {
+        x: x - bbox.left * (canvas.width / bbox.width),
+        y: y - bbox.top * (canvas.height / bbox.height)
+    };
+}
+
+function drawDot(loc) {
+    context.beginPath()
+    context.arc(loc.x, loc.y, DOTRADIUS * 2, 0, 2 * Math.PI);
+    context.fill()
+}
+
+function drawLine(locStart, locEnd) {
+    context.beginPath()
+    context.moveTo(locStart.x, locStart.y);
+    context.lineTo(locEnd.x, locEnd.y);
+    context.stroke();
+}
+
+function drawPolygon(points) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    const length = points.length
+    for (let i = 0; i < parseInt(length / 2); i++) {
+        drawDot(points[i * 2])
+        drawLine(points[i * 2], points[i * 2 + 1])
+    }
+    if (points.length % 2 === 1) {
+        drawDot(points[length - 1])
+    }
+    if (points.length > 2) {
+        console.log("close")
+        drawLine(points[length - 1], points[0])
+    }
+    console.log(...points)
+}
+function drawSegment(points){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+let points = []
+let isDrawing = false
+let isPointAdd = false
+
+canvas.addEventListener("mousedown", e => {
+    const loc = windowToCanvas(canvas, e.clientX, e.clientY)
+    points.push(loc)
+    drawPolygon(points)
+    isDrawing = true
+    isPointAdd = true
+})
+
+canvas.addEventListener("mousemove", e => {
+    if (isDrawing) {
+        const loc = windowToCanvas(canvas, e.clientX, e.clientY)
+        if (!isPointAdd) {
+            points.pop()
+        }
+        points.push(loc)
+        isPointAdd = false
+        drawPolygon(points)
+    }
+})
+
+canvas.addEventListener("dblclick", e => {
+    if (isDrawing) {
+        drawPolygon(points)
+        points = []
+        isDrawing = false
+    }
+})
+
+canvas.addEventListener("mouseup", e => {
+    if (isDrawing) {
+
+    }
+})
+
+ctx.save();
+
+ctx.shadowOffsetX = 10;
+ctx.shadowOffsetY = 10;
+ctx.shadowBlur = 5;
+ctx.shadowColor = 'rgba(0,0,0,0.5)';
+
+ctx.fillStyle = '#FF0000';
+ctx.fillRect(10,10,100,100);
+
+//ctx.restore();
+
+ctx.fillStyle = '#000000';
+ctx.fillRect(180,10,150,100);
+</script>
+</body>
+</html>

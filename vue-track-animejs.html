@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <meta name="renderer" content="webkit">
-  <title>vue 轨迹绘制及播放实验</title>
+  <title>Vue 轨迹绘制及播放实验</title>
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
@@ -23,6 +23,7 @@
       background: rgba(0, 0, 0, 0.1);
       border-radius: 10px;
     }
+    ::-webkit-scrollbar-thumb:hover {background: rgba(0, 0, 0, 0.2);}
     #app{
       position: relative;
     }
@@ -46,7 +47,7 @@
       min-width: 100%;
       float: left;
     }
-    ul li{height:100%;flex-shrink:0;margin-right: 16px;box-shadow: 0 3px 6px rgba(0,0,0,.2);}
+    ul li{height:100%;flex-shrink:0;margin-right: 16px;box-shadow: 0 2px 6px rgba(0,0,0,.1);}
     ul li .img-layer{
       height:100%;
       position:relative;
@@ -85,6 +86,7 @@
       left: 0;
       top: 0;
       height: 363px;
+      pointer-events: none;
     }
     .player{
       position: relative;
@@ -123,6 +125,9 @@
     .device-img img{
       height: 100%;
     }
+    .readme ol{
+      display: block;
+    }
   </style>
 </head>
 <body class="paper">
@@ -131,11 +136,11 @@
   <div class="device-img">
     <img :src="deviceImg" alt="">
   </div>
-  <div class="map" ref="mapOuter" @scroll="userScroll" @mousedown="userClick">
+  <div class="map" ref="mapOuter" @scroll="userScroll" @mousedown ="userMouseDown" @mouseup="userMouseUp" @mousemove="userMouseMove" @mouseleave="userMouseLeave">
     <ul ref="mapLayers">
       <li v-for="item in newData">
         <div class="img-layer">
-          <img :src="item.url" alt="">
+          <img :src="item.url" alt="" draggable="false">
           <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
             <i v-for="d in item.devices" :style="d.deviceStyle" :key="d.index">📍<em>{{d.points}}</em></i>
           </div>
@@ -143,10 +148,15 @@
         <h4>{{item.floorName}}</h4>
       </li>
     </ul>
-    
     <div class="svg-layer">
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
-        <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1; stroke-dasharray: 6, 6;"></path>
+        <!-- <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path> -->
+        <g ref="svgGroup" fill="none" stroke="#ff9966">
+          <!-- <path fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path>
+          <path fill="none" stroke-dasharray="5,5" stroke="#ff9966" style="stroke-width: 1;"></path> -->
+          <polyline v-for="item in imgList" :points="item.deviceCoords"/>
+          <polyline v-for="item in imgList" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
+        </g>
         <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
       </svg>
     </div>
@@ -157,12 +167,23 @@
     <!-- <button @click="pathRun">pathRun:▶</button>
     <button class="pause" @click="pathPause">pathPause:<i>〓</i></button>
     <button @click="pathResume">pathResume:↷</button>
-    
     <button @click="pathRunTimeline">pathRunTimeline </button> -->
   </div>
 </div>
+<div class="readme">
+  <ol>
+    <li>跨地图轨迹生成，地图大小是高度一致，宽度自适应</li>
+    <li>地图上设备点位坐标根据高度缩放比例自适应</li>
+    <li>地图轨迹用SVG 的path实现</li>
+    <li>轨迹播放从左到右，轨迹点移动到地图区域一半时，地图背景开始左移，保持轨迹点在屏幕中央</li>
+    <li>轨迹点移动到设备时，如果设备有抓拍图，需要等抓拍图播放完毕再向下一个点位移动</li>
+    <li>用户点击或拖动地图区域时，轨迹播放暂停</li>
+    <li>禁止图片拖动：draggable="false"</li>
+  </ol>
+  
+</div>
 <script src="./lib/vue.2.6.11.js"></script>
-<script src="./lib/anime.min.js"></script>
+<script src="./lib/anime.min.3.2.0.js"></script>
 <script>
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   new Vue({
@@ -287,10 +308,14 @@
         deviceImg:'',
         playStatus:'0',
         playText:"▶",
-        canAutoScroll:true
+        canAutoScroll:true,
+        isMouseDown :false,
+        mouseDownX : 0,
+        startX : 0
       }
     },
     mounted(){
+      //window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
       this.$nextTick(()=>{
         this.mapHeight = this.$refs.mapLayers.getBoundingClientRect().height
         this.mapInfo = this.$refs.mapOuter.getBoundingClientRect()
@@ -306,8 +331,44 @@
         //console.log(this.canAutoScroll)
       },
       userClick(){
-        this.canAutoScroll = false;
-        this.pathPause()
+        // this.canAutoScroll = false;
+        // this.pathPause()
+      },
+      userMouseDown(ev){
+        console.log(ev)
+        if(ev.button == 0){
+          this.mouseDownX = ev.clientX
+          this.isMouseDown = true
+          this.startX = (this.$refs.mapOuter.scrollLeft);
+          console.log('鼠标左键',this.mouseDownX,this.startX)
+
+          if(this.animationLine && this.animationLine.began){
+            this.animationLine.pause()
+            this.playerClass = "el-icon-video-play"
+            console.log(this.animationLine)
+          }
+        }
+      },
+      userMouseUp(e){
+        //console.log('弹起',this,e)
+        this.isMouseDown = false;
+      },
+      userMouseLeave(){
+        this.isMouseDown = false;
+      },
+      userMouseMove(ev){
+        ev.stopPropagation()
+        ev.preventDefault()
+        //按下并移动
+        if(this.isMouseDown){
+          //console.log(ev)
+          if(ev.movementX < 0){//左移
+
+          }
+          let scrollX = ev.clientX - this.mouseDownX;
+
+          this.$refs.mapOuter.scrollLeft = (this.startX - scrollX)
+        }
       },
       playControl(){
         console.log(this.playStatus)
@@ -324,7 +385,10 @@
         this.playText = "||"
         this.playStatus="1"
         let path = anime.path(this.$refs.pathObj);
+        console.log(path)
+        console.log(this.$refs.runer)
         let halfW = this.mapInfo.width/2;
+        
         this.animationLine = anime.timeline({
           targets: this.$refs.runer,
           duration: 100,
@@ -337,7 +401,7 @@
         })
 
         this.pointArr.map((item,index)=>{
-          //console.log(item.images)
+          //console.log(item)
           let endDelayTime = 10
           if(self.deviceMap.get(index)){
             endDelayTime =  self.deviceMap.get(index).length*1000 + 10
@@ -347,7 +411,11 @@
             translateY: item[1],
             duration: 1000,
             endDelay:endDelayTime,
+            changeBegin: function(anim) {
+              console.log(self.$refs.mapOuter.scrollLeft)
+            },
             change(e) {
+              //console.log(e)
               let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
               let scrollX = step - halfW;
               if(self.canAutoScroll && scrollX > 0){
@@ -368,7 +436,7 @@
       },
       pathInit(){
         //console.log(this.pointArr)
-        this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
+        //this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
         //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
         this.startPos = "transform: translateX("+this.pointArr[0][0]+"px) translateY("+this.pointArr[0][1]+"px)";
       },
@@ -376,11 +444,16 @@
         let self = this;
         let offsetX = []
         this.pointsArr = []
+        
         this.imgList.map((item,index)=>{
+          //console.log(item)
           item.scale = this.mapHeight / item.height;
           item.restoreScale = 1 /item.scale;
-          item.scaleW = (item.width * item.scale)+16
+          item.scaleW = (item.width * item.scale)+16;
           offsetX.push(item.scaleW);
+          item.deviceCoords = [];
+          item.crossMapCoords = []
+          
           if(item.devices && item.devices.length > 0 ){
             item.devices.map((d)=>{
               d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
@@ -391,19 +464,39 @@
               d.points[1] = parseFloat((d.points[1]*item.scale).toFixed(2));
 
               this.pointArr.push(d.points)
+              item.deviceCoords.push(d.points)
               this.deviceMap.set(this.pointArr.length-1,d.images)
+              
+              item.crossMapCoords[0] = d.points
+              
+              // if(index > 0){
+              //   item.crossMapPiont[1] = item.piontArr[0]
+              // }
             })
           }
+          //item.crossMapCoords[1] = this.pointArr[this.pointArr.length]
         })
         setTimeout(()=>{
+          console.log(this.imgList)
           self.newData = this.imgList;
+          let currentLength = 0
+          this.imgList.map((item,index)=>{
+            console.log(index , this.imgList.length-1)
+            
+            currentLength += item.deviceCoords.length
+            item.crossMapCoords[1] = this.pointArr[currentLength]
+            if(index == this.imgList.length-1){
+              item.crossMapCoords = []
+            }
+          })
           this.isLoad = false;
          
-          console.log(this.deviceMap)
+          //console.log(this.deviceMap)
           this.pathInit()
         },200)
       },
       pathStr(arr){
+        //console.log(arr)
         let strAll='',subStr='';
         if(arr && arr.length > 0){
           arr.map((item,index)=>{
@@ -420,6 +513,7 @@
         return strAll
       },
       pathPause(){
+        //TODO:用户滑动滚动条时，播放状态切换为暂停
         this.animationLine.pause()
         this.playText = "继续▶"
         this.playStatus="2"
@@ -499,10 +593,22 @@
           }
         })
       },
+      // beforeunloadHandler (ev) {
+      //   // Cancel the event as stated by the standard.
+      //   ev.preventDefault();
+      //     // Chrome requires returnValue to be set.
+      //   ev.returnValue = '';
+      // },
+      // beforeDestroy(){
+      //   alert("22")
+      // }
       
       
     }
   })
+  // window.addEventListener('unload', function(event) {
+  //       console.log('I am the 3rd one.');
+  //     });
 </script>
 </body>
 </html>
