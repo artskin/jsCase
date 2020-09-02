@@ -61,8 +61,15 @@
     }
     .device-list i{
       position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
-      width: 1em;
+      width: .8em;
+      height: .8em;
+      display: block;
+      border-radius: 0.5em;
       text-align: center;
+      text-indent: -2em;
+      overflow: hidden;
+      background-color: rgba(200, 200, 20, 0.32);
+      border:1px solid #999;
     }
     .device-list i em{
       font-size: 12px;
@@ -142,7 +149,7 @@
         <div class="img-layer">
           <img :src="item.url" alt="" draggable="false">
           <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-            <i v-for="d in item.devices" :style="d.deviceStyle" :key="d.index">📍<em>{{d.points}}</em></i>
+            <i v-for="d in item.devices" @click="viewDevice" :style="d.deviceStyle" :key="d.index">📍<em>{{d.points}}</em></i>
           </div>
         </div>
         <h4>{{item.floorName}}</h4>
@@ -151,11 +158,11 @@
     <div class="svg-layer">
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
         <!-- <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path> -->
-        <g ref="svgGroup" fill="none" stroke="#ff9966">
+        <g ref="svgGroup" fill="none" >
           <!-- <path fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path>
           <path fill="none" stroke-dasharray="5,5" stroke="#ff9966" style="stroke-width: 1;"></path> -->
-          <polyline v-for="item in imgList" :points="item.deviceCoords"/>
-          <polyline v-for="item in imgList" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
+          <polyline v-for="item in imgList" stroke="#ff9966" stroke-width="2" :points="item.deviceCoords"/>
+          <polyline v-for="item in imgList" stroke="#999999" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
         </g>
         <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
       </svg>
@@ -323,6 +330,9 @@
       })
     },
     methods: {
+      viewDevice(e){
+        console.log(e)
+      },
       userScroll(e){
         //console.log(e)
         //if(!this.canAutoScroll){
@@ -456,7 +466,7 @@
           
           if(item.devices && item.devices.length > 0 ){
             item.devices.map((d)=>{
-              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-10px;margin-top:-10px";
+              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-.4em;margin-top:-.4em";
               
               let offsetXW;
               offsetXW = offsetX.reduce(reducer) - offsetX[offsetX.length-1];
