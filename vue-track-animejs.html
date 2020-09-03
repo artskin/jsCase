@@ -60,24 +60,46 @@
       z-index: 999;
     }
     .device-list i{
-      position:absolute;font-weight:bold;font-style:normal;font-size:20px;color:red;line-height: 1;
-      width: .8em;
-      height: .8em;
+      position:absolute;font-weight:bold;font-style:normal;font-size:14px;color:red;line-height: 1;
+      width: 1em;
+      height: 1em;
       display: block;
       border-radius: 0.5em;
       text-align: center;
       text-indent: -2em;
-      overflow: hidden;
-      background-color: rgba(200, 200, 20, 0.32);
+      background-color: rgba(23, 19, 0, 0.8);
       border:1px solid #999;
+      box-sizing: border-box;
     }
     .device-list i em{
       font-size: 12px;
       color: #000;
       font-style: normal;
       position: absolute;
-      bottom: -14px;
+      bottom: 14px;
       left: -30px;
+      display: none;
+      background-color: #fff;
+      width: 150px;
+      border: 1px solid #ccc;
+      word-break: break-all;
+      word-wrap: break-word;
+      padding: 8px 0;
+      border-radius: 4px;
+    }
+    .device-list i.open em{
+      display: block;
+      
+    }
+    .device-list i.open button{
+      padding:.2em .4em;
+      line-height: 1;
+      margin-top:8px
+    }
+    .device-list i em pre{
+      font-weight: normal;
+      padding: 0;
+      margin:0
     }
     ul li .img-layer img{
       height:100%;
@@ -119,11 +141,28 @@
     }
     #runer{
       stroke-width: 2;
+      /* animation:heartbeat 1s infinite;
+	    -webkit-animation:heartbeat 1s infinite; */
+      position: relative;
+    }
+    @keyframes heartbeat {
+        0% {
+        transform:rotate(45deg) scale(0.8,0.8);
+        opacity:1;
+      }
+      25% {
+        transform:rotate(45deg) scale(1,1);
+        opacity:0.8;
+      }
+      100% {
+        transform:rotate(45deg) scale(0.8,0.8);
+        opacity:1;
+      }
     }
     .device-img{
       position: absolute;
       right: 0;top: 42px;
-      height: 160px;
+      height: 260px;
       z-index: 999;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
       border-radius: 4px;
@@ -148,8 +187,13 @@
       <li v-for="item in newData">
         <div class="img-layer">
           <img :src="item.url" alt="" draggable="false">
-          <div v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
-            <i v-for="d in item.devices" @click="viewDevice" :style="d.deviceStyle" :key="d.index">📍<em>{{d.points}}</em></i>
+          <div ref="deviceListLayer" v-if="item.devices && item.devices.length > 0" class="device-list" :style='"transform: scale("+item.scale+")"'>
+            <i v-for="d in item.devices" :style="d.deviceStyle" :title='JSON.stringify(d)' :key="d.index">
+              <em>id:{{d.deviceId}} -{{d.deviceName}}<br>
+                <button>查看大图</button>
+                <button>此处开始</button>
+              </em>
+            </i>
           </div>
         </div>
         <h4>{{item.floorName}}</h4>
@@ -164,7 +208,9 @@
           <polyline v-for="item in imgList" stroke="#ff9966" stroke-width="2" :points="item.deviceCoords"/>
           <polyline v-for="item in imgList" stroke="#999999" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
         </g>
-        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
+        <!-- <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle> -->
+        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos">
+        </circle>
       </svg>
     </div>
   </div>
@@ -330,8 +376,27 @@
       })
     },
     methods: {
-      viewDevice(e){
-        console.log(e)
+      setStartPos(index){
+        return `transform: translateX(${this.pointArr[index][0]}px) translateY(${this.pointArr[index][1]}px)`
+      },
+      showDevice(e){
+        let currentDevice = e.target;
+        currentDevice.classList.toggle('open')
+        //this.startPos = this.setStartPos(item.deviceIndex-1)
+      },
+      hideDevice(e){
+        console.log(this.$refs);
+        this.$refs.deviceListLayer.forEach(element => {
+          for(let i=0;i<element.children.length;i++){
+            let el = element.children.item(i).classList;
+            //console.log(el)
+            if(el.contains('open')){
+              el.remove('open')
+            }
+          }
+
+        });
+        //currentDevice.classList.add('open')
       },
       userScroll(e){
         //console.log(e)
@@ -345,7 +410,16 @@
         // this.pathPause()
       },
       userMouseDown(ev){
-        console.log(ev)
+
+        let thisEl = ev.target;
+        console.log(thisEl)
+        
+        if(thisEl.tagName ==='I'){
+          this.showDevice(ev)
+        }else{
+          this.hideDevice()
+        }
+        
         if(ev.button == 0){
           this.mouseDownX = ev.clientX
           this.isMouseDown = true
@@ -448,7 +522,7 @@
         //console.log(this.pointArr)
         //this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
         //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
-        this.startPos = "transform: translateX("+this.pointArr[0][0]+"px) translateY("+this.pointArr[0][1]+"px)";
+        this.startPos = this.setStartPos(0)
       },
       dataUpdate(){
         let self = this;
@@ -466,7 +540,7 @@
           
           if(item.devices && item.devices.length > 0 ){
             item.devices.map((d)=>{
-              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-.4em;margin-top:-.4em";
+              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-.5em;margin-top:-.5em";
               
               let offsetXW;
               offsetXW = offsetX.reduce(reducer) - offsetX[offsetX.length-1];
