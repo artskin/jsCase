@@ -138,7 +138,7 @@
                       {{n.images[0].dateTime.split(" ")[0]}}<br>
                       <strong>{{n.images[0].dateTime.split(" ")[1]}}</strong>
                       <br>
-                      <el-button type="text" @click="openPic(n)" size="mini">²é¿´´óÍ¼ <i class="el-icon-view"></i></el-button>
+                      <el-button type="text" @click="openPic(n)" size="mini">ï¿½é¿´ï¿½ï¿½Í¼ <i class="el-icon-view"></i></el-button>
                     </p>
 
                     <!-- <el-carousel class="small-carousel" height="60px" width="140px" direction="vertical" :autoplay="false">
@@ -162,7 +162,7 @@
 
       </div>
       <div class="bigPic" v-if="isShowPic">
-        <h4>{{$t('liveservice.validateDeviceName')}}£º{{currentObj.deviceName}}</h4>
+        <h4>{{$t('liveservice.validateDeviceName')}}ï¿½ï¿½{{currentObj.deviceName}}</h4>
         <i class="el-icon-close" @click="closePic"></i>
         <!-- <el-carousel ref="bigCard" :loop="false" :interval="3000" height="100%" :autoplay="true" trigger="click" indicator-position="none" arrow="always" @change="onPicChanged">
           <el-carousel-item v-for="item in currentObj.snapshots" :key="item.index" @click="handlePicItem">
@@ -195,8 +195,8 @@
                 <div slot="error" class="image-error"><i class="iconfont icon-img_error"></i><br>{{$t('el.image.error')}}</div>
               </el-image>
             <div class="shot-time">
-              <span>{{$t("records.snapshotBigPic")}}£º{{index+1}}/{{currentObj.images.length}} </span>
-              <em v-if="item.dateTime">{{$t("records.snapshotTime")}}£º{{item.dateTime}}</em>
+              <span>{{$t("records.snapshotBigPic")}}ï¿½ï¿½{{index+1}}/{{currentObj.images.length}} </span>
+              <em v-if="item.dateTime">{{$t("records.snapshotTime")}}ï¿½ï¿½{{item.dateTime}}</em>
               </div>
           </slide>
         </carousel>
@@ -247,20 +247,6 @@
       <p>{{$t('liveservice.contNoData')}}</p>
     </div>
   </div>
-
-  <!-- <el-dialog
-    title="¾«È·É¸Ñ¡"
-    :center="true"
-    custom-class="dialog-exact-filter"
-    :visible.sync="filterDialogVisible"
-    width="800px"
-    top="3vh"
-    :modal="false"
-    :close-on-click-modal="false"
-    :close-on-press-escape="false"
-  ></el-dialog> -->
-
-
 </el-dialog>
 
 </template>
@@ -280,25 +266,25 @@ let mockMapData = {
   mapVos:[
     {
       mapUrl: "/senseguard-map-management/api/v1/floor/check/5",
-      floorName:"ÎÞÊý¾ÝÐ§¹ûÑÝÊ¾",
+      floorName:"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ê¾",
       width: 1920,
       height: 899,
       deviceInfos:[
         {
           deviceId: 1,
-          deviceName: "mockÉè±¸0",
+          deviceName: "mockï¿½è±¸0",
           points:[200, 96],
           images:[]
         },
         {
           deviceId: 12,
-          deviceName: "mockÉè±¸1",
+          deviceName: "mockï¿½è±¸1",
           points:[408, 62],
           images:[]
         },
         {
           deviceId: 102,
-          deviceName: "Éè±¸02",
+          deviceName: "ï¿½è±¸02",
           points:[300,500],
           images:[
             {
@@ -320,7 +306,7 @@ let mockMapData = {
         },
         {
           deviceId: 103,
-          deviceName: "Éè±¸03",
+          deviceName: "ï¿½è±¸03",
           points:[600,200],
           images:[
             {
@@ -342,7 +328,7 @@ let mockMapData = {
         },
         {
           deviceId: 104,
-          deviceName: "Éè±¸04",
+          deviceName: "ï¿½è±¸04",
           points:[900,700],
           images:[
             {
@@ -366,13 +352,13 @@ let mockMapData = {
     },
     {
       mapUrl: "/senseguard-map-management/api/v1/floor/check/5",
-      floorName:"ÎÞÊý¾ÝÐ§¹ûÑÝÊ¾",
+      floorName:"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ê¾",
       width: 874,
       height: 698,
       deviceInfos:[
         {
           deviceId: 103,
-          deviceName: "Éè±¸03",
+          deviceName: "ï¿½è±¸03",
           points:[600,300],
           images:[
             {
@@ -399,7 +385,7 @@ let mockMapData = {
         },
         {
           deviceId: 104,
-          deviceName: "Éè±¸04",
+          deviceName: "ï¿½è±¸04",
           points:[400,800],
           images:[
             {
@@ -416,7 +402,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[700,500],
           images:[
             {
@@ -433,7 +419,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[700,500],
           images:[
             {
@@ -450,7 +436,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[800,200],
           images:[
             {
@@ -467,7 +453,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[900,900],
           images:[
             {
@@ -484,7 +470,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[200,900],
           images:[
             {
@@ -501,7 +487,7 @@ let mockMapData = {
         },
         {
           deviceId: 105,
-          deviceName: "Éè±¸05",
+          deviceName: "ï¿½è±¸05",
           points:[1400,400],
           images:[
             {
@@ -520,13 +506,13 @@ let mockMapData = {
     },
     {
       mapUrl: "/images/floor03.png",
-      floorName:"ÎÞÊý¾ÝÐ§¹ûÑÝÊ¾",
+      floorName:"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ê¾",
       width: 1920,
       height: 1080,
       deviceInfos:[
         {
           deviceId: 106,
-          deviceName: "mockÉè±¸106",
+          deviceName: "mockï¿½è±¸106",
           points:[200,500],
           images:[
             {
@@ -700,7 +686,7 @@ export default class LocusAnalysis extends Vue {
     if(this.parentParams.captureTimeStart === null){this.parentParams.captureTimeStart =''}
     if(this.parentParams.captureTimeEnd === null){this.parentParams.captureTimeEnd =''}
 
-    //É¸Ñ¡Ìõ¼þ¸³Öµµ½¹ì¼£²ÎÊý
+    //É¸Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ì¼£ï¿½ï¿½ï¿½ï¿½
     this.formFilter.timeRange = [this.parentParams.captureTimeStart,this.parentParams.captureTimeEnd]
     this.formFilter.threshold = this.parentParams.similarity
 
@@ -710,7 +696,7 @@ export default class LocusAnalysis extends Vue {
       // console.log(this.mapInfo)
 
     })
-    //console.log('¸¸¼¶²ÎÊý',this.parentParams,)
+    //console.log('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½',this.parentParams,)
     similarList.map((item)=>{
       let optionItem = {
         label:item.label,
@@ -732,7 +718,7 @@ export default class LocusAnalysis extends Vue {
   }
 
   clearDate(){
-    console.log('Çå³ýÊ±¼ä')
+    console.log('ï¿½ï¿½ï¿½Ê±ï¿½ï¿½')
     //this.formFilter.timeRange = [null,null]
   }
 
@@ -746,7 +732,7 @@ export default class LocusAnalysis extends Vue {
     //console.log(e)
   }
   slideClick(item,index){
-    //FIXME:²é¿´´óÍ¼µÄ¶ÔÓ¦¹ØÏµ
+    //FIXME:ï¿½é¿´ï¿½ï¿½Í¼ï¿½Ä¶ï¿½Ó¦ï¿½ï¿½Ïµ
     console.log(item,index,this.$refs.smallMap)
     if(this.animationLine && this.animationLine.began && this.showRunner){
       this.animationLine.pause()
@@ -760,7 +746,7 @@ export default class LocusAnalysis extends Vue {
     })
     this.$refs.smallMap.$children[index].$el.classList.add('isCurrent')
 
-    //´óÍ¼Î»ÖÃ´¦Àí offsetLeft,scrollLeft
+    //ï¿½ï¿½Í¼Î»ï¿½Ã´ï¿½ï¿½ï¿½ offsetLeft,scrollLeft
     //console.log(this.$refs.mapUl.children.item(0))
     // this.$refs.mapUl.children.item((n)=>{
     //   console.log(n)
@@ -791,7 +777,7 @@ export default class LocusAnalysis extends Vue {
       this.mouseDownX = ev.clientX
       this.isMouseDown = true
       this.startX = (this.$refs.mapOuter.scrollLeft);
-      //console.log('Êó±ê×ó¼ü',this.mouseDownX,this.startX)
+      //console.log('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½',this.mouseDownX,this.startX)
 
       if(this.animationLine && this.animationLine.began && this.showRunner){
         this.animationLine.pause()
@@ -801,7 +787,7 @@ export default class LocusAnalysis extends Vue {
     }
   }
   userMouseUp(e){
-    //console.log('µ¯Æð',this,e)
+    //console.log('ï¿½ï¿½ï¿½ï¿½',this,e)
     this.isMouseDown = false;
   }
   userMouseLeave(){
@@ -810,10 +796,10 @@ export default class LocusAnalysis extends Vue {
   userMouseMove(ev){
     ev.stopPropagation()
     ev.preventDefault()
-    //°´ÏÂ²¢ÒÆ¶¯
+    //ï¿½ï¿½ï¿½Â²ï¿½ï¿½Æ¶ï¿½
     if(this.isMouseDown){
       //console.log(ev)
-      if(ev.movementX < 0){//×óÒÆ
+      if(ev.movementX < 0){//ï¿½ï¿½ï¿½ï¿½
 
       }
       let scrollX = ev.clientX - this.mouseDownX;
@@ -822,7 +808,7 @@ export default class LocusAnalysis extends Vue {
     }
   }
   setSvgWidth(e){
-    //console.log("Í¼Æ¬¼ÓÔØÍê³É",e)
+    //console.log("Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",e)
     this.mapInfo = this.$refs.mapUl.getBoundingClientRect();
     //console.log(this.mapInfo)
     this.svgWidth = this.mapInfo.width;
@@ -837,9 +823,9 @@ export default class LocusAnalysis extends Vue {
     //this.deviceVisible = !this.deviceVisible
     //this.$set(this.mapList[index].deviceInfos, indexN, item);
 
-    //FIXME:µã»÷ºó¸Ä±äµ±Ç°ÕýÔÚ²¥·ÅµÄ¹ì¼£µãµÄÎ»ÖÃ
-    //FIXME:¹ì¼£µ½´ïÉè±¸µãÎ»Ê±Pop×Ô¶¯µ¯³ö£¨µ½´ïÏÂÒ»¸öµãÎ»Ê±£¬ÉÏÒ»¸ö¹Ø±Õ£¬µ±Ç°µÄµ¯³ö£©
-    //FIXME:ÓÃ»§²é¿´Ä³¸öÉè±¸£¬¸Ä±ä¹ì¼£ÆðÊ¼Î»ÖÃºó£¬ÔÙ²¥·ÅÊ±£¬Éè±¸POP²»µ¯³öÎÊÌâ
+    //FIXME:ï¿½ï¿½ï¿½ï¿½ï¿½Ä±äµ±Ç°ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ÅµÄ¹ì¼£ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+    //FIXME:ï¿½ì¼£ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Î»Ê±Popï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î»Ê±ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½ï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½
+    //FIXME:ï¿½Ã»ï¿½ï¿½é¿´Ä³ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ä±ï¿½ì¼£ï¿½ï¿½Ê¼Î»ï¿½Ãºï¿½ï¿½Ù²ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½è±¸POPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     this.startPos = this.setStartPos(item.deviceIndex-1)
     this.currentStartPosIndex = item.deviceIndex;
     this.isReplay = false;
@@ -851,9 +837,9 @@ export default class LocusAnalysis extends Vue {
   }
   pOpen(id,autoClose?){
     let _this = this
-    console.log('²é¿´Éè±¸',id,this.$refs)
+    console.log('ï¿½é¿´ï¿½è±¸',id,this.$refs)
 
-    //FIXME: ÊÖ¶¯²é¿´Éè±¸£¬¹Ø±Õºó£¬ÔÙ²¥·Å¹ì¼£Ê±£¬µãÎ»µ½´ïÏÂÒ»¸öÉè±¸£¬²»ÔÙµ¯³öÎÊÌâ
+    //FIXME: ï¿½Ö¶ï¿½ï¿½é¿´ï¿½è±¸ï¿½ï¿½ï¿½Ø±Õºï¿½ï¿½Ù²ï¿½ï¿½Å¹ì¼£Ê±ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Ùµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     this.$refs[`popover-` + id][0].doShow()
     if(autoClose){
       setTimeout(()=>{
@@ -886,7 +872,7 @@ export default class LocusAnalysis extends Vue {
   }
   getLocusData(cache?){
     let self = this
-    //Êý¾Ý³õÊ¼»¯
+    //ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½
     this.animationLine = null
     this.deviceMap.clear()
     this.imgOptionMap.clear()
@@ -899,7 +885,7 @@ export default class LocusAnalysis extends Vue {
     this.isExport = false
     this.hasData = false;
     if(cache === "true"){
-      // console.log("È«ÐÂÇëÇó")
+      // console.log("È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
       this.checkedImgMap.clear();
       this.objectIds = [];
       this.pedestrianMap = [];
@@ -924,7 +910,7 @@ export default class LocusAnalysis extends Vue {
           this.imgOptionMap.forEach((val,key,map)=>{
             let thisCheckedList:Array<string> = []
             val.map((item)=>{
-              //Ä¬ÈÏÈ«Ñ¡
+              //Ä¬ï¿½ï¿½È«Ñ¡
               thisCheckedList.push(item.objectId)
             })
             //console.log(thisCheckedList)
@@ -1021,7 +1007,7 @@ export default class LocusAnalysis extends Vue {
         }else{
           // this.isExport = false
           // this.hasData = false
-          //this.mapList = JSON.parse(JSON.stringify(mockMapData.mapVos)) //mockÊý¾Ý
+          //this.mapList = JSON.parse(JSON.stringify(mockMapData.mapVos)) //mockï¿½ï¿½ï¿½ï¿½
         }
         //console.log(this.mapList)
         //if(this.mapList.length > 30){this.mapList.length = 30}
@@ -1047,7 +1033,7 @@ export default class LocusAnalysis extends Vue {
 
         if(this.deviceMap.size>0 && this.deviceMap.get(0)){
           this.currentObj = this.deviceMap.get(0);
-          //console.log("µÚÒ»×é",this.currentObj.snapshots)
+          //console.log("ï¿½ï¿½Ò»ï¿½ï¿½",this.currentObj.snapshots)
         }
         setTimeout(()=>{
           self.isLoad = false;
@@ -1060,7 +1046,7 @@ export default class LocusAnalysis extends Vue {
       locusParmas.imageBodyBase64 = this.imgCropData;
       request.getBodyTrackApi(locusParmas).then((resp:any)=>{
 
-        //ÆôÓÃmockÊý¾Ýµ÷ÊÔ
+        //ï¿½ï¿½ï¿½ï¿½mockï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½
         //resp.mapVos = JSON.parse(JSON.stringify(mockMapData.mapVos))
 
         if(resp && resp.pedestrianMap && this.objectIds.length === 0){
@@ -1071,7 +1057,7 @@ export default class LocusAnalysis extends Vue {
           this.imgOptionMap.forEach((val,key,map)=>{
             let thisCheckedList:Array<string> = []
             val.map((item)=>{
-              //Ä¬ÈÏÈ«Ñ¡
+              //Ä¬ï¿½ï¿½È«Ñ¡
               thisCheckedList.push(item.objectId)
             })
             //console.log(thisCheckedList)
@@ -1168,7 +1154,7 @@ export default class LocusAnalysis extends Vue {
         }else{
           // this.isExport = false
           // this.hasData = false
-          //this.mapList = JSON.parse(JSON.stringify(mockMapData.mapVos)) //mockÊý¾Ý
+          //this.mapList = JSON.parse(JSON.stringify(mockMapData.mapVos)) //mockï¿½ï¿½ï¿½ï¿½
         }
         //console.log(this.mapList)
         //if(this.mapList.length > 30){this.mapList.length = 30}
@@ -1196,7 +1182,7 @@ export default class LocusAnalysis extends Vue {
 
         if(this.deviceMap.size>0 && this.deviceMap.get(0)){
           this.currentObj = this.deviceMap.get(0);
-          //console.log("µÚÒ»×é",this.currentObj.snapshots)
+          //console.log("ï¿½ï¿½Ò»ï¿½ï¿½",this.currentObj.snapshots)
         }
         setTimeout(()=>{
           self.isLoad = false;
@@ -1218,7 +1204,7 @@ export default class LocusAnalysis extends Vue {
     return `transform: translateX(${this.pathArray[index][0]}px) translateY(${this.pathArray[index][1]}px)`
   }
   pathInit(){
-    console.log('¹ì¼£Â·¾¶Êý¾Ý',this.pathArray)
+    console.log('ï¿½ì¼£Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½',this.pathArray)
     if(this.pathArray.length>0){
       this.isPathShow = true
       //this.pathLine = this.$refs.svgPath.setAttribute("d",this.pathStr(this.pathArray));
@@ -1245,7 +1231,7 @@ export default class LocusAnalysis extends Vue {
   playFn(){
     let _this = this;
 
-    //¹ì¼£ÒÆ¶¯Ê±£¬¹Ø±Õ´óÍ¼
+    //ï¿½ì¼£ï¿½Æ¶ï¿½Ê±ï¿½ï¿½ï¿½Ø±Õ´ï¿½Í¼
     if(this.isShowPic){
       this.isShowPic = false;
     }
@@ -1270,7 +1256,7 @@ export default class LocusAnalysis extends Vue {
     //this.pathRunTimeline(this.currentStartPosIndex)
 
     if(!this.animationLine){
-      console.log('ÖØÐÂÉú³É')
+      console.log('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½')
       this.pathRunTimeline(this.currentStartPosIndex)
     }else{
       if(!this.animationLine.paused){
@@ -1284,7 +1270,7 @@ export default class LocusAnalysis extends Vue {
     }
   }
   pathRestart(){
-    //FIXME:ÖØ²¥´ÓÍ·¿ªÊ¼
+    //FIXME:ï¿½Ø²ï¿½ï¿½ï¿½Í·ï¿½ï¿½Ê¼
     this.animationLine.restart()
   }
 
@@ -1310,7 +1296,7 @@ export default class LocusAnalysis extends Vue {
       begin(anim) {
         self.playerClass = "el-icon-video-pause"
 
-        //ÖØ²¥Ê±£¬ÆÁÄ»ºáÏò×ó¾íÖµÎª0
+        //ï¿½Ø²ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎª0
         self.$refs.mapOuter.scrollLeft = 0
       },
       complete(anim){
@@ -1329,7 +1315,7 @@ export default class LocusAnalysis extends Vue {
       //   endDelayTime =  self.deviceMap.get(index).length*3000 + 100
       // }
 
-      //TODO:ÖÐ¼äÑ¡ÆðÊ¼µãÖ®ºó£¬µã»÷ÔÝÍ££¬µã·ÉÔ¾
+      //TODO:ï¿½Ð¼ï¿½Ñ¡ï¿½ï¿½Ê¼ï¿½ï¿½Ö®ï¿½ó£¬µï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾
 
       self.animationLine.add({
         translateX: item[0],
@@ -1349,7 +1335,7 @@ export default class LocusAnalysis extends Vue {
         changeComplete(e) {
           if(self.deviceMap.get(index)){
             let currentDevice = self.deviceMap.get(index+self.currentStartPosIndex)
-            console.log('Éè±¸:',index,self.deviceMap.get(index))
+            console.log('ï¿½è±¸:',index,self.deviceMap.get(index))
             self.currentObj = currentDevice
 
             self.pOpen(currentDevice.mapIndex+''+currentDevice.deviceId,true)
@@ -1369,7 +1355,7 @@ export default class LocusAnalysis extends Vue {
     this.$emit("cancel")
   }
   showExportLocusDialog(){
-    //console.log('µ¼³ö¹ì¼£')
+    //console.log('ï¿½ï¿½ï¿½ï¿½ï¿½ì¼£')
     let exportParams = {
       "captureTimeStart": this.formFilter.timeRange[0] || '',
       "captureTimeEnd": this.formFilter.timeRange[1] || '',
