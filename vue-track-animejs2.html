@@ -191,7 +191,7 @@
             <i v-for="d in item.devices" :style="d.deviceStyle" :title='JSON.stringify(d)' :key="d.index">
               <em>id:{{d.deviceId}} -{{d.deviceName}}<br>
                 <button>查看大图</button>
-                <button @click="changeStart">此处开始</button>
+                <button @click.native="changeStart(d)">此处开始</button>
               </em>
             </i>
           </div>
@@ -203,14 +203,10 @@
       <svg ref="svglayer" width="2277" height="100%" viewBox="0 0 2277 363" preserveAspectRatio="xMidYMid meet">
         <!-- <path ref="pathObj" fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path> -->
         <g ref="svgGroup" fill="none" >
-          <!-- <path fill="none" stroke="#ff9966" strokeMiterLimit="10" strokeDashOffset="988.01" style="stroke-width: 1;"></path>
-          <path fill="none" stroke-dasharray="5,5" stroke="#ff9966" style="stroke-width: 1;"></path> -->
           <polyline v-for="item in imgList" stroke="#ff9966" stroke-width="2" :points="item.deviceCoords"/>
           <polyline v-for="item in imgList" stroke="#999999" :points="item.crossMapCoords" stroke-dasharray="5,5"/>
         </g>
-        <!-- <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle> -->
-        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos">
-        </circle>
+        <circle id="runer" ref="runer" r="12" fill="#ff0000" stroke="#ffffff" :style="startPos"></circle>
       </svg>
     </div>
   </div>
@@ -376,11 +372,66 @@
       })
     },
     methods: {
+      dataUpdate(){
+        let self = this;
+        let offsetX = []
+        this.pointsArr = []
+        
+        this.imgList.map((item,index)=>{
+          //console.log(item)
+          item.scale = this.mapHeight / item.height;
+          item.restoreScale = 1 /item.scale;
+          item.scaleW = (item.width * item.scale)+16;
+          offsetX.push(item.scaleW);
+          item.deviceCoords = [];
+          item.crossMapCoords = []
+          
+          if(item.devices && item.devices.length > 0 ){
+            item.devices.map((d)=>{
+              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-.5em;margin-top:-.5em";
+              
+              let offsetXW;
+              offsetXW = offsetX.reduce(reducer) - offsetX[offsetX.length-1];
+              d.points[0] = parseFloat((offsetXW + d.points[0] * item.scale).toFixed(2));
+              d.points[1] = parseFloat((d.points[1]*item.scale).toFixed(2));
+
+              this.pointArr.push(d.points)
+              item.deviceCoords.push(d.points)
+              this.deviceMap.set(this.pointArr.length-1,d.images)
+              
+              item.crossMapCoords[0] = d.points
+              
+              // if(index > 0){
+              //   item.crossMapPiont[1] = item.piontArr[0]
+              // }
+            })
+          }
+          //item.crossMapCoords[1] = this.pointArr[this.pointArr.length]
+        })
+        setTimeout(()=>{
+          console.log(this.imgList)
+          self.newData = this.imgList;
+          let currentLength = 0
+          this.imgList.map((item,index)=>{
+            //console.log(index , this.imgList.length-1)
+            
+            currentLength += item.deviceCoords.length
+            item.crossMapCoords[1] = this.pointArr[currentLength]
+            if(index == this.imgList.length-1){
+              item.crossMapCoords = []
+            }
+          })
+          this.isLoad = false;
+         
+          //console.log(this.deviceMap)
+          this.pathInit()
+        },200)
+      },
       setStartPos(index){
         return `transform: translateX(${this.pointArr[index][0]}px) translateY(${this.pointArr[index][1]}px)`
       },
       changeStart(e){
-        console.log(e)
+        console.log('改变起始位置',e)
         this.startPos()
       },
       showDevice(e){
@@ -389,7 +440,7 @@
         //this.startPos = this.setStartPos(item.deviceIndex-1)
       },
       hideDevice(e){
-        console.log(this.$refs);
+        //console.log(this.$refs);
         this.$refs.deviceListLayer.forEach(element => {
           for(let i=0;i<element.children.length;i++){
             let el = element.children.item(i).classList;
@@ -414,6 +465,9 @@
         // this.pathPause()
       },
       userMouseDown(ev){
+        
+        ev.preventDefault();
+        ev.stopPropagation();
         console.log(ev)
         let thisEl = ev.target;
         if(thisEl.tagName ==='EM'){
@@ -430,7 +484,7 @@
           this.mouseDownX = ev.clientX
           this.isMouseDown = true
           this.startX = (this.$refs.mapOuter.scrollLeft);
-          console.log('鼠标左键',this.mouseDownX,this.startX)
+          //console.log('鼠标左键',this.mouseDownX,this.startX)
 
           if(this.animationLine && this.animationLine.began){
             this.animationLine.pause()
@@ -475,8 +529,8 @@
         this.playText = "||"
         this.playStatus="1"
         let path = anime.path(this.$refs.pathObj);
-        console.log(path)
-        console.log(this.$refs.runer)
+        //console.log(path)
+        //console.log(this.$refs.runer)
         let halfW = this.mapInfo.width/2;
         
         this.animationLine = anime.timeline({
@@ -526,81 +580,7 @@
       },
       pathInit(){
         //console.log(this.pointArr)
-        //this.pathLine = this.$refs.pathObj.setAttribute("d",this.pathStr(this.pointArr))
-        //this.$refs.runPath.setAttribute('path',this.pathStr(this.pointArr))
         this.startPos = this.setStartPos(0)
-      },
-      dataUpdate(){
-        let self = this;
-        let offsetX = []
-        this.pointsArr = []
-        
-        this.imgList.map((item,index)=>{
-          //console.log(item)
-          item.scale = this.mapHeight / item.height;
-          item.restoreScale = 1 /item.scale;
-          item.scaleW = (item.width * item.scale)+16;
-          offsetX.push(item.scaleW);
-          item.deviceCoords = [];
-          item.crossMapCoords = []
-          
-          if(item.devices && item.devices.length > 0 ){
-            item.devices.map((d)=>{
-              d.deviceStyle = "left:"+d.points[0]+"px;top:"+d.points[1]+"px;transform: scale("+item.restoreScale+");margin-left:-.5em;margin-top:-.5em";
-              
-              let offsetXW;
-              offsetXW = offsetX.reduce(reducer) - offsetX[offsetX.length-1];
-              d.points[0] = parseFloat((offsetXW + d.points[0] * item.scale).toFixed(2));
-              d.points[1] = parseFloat((d.points[1]*item.scale).toFixed(2));
-
-              this.pointArr.push(d.points)
-              item.deviceCoords.push(d.points)
-              this.deviceMap.set(this.pointArr.length-1,d.images)
-              
-              item.crossMapCoords[0] = d.points
-              
-              // if(index > 0){
-              //   item.crossMapPiont[1] = item.piontArr[0]
-              // }
-            })
-          }
-          //item.crossMapCoords[1] = this.pointArr[this.pointArr.length]
-        })
-        setTimeout(()=>{
-          console.log(this.imgList)
-          self.newData = this.imgList;
-          let currentLength = 0
-          this.imgList.map((item,index)=>{
-            console.log(index , this.imgList.length-1)
-            
-            currentLength += item.deviceCoords.length
-            item.crossMapCoords[1] = this.pointArr[currentLength]
-            if(index == this.imgList.length-1){
-              item.crossMapCoords = []
-            }
-          })
-          this.isLoad = false;
-         
-          //console.log(this.deviceMap)
-          this.pathInit()
-        },200)
-      },
-      pathStr(arr){
-        //console.log(arr)
-        let strAll='',subStr='';
-        if(arr && arr.length > 0){
-          arr.map((item,index)=>{
-            //console.log(arr)
-            if(index === 0){
-              subStr = "M "+ item.join(" ")
-            }else{
-              subStr = " L "+ item.join(" ")
-            }
-            strAll += subStr
-          })
-        }
-        console.log(strAll)
-        return strAll
       },
       pathPause(){
         //TODO:用户滑动滚动条时，播放状态切换为暂停
@@ -617,88 +597,8 @@
       pathRestart(){
         this.animationLine.restart()
       },
-      pathStop(){
-
-      },
-      pathRun(){
-        let self = this
-        let path = anime.path(this.$refs.pathObj);
-        let halfW = this.mapInfo.width/2
-        
-        this.animation = anime({
-          targets: this.$refs.runer,
-          translateX: path('x'),
-          translateY: path('y'),
-          rotate: path('angle'),
-          easing: 'linear',
-          duration: 10000,
-          loop: false,
-          begin(e){
-            console.log('开始',e)
-          },
-          changeComplete(e){
-            // self.dirChanges ++
-            // console.log(self.dirChanges,e)
-          },
-          change(e) {
-            let step = Number(e.animatables[0].transforms.list.get('translateX').split(".")[0])
-            let scrollX = step - halfW;
-            if(scrollX > 0){
-              self.$refs.mapOuter.scrollLeft = scrollX
-            }
-            self.dirChanges ++;
-            //console.log(self.dirChanges)
-          },
-          loopComplete(){
-            console.log("第一段")
-          },
-          complete(e){
-            console.log('结束',e)
-          }
-        });
-        console.log(this.animation)
-      },
-      pathRunKeyframes(){
-        let self = this
-        let path = anime.path(this.$refs.pathObj);
-        let halfW = this.mapInfo.width/2;
-        this.animation = anime({
-          targets: this.$refs.runer,
-          translateX: [
-            { value: this.pointArr[0][0] },
-            { value: this.pointArr[1][0] },
-            { value: this.pointArr[2][0] },  // 第三帧
-            { value: this.pointArr[3][0] },
-          ],
-          translateY: [
-            { value: this.pointArr[0][1] },
-            { value: this.pointArr[1][1] },
-            { value: this.pointArr[2][1] },  // 第三帧
-            { value: this.pointArr[3][1] },
-          ],
-          easing: 'linear',
-          duration: 3000,
-          changeComplete(e) {
-            console.log(e)
-          }
-        })
-      },
-      // beforeunloadHandler (ev) {
-      //   // Cancel the event as stated by the standard.
-      //   ev.preventDefault();
-      //     // Chrome requires returnValue to be set.
-      //   ev.returnValue = '';
-      // },
-      // beforeDestroy(){
-      //   alert("22")
-      // }
-      
-      
     }
   })
-  // window.addEventListener('unload', function(event) {
-  //       console.log('I am the 3rd one.');
-  //     });
 </script>
 </body>
 </html>
