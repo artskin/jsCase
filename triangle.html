@@ -36,8 +36,33 @@
   <div id="wrap">
     <div class="ball"></div>
     <p class="seconds"></p>
+    
+  </div>
+  <div id="handleDir">
+    <button>up</button>
+    <button>down</button>
+    <button>left</button>
+    <button>right</button>
   </div>
 <script>
+  let dirEl = document.querySelector('#handleDir')
+  let dirObj = {
+    up:()=>{
+      
+    },
+    right:()=>{
+    },
+    left:()=>{
+    },
+    down:()=>{
+    }
+  }
+  dirEl.onclick = (ev)=>{
+    if(ev.target.localName === "button"){
+      dirObj[btn.innerText]()
+    }
+  }
+
   let ball = document.querySelector(".ball");
   let seconds = document.querySelector(".seconds");
     var timer ;
