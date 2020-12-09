@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>SVG 演示</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <style>
+    :root {
+      --animation-duration: 5s;
+    }
+    body {
+      display: grid;
+      place-items: center;
+    }
+    svg {
+      display: block;
+      width: 60vmin;
+      height: auto;
+      border: 1px dashed #ccc;
+    }
+    #rotate {
+      animation: rotate var(--animation-duration) linear infinite;
+    }
+    #offset {
+      animation: removeOffset var(--animation-duration) cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+    }
+    @keyframes rotate {
+      to {
+        transform: rotate(-1turn);
+      }
+    }
+    @keyframes removeOffset {
+      50% {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+<body class="paper">
+  <svg viewBox="-51 -51 102 102" width="100" height="100">
+    <g>
+      <circle r="50" stroke-width="1" stroke="currentColor" fill="none" />
+      <path id="offset" d="M 0 -50 v 100" stroke-width="1" stroke="currentColor" fill="none" stroke-dasharray="100" stroke-dashoffset="100" />
+      <g id="rotate">
+        <g transform="translate(0 -25)">
+          <circle r="25" stroke-width="1" stroke="currentColor" fill="none" />
+          <circle r="2" fill="currentColor" />
+          <g id="rotate" style="animation-direction: reverse;">
+            <g id="rotate" style="animation-direction: reverse;">
+              <g transform="translate(0 -25)">
+                <path d="M 0 0 v 25" stroke-width="1" stroke="currentColor" fill="none" />
+                <circle r="2" fill="currentColor" />
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+  <form action="#">
+    <dl>
+      <dt>viewBox</dt>
+      <dd>
+        <input type="range" name="x" oninput="changeAttr(this)" step=".01" min="0" max="100" value="0">
+        <input type="range" name="y" oninput="changeAttr(this)" step=".01" min="0" max="100" value="0">
+        <input type="range" name="width" oninput="changeAttr(this)" step=".01" min="0" max="100" value="0">
+        <input type="range" name="height" oninput="changeAttr(this)" step=".01" min="0" max="100" value="0">
+      </dd>
+    </dl>
+  </form>
+  <script src="//cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.js"></script>
+
+</body>
+</html>
