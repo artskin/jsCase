@@ -10,68 +10,28 @@
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
-  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="../src/style/base.css?v=1">
-  <link rel="stylesheet" href="//cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css">
   <style>
     svg{
       border: 1px dashed #ccc;
     }
+    .flex{
+      display: flex;
+    }
+    .css-key{
+      line-height: 3;
+    }
   </style>
 </head>
 <body class="paper">
-  
   <div id="app">
-    
-    <pre v-highlight>
-      <code contenteditable="true" class="javascript">
-      let dd = '222';
-      console.log(dd)
-      </code>
-    </pre>
-    <!-- <pre v-highlight>
-      <code contenteditable="true">
-        <script type="text/html" style="display: block;">
-          <svg style="width:300px; height:300px" viewBox="0 0 100 100">
-            <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
-          </svg>
-        </script>
-      </code>
-    </pre> -->
-    <pre>
-      <textarea>
-      <svg style="width:300px; height:300px" viewBox="0 0 100 100">
-        <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
-      </svg>
-      </textarea>
-    </pre>
-    <pre v-highlight>
-      <code contenteditable="true" class="xml">
-        <xmp>
-          <svg style="width:300px; height:300px" viewBox="0 0 100 100">
-            <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
-          </svg>
-        </xmp>
-      </code>
-    </pre>
-    <svg ref="svg" style="width:300px; height:300px" viewBox="0 0 100 100">
+    <svg ref="svg" style="width:300px; height:300px" :viewBox="viewBoxStr" xlink="http://www.w3.org/1999/xlink">
       <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
     </svg>
-    <form action="#">
-      <dl>
-        <dt>viewBox{{viewbox}}</dt>
-        <dd>
-          <input type="range" @input="changeAttr" step=".01" min="0" max="100" value="0" name="x">
-          <input type="range" @input="changeAttr" step=".01" min="0" max="100" value="0" name="y">
-          <input type="range" @input="changeAttr" step=".01" min="0" max="100" value="0" name="width">
-          <input type="range" @input="changeAttr" step=".01" min="0" max="100" value="0" name="height">
-        </dd>
-      </dl>
-      
-    </form>
   </div>
-<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
-<script src="//cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.global.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+<script src="../lib/3.0.4.vue.global.js"></script>
 <script>
   //let svgEl = document.querySelector('svg');
   // document.querySelectorAll('pre code').forEach(function(i, block) {
@@ -96,6 +56,7 @@
     store,
     increment
   }
+
   watchEffect(()=>{
     // renderTemplate(
     //   `<button @click="increment">{{ store.count }}</button>`,renderContext
@@ -107,23 +68,27 @@
     setup(props, ctx) {
       const svg = ref();
       const state = reactive({
-        viewbox:{
+        viewBox:{
           x:'0',
           y:'0',
           width:'100',
           height:'100'
         },
+        viewBoxStr:'',
         incomeList:[],
         totalIncome:0,
         perMonth:0,
         //double:computed(()=>{state.form.rate*2})
       })
       changeAttr = (el)=>{
-        console.log(el)
-        svg.value.viewBox.animVal[el.target.name] = el.target.value
+        //svg.value.viewBox.baseVal[el.target.name] = el.target.value
+        state.viewBox[el.target.name] = el.target.value;
+        state.viewBoxStr = Object.values(state.viewBox).join(' ');
       }
       onMounted(()=>{
-        //console.log(svg.value.viewBox)
+        // console.log(svg)
+        // console.log(svg.value.viewBox)
+        state.viewBoxStr = Object.values(state.viewBox).join(' ');
       })
       
       return {
@@ -167,8 +132,8 @@ app.directive('highlight', {
     }
   }
 })
-  app.mount('#app')
-  console.log(app)
+app.mount('#app')
+
 </script>
 </body>
 </html>

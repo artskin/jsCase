@@ -9,9 +9,9 @@
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
-  <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest">
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
-  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
   <style>
     body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;max-width: 500px;}
     h3{
@@ -44,6 +44,7 @@
 <body class="paper">
   <h3 class="center">商品*期免息价值计算</h3>
   <hr>
+  <video src="" currentTime="new Date()"></video>
   <div id="app">
     <div class="container">
       <form>
@@ -67,82 +68,83 @@
     </div>
     <p>{{double2}}</p>
   </div>
-<script src="./lib/3.0.0-rc.1.vue.global.js"></script>
+<!-- <script src="./lib/3.0.0-rc.1.vue.global.js"></script> -->
+<script src="../lib/3.0.4.vue.global.js"></script>
 <script>
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
-  const { reactive,computed,toRefs,watchEffect,renderTemplate } = Vue
-  console.log(watchEffect)
+  //const { reactive,computed,toRefs,watchEffect,renderTemplate } = Vue
+  console.log(Vue)
 
-  const store = reactive({
-    count:1,
-  })
-  const double2 = computed(()=> store.count *2)
-  console.log(double2)
-  increment= ()=>{
-    store.count ++ 
-  }
-  // document.body.addEventListener("click",increment)
+  // const store = reactive({
+  //   count:1,
+  // })
+  // const double2 = computed(()=> store.count *2)
+  // console.log(double2)
+  // increment= ()=>{
+  //   store.count ++ 
+  // }
+  // // document.body.addEventListener("click",increment)
 
-  const renderContext = {
-    store,
-    increment
-  }
-  watchEffect(()=>{
-    // renderTemplate(
-    //   `<button @click="increment">{{ store.count }}</button>`,renderContext
-    // )
-    //document.body.innerHTML = `count is ${store.count}`
-  })
-  var App = {
-    template: ``,
-    setup(props, ctx) {
-      const state = reactive({
-        form:{
-          price:'1599',
-          rate:'4',
-          month:'24'
-        },
-        show:"none",
-        incomeList:[],
-        totalIncome:0,
-        perMonth:0,
-        double:computed(()=>{state.form.rate*2})
-      })
+  // const renderContext = {
+  //   store,
+  //   increment
+  // }
+  // watchEffect(()=>{
+  //   // renderTemplate(
+  //   //   `<button @click="increment">{{ store.count }}</button>`,renderContext
+  //   // )
+  //   //document.body.innerHTML = `count is ${store.count}`
+  // })
+  // var App = {
+  //   template: ``,
+  //   setup(props, ctx) {
+  //     const state = reactive({
+  //       form:{
+  //         price:'1599',
+  //         rate:'4',
+  //         month:'24'
+  //       },
+  //       show:"none",
+  //       incomeList:[],
+  //       totalIncome:0,
+  //       perMonth:0,
+  //       double:computed(()=>{state.form.rate*2})
+  //     })
 
-      countFn = ()=>{
-        state.show = 'block'
-        let rateNumber  = Number(state.form.rate)/100
-        let priceNumber = Number(state.form.price)
-        let monthNumber = Number(state.form.month)
-        let monthPrice = priceNumber/monthNumber;
+  //     countFn = ()=>{
+  //       state.show = 'block'
+  //       let rateNumber  = Number(state.form.rate)/100
+  //       let priceNumber = Number(state.form.price)
+  //       let monthNumber = Number(state.form.month)
+  //       let monthPrice = priceNumber/monthNumber;
         
-        if(state.form.month && monthNumber>0){
-          let comeList = []
-          let incomeArr = []
-          for(let i=0;i<monthNumber;i++){
-            if(i>0){
-              let monthInterest = (priceNumber - monthPrice*i)*rateNumber/12;
-              comeList.push({
-                monthPrice:monthPrice,
-                monthInterest:monthInterest,
-              })
-              incomeArr.push(monthInterest)
-            }
-          }
-          state.totalIncome =  incomeArr.reduce(reducer);
-          state.incomeList = comeList;
-          state.perMonth = priceNumber/monthNumber
-        }
-      }
+  //       if(state.form.month && monthNumber>0){
+  //         let comeList = []
+  //         let incomeArr = []
+  //         for(let i=0;i<monthNumber;i++){
+  //           if(i>0){
+  //             let monthInterest = (priceNumber - monthPrice*i)*rateNumber/12;
+  //             comeList.push({
+  //               monthPrice:monthPrice,
+  //               monthInterest:monthInterest,
+  //             })
+  //             incomeArr.push(monthInterest)
+  //           }
+  //         }
+  //         state.totalIncome =  incomeArr.reduce(reducer);
+  //         state.incomeList = comeList;
+  //         state.perMonth = priceNumber/monthNumber
+  //       }
+  //     }
 
-      return {
-        ...toRefs(state),
-        countFn
-      }
-    }
-  }
+  //     return {
+  //       ...toRefs(state),
+  //       countFn
+  //     }
+  //   }
+  // }
   
-  Vue.createApp(App).mount('#app')
+  // Vue.createApp(App).mount('#app')
 </script>
 </body>
 </html>
