@@ -13,11 +13,12 @@
   <button id="set_socket_url">Set socket</button>
 </div>
 <div>
-    <input  id="stream_url" value="rtsp://10.151.3.105:8080/vehicle_long.264" size="36">
+    <input  id="stream_url" value="rtsp://127.0.0.1:8554/test/" size="36">
     <button id="set_new_url">Set</button>
 </div>
+<button onclick="playerRun">Run</button>
 <div>
-    <p style="color:#808080">Enter your rtsp link to the stream, for example: "rtsp://192.168.1.1:554/h264",rtsp://127.0.0.1:8554/test/</p>
+    <p style="color:#808080">Enter your rtsp link to the stream, for example: "rtsp://192.168.1.1:554/h264",rtsp://127.0.0.1:8554/test/，rtsp://10.151.3.105:8080/vehicle_long.264</p>
 </div>
 
 <div>
@@ -192,7 +193,7 @@ To activate key, please, use the activation application that is placed:
 
         var playerOptions = {
             //socket: "ws://localhost:8088/ws/",            
-            socket: "wss://10.151.3.105/rtsp-over-ws",            
+            socket: "wss://streamedian.com/ws/",//wss://10.151.3.105/rtsp-over-ws
             redirectNativeMediaErrors : true,
             bufferDuration: 30,
             errorHandler: errHandler,
@@ -262,15 +263,17 @@ To activate key, please, use the activation application that is placed:
 
         socketUrlButton.onclick = ()=> {
             playerOptions.socket = socketUrlEdit.value;
-            setPlayerSource();
         };
 
         function setPlayerSource(newSource) {
-            player.destroy();
-            player = null;
             if(newSource){
               html5Player.src = newSource;
             }
+            playerRun()
+        }
+        function playerRun(){
+            player.destroy();
+            player = null;
             player = Streamedian.player("test_video", playerOptions);
             updateRangeControls();
         }
