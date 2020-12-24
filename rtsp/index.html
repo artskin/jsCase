@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streamedian HTML5 RTSP/HLS player example</title>
+    <style>
+        #test_video {
+            width: 720px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <input id="stream_url">
+    <button id="set_new_url">Set</button>
+</div>
+<video id="test_video" controls autoplay>
+    <source src="rtsp://10.151.3.105:8080/vehicle_long.264" type="application/x-rtsp">
+    <!--<source src="rtsp://127.0.0.1:8554/test" type="application/x-rtsp">-->
+</video>
+<script src="https://cdn.bootcss.com/babel-polyfill/7.0.0-beta.2/polyfill.min.js"></script>
+<script src="streamedian.min.js"></script>
+<!--<script src="test.bundle2.js"></script>-->
+<!--<script src="http://45.32.210.71/streamedian.js"></script>-->
+
+<script>
+    if (window.Streamedian) {
+        // var p = Streamedian.player('test_video', {socket: "ws://45.32.210.71/ws/"})
+        var p = Streamedian.player('test_video', {socket: "wss://streamedian.com/ws/"})
+    }
+</script>
+</body>
+</html>
