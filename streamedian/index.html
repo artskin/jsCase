@@ -8,10 +8,23 @@
 </head>
 <body>
 <div id="sourcesNode"></div>
+<select name="socket_url" id="socket_url_list">
+  <option value="wss://streamedian.com/ws/">ws-streamedian</option>
+  <option value="ws://10.111.32.60:10219/rtsp-over-ws">ws-Razor</option>
+  <option value="wss://10.151.3.105/rtsp-over-ws">ws-Gurad</option>
+</select>
+<br>
 <div>
   <input  id="socket_url" value="wss://streamedian.com/ws/" size="36">
   <button id="set_socket_url">Set socket</button>
 </div>
+<select name="rtsp_urls" id="rtsp_urls">
+  <option value="rtsp://127.0.0.1:8554/test/">ws-streamedian</option>
+  <option value="rtsp://ivatest:Good5ensetime@10.9.61.34:554">ws-Razor</option>
+  <option value="rtsp://10.151.3.105:8080/vehicle_long.264">ws-Gurad</option>
+  <option value="rtsp://2.14.120.33:554/sip/32011261561326220042">南京sip</option>
+</select>
+<br>
 <div>
     <input  id="stream_url" value="rtsp://127.0.0.1:8554/test/" size="36">
     <button id="set_new_url">Set</button>
@@ -78,23 +91,23 @@ To activate key, please, use the activation application that is placed:
     var wslogs = document.getElementById("wslogs");
 
     // define a new console
-    var console=(function(oldConsole){
-        return {
-            log: function(){
-                oldConsole.log(newConsole(arguments, "black", "#A9F5A9"));
-            },
-            info: function () {
-                oldConsole.info(newConsole(arguments, "black", "#A9F5A9"));
-            },
-            warn: function () {
-                oldConsole.warn(newConsole(arguments, "black", "#F3F781"));
-            },
-            error: function (e) {
-              console.log(e)
-                oldConsole.error(newConsole(arguments, "black", "#F5A9A9"));
-            }
-        };
-    }(window.console));
+    // var console=(function(oldConsole){
+    //     return {
+    //         log: function(){
+    //             oldConsole.log(newConsole(arguments, "black", "#A9F5A9"));
+    //         },
+    //         info: function () {
+    //             oldConsole.info(newConsole(arguments, "black", "#A9F5A9"));
+    //         },
+    //         warn: function () {
+    //             oldConsole.warn(newConsole(arguments, "black", "#F3F781"));
+    //         },
+    //         error: function (e) {
+    //           console.log(e)
+    //             oldConsole.error(newConsole(arguments, "black", "#F5A9A9"));
+    //         }
+    //     };
+    // }(window.console));
 
     function newConsole(args, textColor, backColor){
         let text = '';
@@ -111,7 +124,7 @@ To activate key, please, use the activation application that is placed:
     }
 
     //Then redefine the old console
-    window.console = console;
+    //window.console = console;
 
     function cleanLog(element){
         while (element.firstChild) {
@@ -168,6 +181,9 @@ To activate key, please, use the activation application that is placed:
 </script>
 
 <script>
+  let selectWs = document.querySelector('#socket_url_list')
+  let selectRtsp = document.querySelector('#rtsp_urls')
+  
     if (window.Streamedian) {
         let errHandler = function(err){
             alert(err.message);
@@ -193,7 +209,7 @@ To activate key, please, use the activation application that is placed:
 
         var playerOptions = {
             //socket: "ws://localhost:8088/ws/",            
-            socket: "wss://streamedian.com/ws/",//wss://10.151.3.105/rtsp-over-ws
+            socket: "wss://streamedian.com/ws/",//
             redirectNativeMediaErrors : true,
             bufferDuration: 30,
             errorHandler: errHandler,
@@ -264,6 +280,14 @@ To activate key, please, use the activation application that is placed:
         socketUrlButton.onclick = ()=> {
             playerOptions.socket = socketUrlEdit.value;
         };
+        selectWs.onchange = (e)=>{
+          console.log(e.target.value)
+          playerOptions.socket = e.target.value
+        }
+
+        selectRtsp.onchange = (e)=>{
+          setPlayerSource(e.target.value)
+        }
 
         function setPlayerSource(newSource) {
             player.destroy();
