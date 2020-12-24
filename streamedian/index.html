@@ -266,16 +266,18 @@ To activate key, please, use the activation application that is placed:
         };
 
         function setPlayerSource(newSource) {
+            player.destroy();
+            player = null;
             if(newSource){
               html5Player.src = newSource;
             }
-            playerRun()
-        }
-        function playerRun(){
-            player.destroy();
-            player = null;
+
             player = Streamedian.player("test_video", playerOptions);
             updateRangeControls();
+        }
+        function playerRun(){
+            
+            
         }
     }
 </script>
