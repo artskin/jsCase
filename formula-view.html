@@ -14,9 +14,10 @@
 </head>
 <body>
 <h1 class="center">数学方程式-可视化</h1>
+
 <hr>
 <div id="app">
-  <section class="formula flex">
+  <section class="formula flex" id="circle">
     <aside>
       <h2>圆的方程:</h2>
       <p>(x-a)² + (y-b)² = r²</p>
@@ -29,7 +30,7 @@
       </ul>
       <p class="right">
         <em>(x-{{circle.cx}})² + (y-{{circle.cy}})² = {{circle.r}}²</em>
-        <button class="btn-blue" @click="draw">绘制</button></p>
+        <button class="btn-blue" @click="draw('circle')">绘制</button></p>
     </aside>
     <main>
       <div class="svg-area">
@@ -63,11 +64,57 @@
       </div>
     </main>
   </section>
+  <section class="formula flex" id="quadratic">
+    <aside>
+      <h2>二次方程:</h2>
+      <p>y=ax²+bx+c（a≠0）</p>
+      <p>a称为二次项系数，b为一次项系数，c为常数项。x为自变量，y为因变量。等号右边自变量的最高次数是2。</p>
+      <ul class="params">
+        <li><label for="">二次项系数 a</label><input step="0.1" type="number" v-model="quadratic.a"></li>
+        <li><label for="">一次项系数 b</label><input step="0.1" type="number" v-model="quadratic.b"></li>
+        <li><label for="">常数项c</label><input step="1" type="number" v-model="quadratic.c"></li>
+      </ul>
+      <p class="right">
+        <em>y={{quadratic.a}}x²<span v-if="quadratic.b>=0">+</span>{{quadratic.b}}x<span v-if="quadratic.c>=0">+</span>{{quadratic.c}}</em>
+        <button class="btn-blue" @click="draw('quadratic')">绘制</button></p>
+    </aside>
+    <main>
+      <div class="svg-area">
+        <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-200 -200 400 400">
+          <defs>
+            <marker id='markerArrow' markerWidth='10' markerHeight='10' refx='2' refy='4' orient='auto'>
+              <path d='M2,2 L2,6 L8,4 L2,2' style='fill:#ccc' />
+            </marker>
+          </defs>
+          
+          <line class="axis" x1="-180" y1="0" x2="180" y2="0" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='1'>
+          </line>
+          <line class="axis" x1="0" y1="180" x2="0" y2="-180" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='1'></line>
+          <g stroke-width="1" stroke="black">
+            <template v-for="item in axis.xlist">
+              <line v-if="!(item.value % 50)" :x1="item.value" y1="5" :x2="item.value" y2="0" style="stroke:#666;"></line>
+              <line v-else :x1="item.value" y1="3" :x2="item.value" y2="0" style="stroke:#ccc;"></line>
+              <text v-if="!(item.value %50)" :x="item.value-6" :y="15" class="x-value">{{item.text}}</text>
+            </template>
+          </g>
+          <g stroke-width="1" stroke="black">
+            <template v-for="item in axis.xlist">
+              <line v-if="!(item.value % 50)" :x1="-5" :y1="item.value" :x2="0" :y2="item.value" style="stroke:#666;"></line>
+              <line v-else :x1="-3" :y1="item.value" :x2="0" :y2="item.value" style="stroke:#ccc;"></line>
+              <text v-if="!(item.value % 50)" :y="item.value+2" :x="-20" class="x-value">{{-item.text}}</text>
+            </template>
+          </g>
+          <polyline ref="quadratic" class="animation" :class="drawClass" :points="quadratic.path" style="fill:none;stroke-width:1" />
+          <circle :cx="quadratic.toppoint.x" :cy="quadratic.toppoint.y" r="1" stroke="red" stroke-width="1" fill="#000"/>
+        </svg>
+      </div>
+    </main>
+  </section>
 
 </div>
   <div class="copyright">
     Powerd by 阿沐<br>
-    Copyright © 2009-2019
+    Copyright © 2018-2021
   </div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.11.1/less.min.js" ></script>
 <script src="./lib/anime.min.3.2.0.js"></script>
@@ -82,6 +129,16 @@
           cx:0,
           cy:0,
           r:100
+        },
+        quadratic:{
+          a:0.1,
+          b:0.2,
+          c:1,
+          path:'',
+          toppoint:{
+            x:0,
+            y:0
+          }
         },
         axis:{
           xlist:[],
@@ -112,14 +169,34 @@
       this.axis.xlist = axisList
     },
     methods:{
-      draw:function(){
+      draw:function(type){
         let _this = this;
         console.log(this.$refs.circle.classList)
-        this.$refs.circle.classList.remove('path')
-        setTimeout(()=>{
-          _this.$refs.circle.classList.add('path')
-        },400)
-        
+        if(type =='circle'){
+          this.$refs.circle.classList.remove('path')
+          setTimeout(()=>{
+            _this.$refs.circle.classList.add('path')
+          },400)
+        }
+
+        if(type == 'quadratic'){
+          this.$refs.quadratic.classList.remove('path')
+          setTimeout(()=>{
+            _this.$refs.quadratic.classList.add('path')
+          },400)
+          let pathArray = []
+          this.quadratic.c = parseFloat(this.quadratic.c)
+          for(let i=-20;i<21;i++){
+            console.log(i)
+            let ponit = [i,-(this.quadratic.a*i*i+this.quadratic.b*i+this.quadratic.c)]
+            pathArray.push(ponit)
+          }
+          console.log(pathArray)
+          this.quadratic.path = pathArray.join(' ')
+          this.quadratic.toppoint.x = -this.quadratic.b/(2*this.quadratic.a)
+          this.quadratic.toppoint.y = -((4*this.quadratic.a*this.quadratic.c-this.quadratic.b*this.quadratic.b)/(4*this.quadratic.a))
+
+        }
         // const path = anime.path(this.$refs.circle)
         // anime({
         //   targets: '.point',
@@ -130,7 +207,6 @@
         //   duration: 2000,
         //   loop: true
         // })
-        
       }
     }
   })
