@@ -27,7 +27,9 @@
         <li><label for="">Y轴坐标：b</label><input step="5" type="number" v-model="circle.cy"></li>
         <li><label for="">圆的半径：r</label><input step="5" type="number" v-model="circle.r"></li>
       </ul>
-      <p class="right"><button class="btn-blue" @click="draw">绘制</button></p>
+      <p class="right">
+        <em>(x-{{circle.cx}})² + (y-{{circle.cy}})² = {{circle.r}}²</em>
+        <button class="btn-blue" @click="draw">绘制</button></p>
     </aside>
     <main>
       <div class="svg-area">
@@ -37,25 +39,26 @@
               <path d='M2,2 L2,6 L8,4 L2,2' style='fill:#ccc' />
             </marker>
           </defs>
+          
+          <line class="axis" x1="-180" y1="0" x2="180" y2="0" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='1'>
+          </line>
+          <line class="axis" x1="0" y1="180" x2="0" y2="-180" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='1'></line>
           <g stroke-width="1" stroke="black">
             <template v-for="item in axis.xlist">
-              <line v-if="!(item.value % 50)" :x1="item.value" y1="5" :x2="item.value" y2="0"></line>
-              <line v-else :x1="item.value" y1="3" :x2="item.value" y2="0" style="opacity: .3;"></line>
+              <line v-if="!(item.value % 50)" :x1="item.value" y1="5" :x2="item.value" y2="0" style="stroke:#666;"></line>
+              <line v-else :x1="item.value" y1="3" :x2="item.value" y2="0" style="stroke:#ccc;"></line>
               <text v-if="!(item.value %50)" :x="item.value-6" :y="15" class="x-value">{{item.text}}</text>
             </template>
           </g>
           <g stroke-width="1" stroke="black">
             <template v-for="item in axis.xlist">
-              <line v-if="!(item.value % 50)" :x1="-5" :y1="item.value" :x2="0" :y2="item.value"></line>
-              <line v-else :x1="-3" :y1="item.value" :x2="0" :y2="item.value" style="opacity: .3;"></line>
+              <line v-if="!(item.value % 50)" :x1="-5" :y1="item.value" :x2="0" :y2="item.value" style="stroke:#666;"></line>
+              <line v-else :x1="-3" :y1="item.value" :x2="0" :y2="item.value" style="stroke:#ccc;"></line>
               <text v-if="!(item.value % 50)" :y="item.value+2" :x="-20" class="x-value">{{-item.text}}</text>
             </template>
           </g>
-          <line class="axis" x1="-180" y1="0" x2="180" y2="0" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='2'>
-          </line>
-          <line class="axis" x1="0" y1="180" x2="0" y2="-180" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='2'></line>
-          <circle class="animation" :class="drawClass" ref="circle" :cx="circle.cx" :cy="-circle.cy" :r="circle.r" stroke="#ccc" stroke-width="1" stroke-dasharray='2' fill="none"/>
-          <circle :cx="circle.cx" :cy="-circle.cy" r="0.5" stroke="black" stroke-width="1" fill="#000"/>
+          <circle class="animation" :class="drawClass" ref="circle" :cx="circle.cx" :cy="-circle.cy" :r="circle.r" stroke="#ddd" stroke-width="1" stroke-dasharray='2' fill="none"/>
+          <circle :cx="circle.cx" :cy="-circle.cy" r="0.5" stroke="green" stroke-width="1" fill="#000"/>
         </svg>
       </div>
     </main>
