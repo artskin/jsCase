@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>数学方程式-可视化</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet/less" href="./src/style/base.less">
+</head>
+<body>
+<h1 class="center">数学方程式-可视化</h1>
+<hr>
+<div id="app">
+  <section class="formula flex">
+    <aside>
+      <h2>圆的方程:</h2>
+      <p>(x-a)² + (y-b)² = r²</p>
+      <p> 表示的曲线是以O(a，b)为圆心，以r为半径的圆</p>
+      
+      <ul class="params">
+        <li><label for="">X轴坐标：a</label><input step="5" type="number" v-model="circle.cx"></li>
+        <li><label for="">Y轴坐标：b</label><input step="5" type="number" v-model="circle.cy"></li>
+        <li><label for="">圆的半径：r</label><input step="5" type="number" v-model="circle.r"></li>
+      </ul>
+      <p class="right"><button class="btn-blue" @click="draw">绘制</button></p>
+    </aside>
+    <main>
+      <div class="svg-area">
+        <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-200 -200 400 400">
+          <defs>
+            <marker id='markerArrow' markerWidth='10' markerHeight='10' refx='2' refy='4' orient='auto'>
+              <path d='M2,2 L2,6 L8,4 L2,2' style='fill:#ccc' />
+            </marker>
+          </defs>
+          <g stroke-width="1" stroke="black">
+            <template v-for="item in axis.xlist">
+              <line v-if="!(item.value % 50)" :x1="item.value" y1="5" :x2="item.value" y2="0"></line>
+              <line v-else :x1="item.value" y1="3" :x2="item.value" y2="0" style="opacity: .3;"></line>
+              <text v-if="!(item.value %50)" :x="item.value-6" :y="15" class="x-value">{{item.text}}</text>
+            </template>
+          </g>
+          <g stroke-width="1" stroke="black">
+            <template v-for="item in axis.xlist">
+              <line v-if="!(item.value % 50)" :x1="-5" :y1="item.value" :x2="0" :y2="item.value"></line>
+              <line v-else :x1="-3" :y1="item.value" :x2="0" :y2="item.value" style="opacity: .3;"></line>
+              <text v-if="!(item.value % 50)" :y="item.value+2" :x="-20" class="x-value">{{-item.text}}</text>
+            </template>
+          </g>
+          <line class="axis" x1="-180" y1="0" x2="180" y2="0" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='2'>
+          </line>
+          <line class="axis" x1="0" y1="180" x2="0" y2="-180" stroke-width="1" marker-end="url(#markerArrow)" stroke-dasharray='2'></line>
+          <circle class="animation" :class="drawClass" ref="circle" :cx="circle.cx" :cy="-circle.cy" :r="circle.r" stroke="#ccc" stroke-width="1" stroke-dasharray='2' fill="none"/>
+          <circle :cx="circle.cx" :cy="-circle.cy" r="0.5" stroke="black" stroke-width="1" fill="#000"/>
+        </svg>
+      </div>
+    </main>
+  </section>
+
+</div>
+  <div class="copyright">
+    Powerd by 阿沐<br>
+    Copyright © 2009-2019
+  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.11.1/less.min.js" ></script>
+<script src="./lib/anime.min.3.2.0.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.js"></script>
+<!-- <script src="./src/js/felib.js" type="module"></script> -->
+<script src="./lib/http-vue-loader.js"></script>
+<script>
+  var vm = new Vue({
+    data:() => {
+      return {
+        circle:{
+          cx:0,
+          cy:0,
+          r:100
+        },
+        axis:{
+          xlist:[],
+        },
+        drawClass:'',
+        msg:'hello vue2'
+      }
+    },
+    watch:{
+      rValue:function(){
+        this.draw()
+      }
+    },
+    mounted(){
+      const axisList = []
+      let step = 10;
+      for(let i=0;i<18;i++){
+        let item = {
+          value:i*step,
+          text:i*step+'',
+        }
+        let negitem = {
+          value:-i*step,
+          text:-i*step+'',
+        }
+        axisList.push(item,negitem)
+      }
+      this.axis.xlist = axisList
+    },
+    methods:{
+      draw:function(){
+        let _this = this;
+        console.log(this.$refs.circle.classList)
+        this.$refs.circle.classList.remove('path')
+        setTimeout(()=>{
+          _this.$refs.circle.classList.add('path')
+        },400)
+        
+        // const path = anime.path(this.$refs.circle)
+        // anime({
+        //   targets: '.point',
+        //   translateX: path('x'),
+        //   translateY: path('y'),
+        //   rotate: path('angle'),
+        //   easing: 'linear',
+        //   duration: 2000,
+        //   loop: true
+        // })
+        
+      }
+    }
+  })
+  vm.$mount('#app')
+</script>
+
+</body>
+</html>

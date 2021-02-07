@@ -1,0 +1,159 @@
+html{
+	background: #e9ecee;
+}
+.paper{
+	/* display: flex;
+	justify-content: center; */
+	padding: 16px;
+	width: 92%;
+	margin: 20px auto;
+	max-width: 1000px;
+	background: white;
+	border-radius: 2px;
+	box-shadow: 0 1px 5px #ddd;
+}
+button,input{
+	border: none;
+	padding: .5em;
+	line-height: 1;
+}
+input[type='text']{
+	border: 1px solid #ccc;
+	padding: 5px;
+}
+button{
+	padding: .4em 1em;
+	border-radius: 3px;
+	background: #ccc;
+	cursor: pointer;
+}
+button:hover{
+	background: #ddd;
+}
+.btn{
+	background: #fc0;
+	border-radius: 3px;
+	font-size: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #fff;
+	line-height: 1;
+}
+.btn-green{
+	background: rgb(21, 179, 34);
+	border: 1px solid rgb(21, 179, 34);
+}
+.btn-blue{
+	background: #007bff;
+	border: 1px solid #007bff;
+	color: #fff;
+	padding: .6em 2em;
+}
+.btn-blue:hover{
+	background: #1687ff;
+	border: 1px solid #1687ff;
+}
+table{
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+table th,
+table td{border: 1px solid #ccc;padding:3px 6px;}
+
+hr{border: none;height: 1px;background: #ccc;}
+
+input{
+	border: 1px solid #ccc;
+}
+.copyright{
+	color: #ccc;
+	text-align: center;
+	font-size: 12px;
+	padding: 1em;
+	line-height: 1.6;
+}
+
+
+/* 方程式*/
+.point{
+  font-size: 30px;
+  position: absolute;
+}
+.path{
+  fill: transparent;
+  stroke: #f00;
+  animation: pathDrawing 4s ease-in-out forwards;
+}
+.animation{
+  transition: .4s all;
+}
+.axis{
+  stroke: #ccc;
+  position: relative;
+}
+.right{
+  text-align: right;
+}
+.center{
+  text-align: center;
+}
+.axis::before{
+  content: ' ';
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-bottom: none;
+  position: absolute;
+  left: 50%;
+  top:50%;
+}
+@keyframes pathDrawing {
+  0% {
+    stroke-dasharray: 0 1611px;
+  }
+  100% {
+    stroke-dasharray: 1611px 0;
+  }
+}
+.x-value{
+  font-size:8px;
+  color: gray;
+  font-weight: normal;
+  opacity: .3;
+}
+.params{
+  list-style: none;
+  border:1px dashed #ccc;
+  padding: 20px;
+  background: rgba(198, 233, 233, 0.575);
+  li{
+    display: flex;
+    label{width: 100px;text-align: right;padding-right: 10px;}
+  }
+}
+
+.svg-area{
+  width: 500px;
+  height: 500px;
+  border: 1px dashed #ddd;
+  padding:10px;
+  svg{
+    background: rgba(245, 238, 229, 0.849);
+  }
+}
+
+.flex{
+  display: flex;
+}
+.formula{
+  aside{
+    padding: 15px;
+    width: 40%;
+  }
+  main{
+    flex: 1;
+    padding: 15px;
+  }
+}

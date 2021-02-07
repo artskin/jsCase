@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>js 自定义事件</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+ </head>
+<body>
+
+  <h1>js事件</h1>
+	<div>事件</div>
+  <h3>方式1</h3>
+  <p id="evt1"></p>
+  <h3>方式2</h3>
+  <p id="evt2"></p>
+  <h3>方式3</h3>
+  <p id="evt3"></p>
+  <script>
+    //方式1
+    let evt = new Event('touch')
+    document.addEventListener('touch',(ev)=>{
+      console.log('触摸1',ev)
+      document.querySelector('#evt1').innerHTML = '触摸1'+JSON.stringify(ev.type)
+    })
+    document.dispatchEvent(evt)
+
+    //方式2
+    let evt2 = new CustomEvent('touch2',{'dataName':'sss'});
+    document.addEventListener('touch2',(ev)=>{
+      console.log('触摸2',ev)
+      document.querySelector('#evt2').innerHTML = '触摸2'+JSON.stringify(ev.type)
+    })
+    document.dispatchEvent(evt2)
+
+    //方式3:过时
+    document.body.addEventListener('mygg',(ev)=>{
+      console.log('触摸3',ev)
+      document.querySelector('#evt3').innerHTML = '触摸3'+JSON.stringify(ev.type)
+    })
+    let evt3 = document.createEvent('HTMLEvents');
+    evt3.initEvent('mygg',true,true)// initEvent接受3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为
+    evt3.eventType ="这是mygg"
+    document.body.dispatchEvent(evt3)
+
+    let obj = {}
+
+    const $on = (name,fn) => {
+      if(!obj[name]){
+        obj[name]=[]
+      }
+      obj[name].push[fn]
+    }
+
+    const $emit = (name,fn) => {
+      console.log(name,fn,obj[name])
+      
+      if(obj[name]){
+        obj[name].map((fn)=>{
+          fn(val)
+        })
+      }
+      console.log(obj)
+    }
+
+    const $off = (name,fn) => {
+      if(obj[name]){
+        if(fn){
+          let index = obj[name].indexOf(fn);
+          if(index > -1){
+            obj[name].splice(index,1)
+          }
+        }else{
+          obj[name].length = 0
+        }
+      }
+    }
+    $emit('post',(va)=>{
+      console.log(va)
+      
+    })
+
+
+  </script>
+</html>
