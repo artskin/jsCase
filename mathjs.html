@@ -1,0 +1,60 @@
+<html>
+<head>
+<script src="//cdn.bootcdn.net/ajax/libs/mathjs/8.1.0/math.js"></script>
+<script type="text/javascript">
+console.log(math)
+function fn_click(p){
+  var a , b;
+  a=0.7;
+  b=0.1;
+  if(p==1){
+    alert(a+b);
+  }else if(p==2){
+    alert(eval("a+b"));
+  }else if(p==3){
+    math.config({
+      number: 'BigNumber'
+    });
+    var result = math.parser().eval(a + "+" + b)
+    alert(result);
+  }
+}
+
+
+function print(value) {
+  const precision = 14
+  document.write(math.format(value, precision) + '<br>')
+}
+
+// functions and constants
+print(math.round(math.e, 3))            // 2.718
+print(math.atan2(3, -3) / math.pi)      // 0.75
+print(math.log(10000, 10))              // 4
+print(math.sqrt(-4))                    // 2i
+print(math.pow([[-1, 2], [3, 1]], 2))   // [[7, 0], [0, 7]]
+print(math.derivative('x^2 + x', 'x'))  // 2 * x + 1
+
+// expressions
+print(math.evaluate('12 / (2.3 + 0.7)'))    // 4
+print(math.evaluate('12.7 cm to inch'))     // 5 inch
+print(math.evaluate('9 / 3 + 2i'))          // 3 + 2i
+print(math.evaluate('det([-1, 2; 3, 1])'))  // -7
+print('我的')  // -7
+print(math.evaluate(0.2 * 19))  // -7
+console.log(math.evaluate(0.2 * 19))
+console.log(math.format(math.evaluate(0.2 * 19), 14))
+
+// chained operations
+const a = math.chain(3)
+    .add(4)
+    .multiply(2)
+    .done()
+print(a)  // 14
+</script>
+</head>
+<body>
+  <input type="button" value="0.7+0.1" onclick="fn_click(1);" />
+  <input type="button" value="eval(0.7+0.1)" onclick="fn_click(2);" />
+  <input type="button" value="mathjs(0.7+0.1)" onclick="fn_click(3);" />
+</body>
+</html>
