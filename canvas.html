@@ -42,7 +42,7 @@
 <body>
 
   <h1>Canvas 绘图</h1>
-  <h2>案例一：手绘自由线条</h2>
+  <h2>案例一：手绘自由线条（支持high DPI）</h2>
   <canvas id="canvas2" width="600" height="400"></canvas>
   <h2>案例二：显示多边形，且位置相对图片固定</h2>
   <div id="block">
@@ -117,25 +117,26 @@
 
   let drawX,drawY;
   let offsetX = 0,offsetY = -28;
-  canvas2.onmousedown=function(event){
-
-    drawX=event.clientX-canvas2.offsetLeft-offsetX;
-    drawY=event.clientY-canvas2.offsetTop-offsetY;
+  function drawInit(evt){
+    drawX=evt.clientX-canvas2.offsetLeft-offsetX;
+    drawY=evt.clientY-canvas2.offsetTop-offsetY;
     ctx2.beginPath();
     ctx2.lineCap="round";
-    //ctx2.scale(1/dpr,1/dpr)
-    //ctx2.translate(0.5, 0.5);
-    
-    
     ctx2.shadowBlur=1.4;
     ctx2.shadowColor="#234";
     ctx2.moveTo(drawX,drawY);
-    //document.onmousemove=drawFree
+  }
+  canvas2.onmousedown=function(event){
+    //ctx2.scale(1/dpr,1/dpr)
+    drawInit(event)
     document.addEventListener('mousemove',drawFree)
-    
   };
   function drawFree(evt){
-    //console.log(evt)
+    console.log(evt.clientX,canvas2.offsetLeft,evt)
+    if(!evt.clientX){
+      evt.clientX = evt.targetTouches[0].clientX
+      evt.clientY = evt.targetTouches[0].clientY+offsetY
+    }
     drawX = evt.clientX - canvas2.offsetLeft - offsetX;
     drawY = evt.clientY - canvas2.offsetTop - offsetY;
     ctx2.lineTo(drawX,drawY);
@@ -143,7 +144,10 @@
     ctx2.strokeStyle="#234";
     ctx2.stroke();
   }
-  //canvas2.addEventListener('touchstart',drawFree)
+  canvas2.addEventListener('touchstart',(e)=>{
+    drawInit(e)
+    canvas2.addEventListener('touchmove',drawFree)
+  })
   //document.addEventListener('touchmove',drawFree)
 
   function setupCanvas(canvas) {
