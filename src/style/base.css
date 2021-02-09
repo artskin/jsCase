@@ -1,17 +1,31 @@
 html{
 	background: #e9ecee;
 }
+body{
+  margin: 0;
+  padding: 4px;
+}
 .paper{
 	/* display: flex;
 	justify-content: center; */
 	padding: 16px;
-	width: 92%;
-	margin: 20px auto;
+	margin: 0 auto;
 	max-width: 1000px;
 	background: white;
 	border-radius: 2px;
 	box-shadow: 0 1px 5px #ddd;
+  box-sizing: border-box;
+  margin-top: 10px;
 }
+@media (max-width: 1000px){
+  .paper{
+    margin-top: 0px;
+  }
+}
+h1{font-size: 1.6em;}
+h2{font-size: 1.2em;}
+h3{font-size: 1em;}
+h4{font-size: 0.9em;}
 button,input{
 	border: none;
 	padding: .5em;
@@ -23,7 +37,7 @@ input[type='text']{
 }
 button{
 	padding: .4em 1em;
-	border-radius: 3px;
+	border-radius: 2px;
 	background: #ccc;
 	cursor: pointer;
 }

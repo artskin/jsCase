@@ -10,23 +10,8 @@
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css">
   <style>
-    html{
-      background: #e1e6e950;
-    }
-    body{
-      /* display: flex;
-      justify-content: center; */
-      
-      margin: 0;
-      width: 100%;
-      margin: 0 auto;
-      max-width: 1000px;
-      
-      box-sizing: border-box;
-    }
-    .paper{background: white;padding: 10px;}
-    h1{text-align: center;border-bottom: 2px gray solid;padding-bottom: 20px;}
   　#block{
       /* background-color: #ccc;
       border:3px solid #ccc; */
@@ -45,9 +30,10 @@
 
 <body>
   <div class="paper">
+    
   <h1>Canvas 绘图</h1>
-
-  <h2>案例二：绘制4个线段</h2>
+  <hr>
+  <h2>案例二：随机绘制4个线段</h2>
   <div id="block">
     <canvas id="canvas"></canvas>
     <img id="video" width="60%" src="assets/images/map.png" alt="">
