@@ -12,18 +12,20 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <style>
     html{
-      background: #e1e6e9;
+      background: #e1e6e950;
     }
     body{
       /* display: flex;
       justify-content: center; */
-      padding: 10px;
+      
       margin: 0;
-      width: 80%;
+      width: 100%;
       margin: 0 auto;
       max-width: 1000px;
-      background: white;
+      
+      box-sizing: border-box;
     }
+    .paper{background: white;padding: 10px;}
     h1{text-align: center;border-bottom: 2px gray solid;padding-bottom: 20px;}
   　#block{
       /* background-color: #ccc;
@@ -42,7 +44,7 @@
  </head>
 
 <body>
-
+  <div class="paper">
   <h1>Canvas 绘图</h1>
 
   <h2>案例二：绘制4个线段</h2>
@@ -55,6 +57,7 @@
   <button onclick="previewHumanBody(false)">禁用预览</button>
   <br>
   <canvas class="my-canvas"></canvas>
+</div>
 </body>
 <script>
   let videoDom=document.getElementById("video");

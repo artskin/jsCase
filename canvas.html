@@ -12,7 +12,7 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <style>
     html{
-      background: #e1e6e9;
+      background: #e1e6e950;
     }
     body{
       /* display: flex;
@@ -35,10 +35,10 @@
     }
     #canvas{position: absolute;background: rgba(0,0,0,.2);}
     #canvas2{border: 1px seagreen dashed;transform-origin: 0 0;
-      width: 500px;height: 300px;max-width: 100%;
+      width: 600px;height: 300px;max-width: 100%;
       box-sizing: border-box;
     }
-    #canvas2:hover{cursor :url(assets/images/draw.ico),auto;}
+    #canvas2:hover{cursor :url(assets/images/draw.ico) 0 28,auto;}
   </style>
  </head>
 
@@ -119,10 +119,9 @@
   let ctx2=setupCanvas(canvas2);
 
   let drawX,drawY;
-  let offsetX = 0,offsetY = -28;
   function drawInit(evt){
-    drawX=evt.clientX-canvas2.offsetLeft-offsetX;
-    drawY=evt.clientY-canvas2.offsetTop-offsetY;
+    drawX=evt.clientX-canvas2.offsetLeft;
+    drawY=evt.clientY-canvas2.offsetTop;
     ctx2.beginPath();
     ctx2.lineCap="round";
     ctx2.shadowBlur=1.4;
@@ -135,13 +134,15 @@
     document.addEventListener('mousemove',drawFree)
   };
   function drawFree(evt){
+    evt.preventDefault();
+    evt.stopPropagation();
     console.log(evt.clientX,canvas2.offsetLeft,evt)
     if(!evt.clientX){
       evt.clientX = evt.targetTouches[0].clientX
-      evt.clientY = evt.targetTouches[0].clientY+offsetY
+      evt.clientY = evt.targetTouches[0].clientY
     }
-    drawX = evt.clientX - canvas2.offsetLeft - offsetX;
-    drawY = evt.clientY - canvas2.offsetTop - offsetY;
+    drawX = evt.clientX - canvas2.offsetLeft;
+    drawY = evt.clientY - canvas2.offsetTop;
     ctx2.lineTo(drawX,drawY);
     ctx2.lineWidth = 6;
     ctx2.strokeStyle="#234";
@@ -170,9 +171,9 @@
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.moveTo(10, 10);
-    ctx.lineTo(10, 100);
-    ctx.lineTo(100, 100);
-    ctx.lineTo(100, 10);
+    ctx.lineTo(10, 50);
+    ctx.lineTo(50, 50);
+    ctx.lineTo(50, 10);
     ctx.stroke();
     return ctx;
   }
