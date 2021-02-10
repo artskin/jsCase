@@ -34,7 +34,9 @@
   <hr>
   <h2>案例一：手绘自由线条（支持high DPI）</h2>
   <button onclick="clearCanvas()">清空</button>
-  <button onclick="saveCanvas()">生成图片</button> <a download="mydraw.png" id="save_href">下载</a>
+  <button onclick="saveCanvas()">生成图片</button> 
+  <a download="mydraw.png" id="save_href">下载</a>
+  <span id="touchSize"></span>
   <br>
   <canvas id="canvas2" width="600" height="400"></canvas>
   <h2>案例二：显示多边形，且位置相对图片固定</h2>
@@ -107,6 +109,7 @@
   
   //let ctx2=canvas2.getContext("2d");
   let ctx2=setupCanvas(canvas2);
+  let touchSize = document.querySelector('#touchSize')
 
   let drawX,drawY;
   function drawInit(evt){
@@ -142,6 +145,8 @@
     evt.preventDefault();
     evt.stopPropagation();
     if(!evt.clientX){
+      console.log(evt)
+      touchSize.innerHTML = evt.targetTouches[0].radiusX
       evt.clientX = evt.targetTouches[0].clientX
       evt.clientY = evt.targetTouches[0].clientY
     }
