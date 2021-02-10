@@ -25,6 +25,8 @@
     }
     #canvas2:hover{cursor :url(assets/images/draw.ico) 0 28,auto;}
     #save_href{display: none;}
+    #outimg{z-index: 10;top:20%}
+    #outimg img{max-width: 100%;border: 1px dashed #ccc;}
   </style>
  </head>
 
@@ -39,11 +41,16 @@
   <span id="touchSize"></span>
   <br>
   <canvas id="canvas2" width="600" height="400"></canvas>
+  <dialog id="outimg">
+    <img src="" alt="">
+    <p>长按下载 <button onclick="closeDialog()">关闭</button></p>
+  </dialog>
   <h2>案例二：显示多边形，且位置相对图片固定</h2>
   <div id="block">
     <canvas id="canvas"></canvas>
     <img id="video" width="60%" src="assets/images/map.png" alt="">
   </div>
+  
 </div>
 </body>
 <script>
@@ -130,23 +137,31 @@
     console.log(ctx2)
     ctx2.clearRect(0,0,ctx2.canvas.width,ctx2.canvas.height)
   }
+  let outDialog = document.querySelector("#outimg")
   function saveCanvas(){
     ctx2.save()
-    console.log(ctx2,canvas2.toDataURL("image/png"))
+    //console.log(ctx2,canvas2.toDataURL("image/png"))
     let image = new Image()
     image.src = canvas2.toDataURL("image/png")
-    svaeHref = document.querySelector('#save_href')
-    svaeHref.style.display = 'inline-block'
-    svaeHref.href=image.src;
     
-    //return image;
+    if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+      outDialog.open = true
+      outDialog.querySelector('img').src=image.src
+    }else{
+      svaeHref = document.querySelector('#save_href')
+      svaeHref.style.display = 'inline-block'
+      svaeHref.href=image.src;
+    }
+  }
+  function closeDialog(){
+    outDialog.open = false
   }
   function drawFree(evt){
     evt.preventDefault();
     evt.stopPropagation();
     if(!evt.clientX){
       console.log(evt)
-      touchSize.innerHTML = evt.targetTouches[0].radiusX
+      touchSize.innerHTML = evt.targetTouches[0].radiusX+'-'+evt.targetTouches[0].force //force[0.1~1]
       evt.clientX = evt.targetTouches[0].clientX
       evt.clientY = evt.targetTouches[0].clientY
     }

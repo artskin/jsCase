@@ -20,6 +20,7 @@ body{
 @media (max-width: 1000px){
   .paper{
     margin-top: 0px;
+    padding: 3%;
   }
 }
 h1{font-size: 1.6em;}
