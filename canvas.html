@@ -75,7 +75,6 @@
     index = 1;
     steps = []
     stepIndex = 0
-    console.log(strokeCache)
     btnReplay.disabled = true
     btnSave.disabled = true
     btnClear.disabled = true
@@ -104,6 +103,7 @@
     ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
     index = 1
     stepIndex = 0
+    
     ctx.beginPath();
     ctx.lineWidth = 6;
     ctx.strokeStyle="#234";
@@ -131,7 +131,6 @@
   function drawEnd(){
     ctx.closePath();
     steps.push(strokeCache.length)
-    //console.log(steps,strokeCache)
     if(strokeCache.length>1){
       btnReplay.disabled = false
       btnSave.disabled = false
