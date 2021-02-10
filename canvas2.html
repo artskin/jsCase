@@ -12,70 +12,79 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css">
   <style>
-  　#block{
-      /* background-color: #ccc;
-      border:3px solid #ccc; */
-      width: 100%;
-      height: 100%;
+    .canvas-layer{
+      position: relative;
     }
-    #canvas{position: absolute;background: rgba(0,0,0,.2);}
+    canvas{position: absolute;background: rgba(0,0,0,.2);left: 0;top: 0;}
+    #canvas{}
+
     #canvas2{border: 1px seagreen dashed;}
-    #canvas2:hover{cursor :url(assets/images/draw.ico),auto;}
-    .my-canvas{
-      width: 500px;
-      height: 300px;
-    }
   </style>
  </head>
 
 <body>
-  <div class="paper">
-    
+<div class="paper">
   <h1>Canvas 绘图</h1>
   <hr>
-  <h2>案例二：随机绘制4个线段</h2>
-  <div id="block">
+  <h2>案例一：canvas绘制图形，且位置相对图片固定</h2>
+  <div class="canvas-layer">
+    <img width="60%" src="assets/images/map.png" alt="">
+    <canvas id="canvas1"></canvas>
+  </div>
+  
+  <h2>案例一：随机绘制4个线段</h2>
+  <div class="canvas-layer">
+    <img width="60%" src="assets/images/map.png" alt="">
     <canvas id="canvas"></canvas>
-    <img id="video" width="60%" src="assets/images/map.png" alt="">
+    
   </div>
 
   <button onclick="previewHumanBody(true)">预览</button>
   <button onclick="previewHumanBody(false)">禁用预览</button>
   <br>
-  <canvas class="my-canvas"></canvas>
+  
 </div>
 </body>
 <script>
-  let videoDom=document.getElementById("video");
-  let canvas=document.getElementById("canvas");
-  let ctx=canvas.getContext("2d");
+  const canvasSetting = {
+    ctx:''
+  }
+
+  function init(canvas){
+    let mapImg=canvas.previousElementSibling;
+    mapImg.onload = (e)=>{
+      resizeCanvas(mapImg)
+      previewHumanBody(true)
+    }
+  }
+  function resizeCanvas(imgEl){
+    canvasSetting.ctx = ctxInit(imgEl)
+      //drawLine(start,end,scaleX,scaleY)
+    
+  }
+  let canvas1=document.getElementById("canvas1");
+  init(canvas1)
+
+  function ctxInit(el){
+    canvas.width = el.width;
+    canvas.height = el.height;
+    let ctx=canvas.getContext("2d");
+    let scaleX = el.width/el.naturalWidth;
+    let scaleY = el.height/el.naturalHeight;
+    let scale = {
+      x:scaleX,
+      y:scaleY
+    }
+    return ctx
+  }
+
   let start = {x:351,y:385},end={x:503,y:520};
+  
   let humanBodyArray = [[4,105],[141,269],[408,623],[814,1071]]
 
-  videoDom.onload = ()=>{
-    let scaleX = videoDom.width/originalVideo.width;
-    let scaleY = videoDom.height/originalVideo.height;
-    let scale ={
-      x:videoDom.width/originalVideo.width,
-      y:videoDom.height/originalVideo.height
-    }
-    canvas.width = videoDom.width;
-    canvas.height = videoDom.height;
-    //drawLine(start,end,scaleX,scaleY)
-    previewHumanBody(true,scale)
-  }
-    
-  let originalVideo = {
-    width:1407,
-    height:1002
-  }
 
   window.onresize = ()=>{
-    let scaleX = videoDom.width/originalVideo.width;
-    let scaleY = videoDom.height/originalVideo.height;
-    canvas.width = videoDom.width;
-    canvas.height = videoDom.height;
-      
+    resizeCanvas(canvas1)
     //drawLine(start,end,scaleX,scaleY)
   }
 
@@ -108,10 +117,11 @@
     ctx.closePath();
     ctx.stroke();
   }
-  poly(8);
+  //poly(8);
 
 
-  function previewHumanBody(show,scale){
+  function previewHumanBody(show){
+    ctx = canvasSetting.ctx
     ctx.clearRect(0,0,1000,1000)
     if(show){
       humanBodyArray.forEach((item) => {
@@ -126,13 +136,13 @@
             y:item[1]
           }
         }
-        insertLines(pointObj.start,pointObj.end,"#cc0000",scale);
+        insertLines(ctx,pointObj.start,pointObj.end,"#cc0000");
       });
     }
   }
   
-  function insertLines(startPoint,endPoint,color,scale){
-    console.log(startPoint,endPoint,color,scale)
+  function insertLines(ctx,startPoint,endPoint,color){
+    //console.log(startPoint,endPoint,color,scale)
     ctx.beginPath();
     //ctx.scale(scale.x,scale.y)
     ctx.moveTo(startPoint.x, startPoint.y);
@@ -143,31 +153,42 @@
     ctx.stroke();
   }
   
-  function setupCanvas(canvas) {
-    // Get the device pixel ratio, falling back to 1.
-    var dpr = window.devicePixelRatio || 1;
-    // Get the size of the canvas in CSS pixels.
-    var rect = canvas.getBoundingClientRect();
-    console.log(rect)
-    // Give the canvas pixel dimensions of their CSS
-    // size * the device pixel ratio.
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    var ctx = canvas.getContext('2d');
-    // Scale all drawing operations by the dpr, so you
-    // don't have to worry about the difference.
-    ctx.scale(dpr, dpr);
-    return ctx;
-  }
 
-  // Now this line will be the same size on the page
-  // but will look sharper on high-DPI devices!
-  var ctxP = setupCanvas(document.querySelector('.my-canvas'));
-  ctxP.lineWidth = 5;
-  ctxP.beginPath();
-  ctxP.moveTo(10, 10);
-  ctxP.lineTo(10, 200);
-  ctxP.stroke();
+  // let videoDom2=document.getElementById("video");
+  // let canvas2=document.getElementById("canvas");
+  // let ctx2=canvas.getContext("2d");
+  // let start = {x:351,y:385},end={x:503,y:520};
+
+  // videoDom2.onload = ()=>{
+  //   let scaleX = videoDom2.width/originalVideo.width;
+  //   let scaleY = videoDom2.height/originalVideo.height;
+  //   canvas.width = videoDom2.width;
+  //   canvas.height = videoDom2.height;
+  //   drawLine(start,end,scaleX,scaleY)
+  // }
+    
+  // window.onresize = ()=>{
+  //   let scaleX = videoDom.width/originalVideo.width;
+  //   let scaleY = videoDom.height/originalVideo.height;
+  //   canvas.width = videoDom.width;
+  //   canvas.height = videoDom.height;
+      
+  //   drawLine2(start,end,scaleX,scaleY)
+  // }
+
+  // function drawLine2(start,end,scaleX,scaleY){
+  //   ctx.clearRect(0,0,1000,1000)
+  //   ctx.beginPath();
+  //   ctx.scale(scaleX,scaleY)
+  //   ctx.moveTo(start.x,start.y);
+  //   ctx.lineTo(end.x,end.y);
+  //   ctx.closePath();
+    
+  //   ctx.lineWidth = 2;
+  //   ctx.setLineDash([5,15]);
+  //   ctx.strokeStyle = "red"
+  //   ctx.stroke();
+  // }
 
 </script>
 </html>

@@ -17,7 +17,7 @@ body{
   box-sizing: border-box;
   margin-top: 10px;
 }
-@media (max-width: 1000px){
+@media (max-width: 600px){
   .paper{
     margin-top: 0px;
     padding: 3%;
@@ -44,6 +44,17 @@ button{
 }
 button:hover{
 	background: #ddd;
+}
+.center{
+  text-align: center;
+}
+.right{
+  text-align: right;
+}
+dialog{
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+  box-sizing: border-box;
 }
 .btn{
 	background: #fc0;

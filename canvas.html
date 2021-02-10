@@ -12,200 +12,177 @@
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="./src/style/base.css">
   <style>
-  　#block{
-      width: 100%;
-      height: 100%;
-    }
-    #canvas{position: absolute;background: rgba(0,0,0,.2);}
-    #canvas2{
+    #canvas{
       border: 1px seagreen dashed;transform-origin: 0 0;
-      width: 600px;height: 300px;max-width: 100%;
+      width: 800px;height: 400px;max-width: 100%;
       box-sizing: border-box;
-      margin-top: 10px;
     }
-    #canvas2:hover{cursor :url(assets/images/draw.ico) 0 28,auto;}
+    #canvas:hover{cursor :url(assets/images/draw.ico) 0 28,auto;}
     #save_href{display: none;}
-    #outimg{z-index: 10;top:20%}
+    #outimg{z-index: 10;top:15%}
     #outimg img{max-width: 100%;border: 1px dashed #ccc;}
   </style>
  </head>
 
 <body>
 <div class="paper">
-  <h1>Canvas 绘图</h1>
+  <h1>Canvas</h1>
   <hr>
-  <h2>案例一：手绘自由线条（支持high DPI）</h2>
-  <button onclick="clearCanvas()">清空</button>
-  <button onclick="saveCanvas()">生成图片</button> 
+  <h2>案例：手绘（支持high DPI）</h2>
+  <p>
+    <button id="clear">清空</button>
+    <button id="save">生成图片</button> 
+    <button id="replay">回放</button>
+  </p>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <br>
   <a download="mydraw.png" id="save_href">下载</a>
   <span id="touchSize"></span>
-  <br>
-  <canvas id="canvas2" width="600" height="400"></canvas>
   <dialog id="outimg">
+    <br>
     <img src="" alt="">
-    <p>长按下载 <button onclick="closeDialog()">关闭</button></p>
+    <p class="center">长按图片下载 <button id="btnClose">关闭</button></p>
   </dialog>
-  <h2>案例二：显示多边形，且位置相对图片固定</h2>
-  <div id="block">
-    <canvas id="canvas"></canvas>
-    <img id="video" width="60%" src="assets/images/map.png" alt="">
-  </div>
-  
 </div>
 </body>
-<script>
-  let videoDom=document.getElementById("video");
+<script type="module">
+  import canvasdpr from './src/js/canvas.hdpr.js'
+
   let canvas=document.getElementById("canvas");
-  let ctx=canvas.getContext("2d");
-  let start = {x:351,y:385},end={x:503,y:520};
+  let strokeCache = []
+  let index = 1;
+  let steps = []
+  let stepIndex = 0
+  let ctx=canvasdpr(canvas);
 
-  videoDom.onload = ()=>{
-    let scaleX = videoDom.width/originalVideo.width;
-    let scaleY = videoDom.height/originalVideo.height;
-    canvas.width = videoDom.width;
-    canvas.height = videoDom.height;
-    drawLine(start,end,scaleX,scaleY)
-  }
-    
-  let originalVideo = {
-    width:1407,
-    height:1002
-  }
-
-  window.onresize = ()=>{
-    let scaleX = videoDom.width/originalVideo.width;
-    let scaleY = videoDom.height/originalVideo.height;
-    canvas.width = videoDom.width;
-    canvas.height = videoDom.height;
-      
-    drawLine(start,end,scaleX,scaleY)
-  }
-
-  function drawLine(start,end,scaleX,scaleY){
-    ctx.clearRect(0,0,1000,1000)
-    ctx.beginPath();
-    ctx.scale(scaleX,scaleY)
-    ctx.moveTo(start.x,start.y);
-    
-    ctx.lineTo(end.x,end.y);
-    
-    ctx.closePath();
-    
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5,15]);
-    ctx.strokeStyle = "red"
-    ctx.stroke();
-  }
-  
-  function poly (num){
-    let r = 100;
-    let a = 2 * Math.PI / num;
-    ctx.beginPath();
-    ctx.moveTo(150+r,150);
-    for(let i=0;i < num;i++){
-      let x = 150 + r * Math.cos(a * i);
-      let y = 150 + r * Math.sin(a * i);
-      ctx.lineTo(x,y);
-    }
-    ctx.closePath();
-    ctx.stroke();
-  }
-  poly(8);
-  let dpr = window.devicePixelRatio;
-  let canvas2=document.getElementById("canvas2");
-  
-  //let ctx2=canvas2.getContext("2d");
-  let ctx2=setupCanvas(canvas2);
   let touchSize = document.querySelector('#touchSize')
-
-  let drawX,drawY;
   function drawInit(evt){
-    drawX=evt.clientX-canvas2.offsetLeft;
-    drawY=evt.clientY-canvas2.offsetTop;
-    ctx2.beginPath();
-    ctx2.lineCap="round";
-    ctx2.shadowBlur=1.4;
-    ctx2.shadowColor="#234";
-    ctx2.moveTo(drawX,drawY);
+    let startPoint =[evt.clientX-canvas.offsetLeft,evt.clientY-canvas.offsetTop]
+    ctx.beginPath();
+    ctx.lineCap="round";
+    ctx.shadowBlur=1.4;
+    ctx.shadowColor="#234";
+    ctx.moveTo(startPoint[0],startPoint[1]);
+    strokeCache.push(startPoint)
   }
-  canvas2.onmousedown=function(event){
-    //ctx2.scale(1/dpr,1/dpr)
+  canvas.onmousedown=function(event){
     drawInit(event)
     document.addEventListener('mousemove',drawFree)
   };
-  function clearCanvas(){
-    console.log(ctx2)
-    ctx2.clearRect(0,0,ctx2.canvas.width,ctx2.canvas.height)
+  function clearCanvas (){
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
+    strokeCache = []
+    index = 1;
+    steps = []
+    stepIndex = 0
+    console.log(strokeCache)
+    btnReplay.disabled = true
+    btnSave.disabled = true
+    btnClear.disabled = true
   }
-  let outDialog = document.querySelector("#outimg")
-  function saveCanvas(){
-    ctx2.save()
-    //console.log(ctx2,canvas2.toDataURL("image/png"))
-    let image = new Image()
-    image.src = canvas2.toDataURL("image/png")
-    
-    if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
-      outDialog.open = true
-      outDialog.querySelector('img').src=image.src
-    }else{
-      svaeHref = document.querySelector('#save_href')
-      svaeHref.style.display = 'inline-block'
-      svaeHref.href=image.src;
-    }
-  }
-  function closeDialog(){
-    outDialog.open = false
-  }
+  
+  
   function drawFree(evt){
     evt.preventDefault();
     evt.stopPropagation();
+    
     if(!evt.clientX){
       console.log(evt)
       touchSize.innerHTML = evt.targetTouches[0].radiusX+'-'+evt.targetTouches[0].force //force[0.1~1]
       evt.clientX = evt.targetTouches[0].clientX
       evt.clientY = evt.targetTouches[0].clientY
     }
-    drawX = evt.clientX - canvas2.offsetLeft;
-    drawY = evt.clientY - canvas2.offsetTop;
-    ctx2.lineTo(drawX,drawY);
-    ctx2.lineWidth = 6;
-    ctx2.strokeStyle="#234";
-    ctx2.stroke();
-  }
-  canvas2.addEventListener('touchstart',(e)=>{
-    drawInit(e)
-    canvas2.addEventListener('touchmove',drawFree)
-  })
-  //document.addEventListener('touchmove',drawFree)
-
-  function setupCanvas(canvas) {
-    // Get the device pixel ratio, falling back to 1.
-    var dpr = window.devicePixelRatio || 1;
-    // Get the size of the canvas in CSS pixels.
-    var rect = canvas.getBoundingClientRect();
-    //console.log(rect)
-    // Give the canvas pixel dimensions of their CSS
-    // size * the device pixel ratio.
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    var ctx = canvas.getContext('2d');
-    // Scale all drawing operations by the dpr, so you
-    // don't have to worry about the difference.
-    ctx.scale(dpr, dpr);
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.moveTo(10, 10);
-    ctx.lineTo(10, 50);
-    ctx.lineTo(50, 50);
-    ctx.lineTo(50, 10);
+    let point =[evt.clientX-canvas.offsetLeft,evt.clientY-canvas.offsetTop]
+    ctx.lineTo(point[0],point[1]);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle="#234";
     ctx.stroke();
-    return ctx;
+    strokeCache.push(point)
+  }
+  
+  function rePlay(){
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
+    index = 1
+    stepIndex = 0
+    ctx.beginPath();
+    ctx.lineWidth = 6;
+    ctx.strokeStyle="#234";
+
+    console.log(strokeCache)
+    ctx.moveTo(strokeCache[0][0],strokeCache[0][1])
+    renderDrawing()
+  }
+  
+  function renderDrawing(){
+    if(index === steps[stepIndex]){
+      stepIndex ++
+      ctx.beginPath();
+    }
+    ctx.lineTo(strokeCache[index][0],strokeCache[index][1])
+    ctx.stroke();
+    if(index<strokeCache.length-1){
+      index++
+      requestAnimationFrame(renderDrawing)
+    }else{
+      ctx.closePath();
+    }
+  }
+  
+  function drawEnd(){
+    ctx.closePath();
+    steps.push(strokeCache.length)
+    //console.log(steps,strokeCache)
+    if(strokeCache.length>1){
+      btnReplay.disabled = false
+      btnSave.disabled = false
+      btnClear.disabled = false
+    }
+    document.removeEventListener('mousemove',drawFree);
   }
 
-  document.onmouseup=function(){
-    ctx2.closePath();
-    document.removeEventListener('mousemove',drawFree);
+  canvas.onmouseup=function(){
+    drawEnd()
   };
+
+  //移动端兼容
+  canvas.addEventListener('touchstart',(e)=>{
+    drawInit(e)
+    canvas.addEventListener('touchmove',drawFree)
+  })
+  canvas.addEventListener('touchend',drawEnd)
+
+  let btnClear = document.querySelector('#clear')
+  let btnSave = document.querySelector('#save')
+  let btnReplay = document.querySelector('#replay')
+  let btnClose = document.querySelector('#btnClose')
+  let outDialog = document.querySelector("#outimg")
+  btnReplay.disabled = true
+  btnSave.disabled = true
+  btnClear.disabled = true
+
+  btnClear.addEventListener('click',clearCanvas)
+  btnSave.addEventListener('click',saveCanvas)
+  btnReplay.addEventListener('click',rePlay)
+  btnClose.addEventListener('click',closeDialog)
+
+  
+  function saveCanvas(){
+    ctx.save()
+    let image = new Image()
+    image.src = canvas.toDataURL("image/png")
+    if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+      outDialog.open = true
+      outDialog.querySelector('img').src=image.src
+    }else{
+      let svaeHref = document.querySelector('#save_href')
+      svaeHref.style.display = 'inline-block'
+      svaeHref.href=image.src;
+    }
+  }
+
+  function closeDialog(){
+    outDialog.open = false
+  }
 
 </script>
 
