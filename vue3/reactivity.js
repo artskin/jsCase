@@ -1,4 +1,9 @@
 let activeEffect = null
+function effect(eff){
+  activeEffect = eff
+  activeEffect()
+  activeEffect = null
+}
 const targetMap = new WeakMap()
 function track(target,key){
   if(activeEffect){
@@ -20,8 +25,10 @@ function track(target,key){
     //console.log(depsMap)
   }
 }
-
+let times = 0
 function trigger(target,key){
+
+  console.log(target)
   //console.log('Fn.trigger',targetMap,target,key)
   const depsMap = targetMap.get(target)
   //console.log(depsMap)
@@ -29,7 +36,7 @@ function trigger(target,key){
 
   let dep = depsMap.get(key)
   //console.log(dep)
-  console.log(dep)
+  //console.log(dep)
   if(dep){
     
     
@@ -58,6 +65,7 @@ function reactive(target){
       let result = Reflect.set(target,key,newValue,proxySelf);
       // console.log(oldValue,newValue,result,oldValue != newValue)
       if(oldValue != newValue){
+
         trigger(target,key)
       }
       //console.log(target,proxyProduct)

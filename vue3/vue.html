@@ -61,14 +61,6 @@
 <script src="./reactivity.js"></script>
 <script>
   /// 应用代码
-  
-  function effect(eff){
-    //console.log(eff)
-    activeEffect = eff
-    activeEffect()
-    activeEffect = null
-  }
-
   let total = 0,
       baseData = {
         price:5,
@@ -77,44 +69,17 @@
   let product = reactive(baseData)
   let salePrice = ref(0)
 
-  $('input').addEventListener('change',updateValue)
-  
-  function updateValue(e){
-    //console.log('d')
-    //console.log('updateValue-Before',e)
-    
-      product[e.target.name] = e.target.value
-    
-    
-    //console.log('updateValue=After',e.target.name,e.target.value)
-  }
-  //
-  //debugger
-  // let effect = () =>{ 
-  //   //total = product.price * product.discount
-  //   total = salePrice.value * product.discount
-  // }
-  // effect()
-  
-  
-  //effect()
-  //console.log(salePrice.value)
-
   let resultEl = $('.result'),
       priceEl = $('#input-price'),
       discountEl = $('#input-discount')
       
   function init(){
-    //console.trace()
     priceEl.value = product.price
     discountEl.value = product.discount
-    //resultEl.innerHTML = total
-    
+    resultEl.innerHTML = `${product.price}*0.9 =${salePrice.value}*${product.discount} => ${total}`
   }
 
   function render(){
-    //console.trace()
-    console.log(`${product.price * 0.9}*${product.discount} => ${total}`)
     init()
   }
 
@@ -127,14 +92,17 @@
     render()
   })
 
-//log==========
-// console.log(`Before updated discount total (should be 9)= ${total} salePrice (should be 4.5)= ${salePrice.value}`)
+  $('input').addEventListener('change',updateValue)
+  
+  function updateValue(e){
+    product[e.target.name] = e.target.value
+  }
 
+//log==========
 // product.discount = 3
 // console.log(`After updated discount total (should be 13.5)= ${total} salePrice (should be 4.5)= ${salePrice.value}`)
 
 //product.price = 10
-
 //console.log( `After updated price total (should be 27)= ${total} salePrice (should be 9)= ${salePrice.value}`)
 </script>
 </body>
