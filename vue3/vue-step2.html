@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>商品*期免息价值计算</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <style>
+    body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;max-width: 500px;}
+    h3{
+      margin-top: 0.2em;
+    }
+    .center{
+      text-align: center;
+    }
+    form label{
+      display: inline-block;
+      width: 100px;
+      text-align: right;
+    }
+    form input{width: 52%;}
+    ul{
+      list-style: none;
+      padding-left: .2em;
+      margin-left: 0;
+    }
+    /* .result{display: none;} */
+    ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
+    #app strong{color: green;}
+    .gray{
+      color: #ccc;
+      font-size: 12px;
+    }
+    .btn-blue{width: 55%;}
+  </style>
+</head>
+<body class="paper">
+  <h3 class="center">vue3 - Reactivity show</h3>
+<hr>
+  <p>
+    <label for="price">price</label>
+    <input type="number" name="price" id="input-price">
+  </p>
+  <p>
+    <label for="discount">discount</label>
+    <input type="number" name="discount" id="input-discount">
+  </p>
+<hr>
+  <div class="result">
+
+  </div>
+<!-- <script src="./lib/3.0.0-rc.1.vue.global.js"></script> -->
+<!-- <script src="../lib/vue@3.0.5.global.js"></script> -->
+<script src="./reactivity.js"></script>
+<script>
+const targetMap = new WeakMap() // targetMap stores the effects that each object should re-run when it's updated
+function track(target, key) {
+  // We need to make sure this effect is being tracked.
+  let depsMap = targetMap.get(target) // Get the current depsMap for this target
+  if (!depsMap) {
+    // There is no map.
+    targetMap.set(target, (depsMap = new Map())) // Create one
+  }
+  let dep = depsMap.get(key) // Get the current dependencies (effects) that need to be run when this is set
+  if (!dep) {
+    // There is no dependencies (effects)
+    depsMap.set(key, (dep = new Set())) // Create a new Set
+  }
+  dep.add(effect) // Add effect to dependency map
+}
+function trigger(target, key) {
+  const depsMap = targetMap.get(target) // Does this object have any properties that have dependencies (effects)
+  if (!depsMap) {
+    return
+  }
+  let dep = depsMap.get(key) // If there are dependencies (effects) associated with this
+  if (dep) {
+    dep.forEach(effect => {
+      // run them all
+      effect()
+    })
+  }
+}
+
+function reactive(target) {
+  const handler = {
+    get(target, key, receiver) {
+      let result = Reflect.get(target, key, receiver)
+      track(target, key) // If this reactive property (target) is GET inside then track the effect to rerun on SET
+      return result
+    },
+    set(target, key, value, receiver) {
+      let oldValue = target[key]
+      let result = Reflect.set(target, key, value, receiver)
+      if (oldValue != result) {
+        trigger(target, key) // If this reactive property (target) has effects to rerun on SET, trigger them.
+      }
+      return result
+    }
+  }
+  return new Proxy(target, handler)
+}
+function ref(raw){
+  const r = {
+    get value(){
+      track(r,'value')
+      return raw
+    },
+    set value(newValue){
+      raw = newValue;
+      trigger(r,'value')
+    }
+  }
+  //console.log(r)
+  return r
+}
+
+function $(el){
+  return document.querySelector(el)
+}
+
+  /// 应用代码
+  let total = 0,
+      baseData = {
+        price:5,
+        discount:2
+      }
+  let product = reactive(baseData)
+  let salePrice = ref(1)
+
+  function init(){
+    //console.trace()
+    
+    priceEl.value = product.price
+    discountEl.value = product.discount
+    
+    //Object.keys(product).forEach((item)=>{
+      //console.log(item)
+      //track(product,item)
+    //})
+  }
+  let resultEl = $('.result'),
+      priceEl = $('#input-price'),
+      discountEl = $('#input-discount')
+
+  let effect = () => {
+    total = product.price * product.quantity
+  }
+  salePrice.value = product.price * 0.9
+  effect()
+
+  function render(){
+    //effect()
+    init()
+    resultEl.innerHTML = total
+  }
+  render()
+
+  // $('input').addEventListener('input',updateValue)
+  
+  // function updateValue(e){
+  //   //console.log('updateValue-Before',e)
+  //   //product[e.target.name] = e.target.value
+  //   //console.log('updateValue=After',e.target.name,e.target.value)
+  // }
+  //salePrice.value = product.price * 0.9
+  //debugger
+  // let effect = () =>{ 
+  //   //total = product.price * product.discount
+  //   total = salePrice.value * product.discount
+  // }
+  // effect()
+  
+  //console.log(salePrice.value)
+
+  
+
+  // const handler = {
+  //   get:(target, prop,self)=>{
+  //     console.log('get=>',target, prop)
+  //     Reflect.get(target, prop, self)
+  //     console.log(Reflect.get(target, prop, self))
+  //     return prop in target ? target[prop] : 0
+  //   },
+  //   set:(target, prop,newValue)=>{
+  //     target[prop] = newValue
+  //     trigger(prop)
+      
+  //     render()
+  //     console.info('set=>',target, prop,newValue)
+      
+  //     return prop in target ? target[prop] : 0
+  //   }
+  // }
+  
+  //let proxyObj = new Proxy(product,handler)
+  //console.log(proxyObj)
+
+  // let dep = new Set()
+  
+  // function track(){
+  //   dep.add(effect)
+  // }
+  // track()
+
+  // const depsMap = new Map()
+  // function trackMap(key){
+  //   let dep = depsMap.get(key)
+  //   console.log(dep)
+  //   if(!dep){
+  //     depsMap.set(key,(dep = new Set()))
+  //   }
+  //   dep.add(effect)
+  // }
+  // //trackMap('discount')
+
+  // function trigger(key){
+  //   console.trace()
+  //   console.count('count'); 
+  //   let dep = depsMap.get(key)
+  //   if(dep){
+  //     dep.forEach(effect => effect())
+  //   }
+  //   render()
+  // }
+
+  
+
+  //effect()
+  //render()
+  
+
+//log==========
+// console.log(`Before updated discount total (should be 9)= ${total} salePrice (should be 4.5)= ${salePrice.value}`)
+// product.discount = 3
+// console.log(`After updated discount total (should be 13.5)= ${total} salePrice (should be 4.5)= ${salePrice.value}`)
+// product.price = 10
+// console.log( `After updated price total (should be 27)= ${total} salePrice (should be 9)= ${salePrice.value}`)
+</script>
+</body>
+</html>
