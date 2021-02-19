@@ -27,7 +27,7 @@ function track(target,key){
 }
 
 function trigger(target,key){
-  console.log(key,target)
+  console.log(target)
   const depsMap = targetMap.get(target)
 
   if(!depsMap) return
@@ -77,4 +77,10 @@ function ref(raw){
     }
   }
   return r
+}
+
+function computed(getter){
+  let result = ref();
+  effect(()=>(result.value = getter()))
+  return result
 }

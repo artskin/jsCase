@@ -19,45 +19,42 @@
     }
   </style>
 </head>
-<body class="paper">
-  <h3 class="center">vue3 - Reactivity</h3>
-<hr>
-  <p>
-    <label for="price">price</label>
-    <input type="number" name="price" id="input-price">
-  </p>
-  <p>
-    <label for="discount">discount</label>
-    <input type="number" name="discount" id="input-discount">
-  </p>
-<hr>
-  <div class="result">
+<body>
+  <div class="paper">
+    <h3 class="center">vue3 - Reactivity</h3>
+    <hr>
+    <p>
+      <label for="price">price</label>
+      <input type="number" name="price" id="input-price">
+    </p>
+    <p>
+      <label for="discount">discount</label>
+      <input type="number" name="discount" id="input-discount">
+    </p>
+    <hr>
+    <div class="result">
 
+    </div>
   </div>
 <!-- <script src="../lib/vue@3.0.5.global.js"></script> -->
 <script src="./reactivity.js"></script>
 <script>
-  let total = 0,
-      baseData = { price:5,discount:2}
-
+  let baseData = { price:5,discount:2}
+  
   //添加响应功能
   let product = reactive(baseData)
-  let salePrice = ref(0)
+  product.name = 'baicai'
+  
+  let salePrice = computed(()=> product.price * 9 )
+  let total = computed(()=> salePrice.value * product.discount/10 )
 
-  effect(() => {
-    salePrice.value = product.price * 9
-  })
-
-  effect(() => {
-    total = salePrice.value * product.discount
-    total = total/10
-    render()
-  })
+  //effect(() => render())
+  computed(() => render())
 
   function render(){
     $_('#input-price').value = product.price
     $_('#input-discount').value = product.discount
-    $_('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total}`
+    $_('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total.value}`
   }
   $_.all('input').forEach((item)=>{
     item.addEventListener('change',updateValue)
