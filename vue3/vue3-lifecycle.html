@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>vue3-LifeCycle</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <style>
+    ul{
+      list-style: decimal;
+    }
+  </style>
+</head>
+<body class="paper">
+  <h3 class="center">vue3 - LifeCycle</h3>
+  <p>vue3 生命周期演示 （建议Chrome打开）</p>
+  
+<hr>
+  <div id="app">
+    <button @click="showLife">显示vue3生命周期顺序</button>
+    <div id="output">
+      <ul>
+        <li v-for="item in outs">{{item}}</li>
+      </ul>
+      <keep-alive>
+        {{outs}}
+      </keep-alive>
+    </div>
+  </div>
+<script type="module">
+  import {createApp,ref,
+    onBeforeMount,
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
+    onBeforeUnmount,
+    onUnmounted,
+    onActivated,
+    onDeactivated,
+    onErrorCaptured,
+    onRenderTracked,
+    onRenderTriggered
+  } from '../lib/vue@3.0.5.esm-browser.js'
+
+  const output = []
+  function counter(currentCycle){
+    console.group(currentCycle)
+    console.count('顺序',currentCycle)
+    //console.log(lifes.value.get(currentCycle))
+    // if(!lifes.value.has(currentCycle)){
+       //lifes.value.push(currentCycle)
+    // }
+    output.push(currentCycle)
+    console.log(output)
+    console.groupEnd()
+  }
+  const App = {
+    beforeCreate(){
+      counter('beforeCreate')
+    },
+    created() {
+      // `this` 指向 vm 实例
+      console.log('created')
+      counter('created')
+    },
+    setup(props, context) {
+      const outs = ref([])
+      console.log(onMounted)
+
+      onMounted(()=>{
+        counter('onMounted')
+      })
+      onBeforeMount(()=>{
+        counter('onBeforeMount')
+      })
+      onBeforeUpdate(()=>{
+        counter('onBeforeUpdate')
+      })
+      onUpdated(()=>{
+        counter('onUpdated')
+      })
+      onBeforeUnmount(()=>{
+        counter('onBeforeUnmount')
+      })
+      onUnmounted(()=>{
+        counter('onUnmounted')
+      })
+      onActivated(()=>{
+        counter('onActivated')
+      })
+      onDeactivated(()=>{
+        counter('onDeactivated')
+      })
+      onErrorCaptured((hook,target)=>{
+        console.log(hook,target)
+        counter('onErrorCaptured')
+      })
+
+      onRenderTracked(()=>{
+        //counter('onRenderTracked')
+      })
+      onRenderTriggered(()=>{
+        counter('onRenderTriggered')
+      })
+      // setTimeout(()=>{
+      //   outs.value = output
+      // },400)
+
+      function showLife(){
+        console.log('打印',output)
+        outs.value = output
+        
+      }
+      
+      return {outs,showLife}
+    }
+  };
+
+  
+
+  createApp(App).mount('#app')
+</script>
+</body>
+</html>

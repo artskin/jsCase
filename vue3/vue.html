@@ -17,12 +17,25 @@
       width: 100px;
       text-align: right;
     }
+    span{
+      /* padding: .2em; */
+      caret-color:deeppink
+    }
+    var{
+      font-size: 13px;
+      padding: .5em;
+      border:1px dashed #ccc;
+    }
   </style>
 </head>
 <body>
   <div class="paper">
     <h3 class="center">vue3 - Reactivity</h3>
     <hr>
+    <p>
+      <label for="name">name</label>
+      <span><var name="name" id="input-name" contenteditable></var></span>
+    </p>
     <p>
       <label for="price">price</label>
       <input type="number" name="price" id="input-price">
@@ -43,25 +56,29 @@
   
   //添加响应功能
   let product = reactive(baseData)
-  product.name = 'baicai'
+  
   
   let salePrice = computed(()=> product.price * 9 )
   let total = computed(()=> salePrice.value * product.discount/10 )
-
+  
   //effect(() => render())
   computed(() => render())
-
+  product.name = 'baicai'
   function render(){
+    $_('#input-name').innerHTML = product.name
     $_('#input-price').value = product.price
     $_('#input-discount').value = product.discount
     $_('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total.value}`
   }
   $_.all('input').forEach((item)=>{
-    item.addEventListener('change',updateValue)
+    item.addEventListener('input',updateValue)
   })
+  $_('#input-name').addEventListener('input',updateValue)
   
   function updateValue(e){
-    product[e.target.name] = e.target.value
+    //console.log(e,e.target.attributes.item(name).name)
+    if(e.target.value) product[e.target.name] = e.target.value
+    product[e.target.attributes.item(name).name] = e.target.innerText
   }
 </script>
 </body>

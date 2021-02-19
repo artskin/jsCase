@@ -29,7 +29,6 @@ function track(target,key){
 function trigger(target,key){
   console.log(target)
   const depsMap = targetMap.get(target)
-
   if(!depsMap) return
 
   let dep = depsMap.get(key)
@@ -53,7 +52,7 @@ function reactive(target){
       let oldValue = target[key];
       let result = Reflect.set(target,key,newValue,proxySelf);
       // console.log(oldValue,newValue,result,oldValue != newValue)
-      if(oldValue != newValue){
+      if(result && oldValue != newValue){
         trigger(target,key)
       }
       return result
