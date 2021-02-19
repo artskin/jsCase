@@ -20,7 +20,7 @@
   </style>
 </head>
 <body class="paper">
-  <h3 class="center">vue3 - Reactivity show</h3>
+  <h3 class="center">vue3 - Reactivity</h3>
 <hr>
   <p>
     <label for="price">price</label>
@@ -34,15 +34,13 @@
   <div class="result">
 
   </div>
-<!-- <script src="./lib/3.0.0-rc.1.vue.global.js"></script> -->
 <!-- <script src="../lib/vue@3.0.5.global.js"></script> -->
 <script src="./reactivity.js"></script>
 <script>
-  /// 应用代码
   let total = 0,
       baseData = { price:5,discount:2}
 
-  //添加响应
+  //添加响应功能
   let product = reactive(baseData)
   let salePrice = ref(0)
 
@@ -57,24 +55,17 @@
   })
 
   function render(){
-    $('#input-price').value = product.price
-    $('#input-discount').value = product.discount
-    $('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total}`
+    $_('#input-price').value = product.price
+    $_('#input-discount').value = product.discount
+    $_('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total}`
   }
-  $.all('input').forEach((item)=>{
+  $_.all('input').forEach((item)=>{
     item.addEventListener('change',updateValue)
   })
   
   function updateValue(e){
     product[e.target.name] = e.target.value
   }
-
-//log==========
-// product.discount = 3
-// console.log(`After updated discount total (should be 13.5)= ${total} salePrice (should be 4.5)= ${salePrice.value}`)
-
-//product.price = 10
-//console.log( `After updated price total (should be 27)= ${total} salePrice (should be 9)= ${salePrice.value}`)
 </script>
 </body>
 </html>
