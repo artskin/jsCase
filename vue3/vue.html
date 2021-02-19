@@ -5,40 +5,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <meta name="renderer" content="webkit">
-  <title>商品*期免息价值计算</title>
+  <title>手撸 - vue3 Reactivity</title>
   <meta name="description" content="首页描述"/>
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
-  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
   <link rel="stylesheet" href="../src/style/base.css?v=1">
   <style>
-    body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;max-width: 500px;}
-    h3{
-      margin-top: 0.2em;
-    }
-    .center{
-      text-align: center;
-    }
-    form label{
+    label{
       display: inline-block;
       width: 100px;
       text-align: right;
     }
-    form input{width: 52%;}
-    ul{
-      list-style: none;
-      padding-left: .2em;
-      margin-left: 0;
-    }
-    /* .result{display: none;} */
-    ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
-    #app strong{color: green;}
-    .gray{
-      color: #ccc;
-      font-size: 12px;
-    }
-    .btn-blue{width: 55%;}
   </style>
 </head>
 <body class="paper">
@@ -62,37 +40,30 @@
 <script>
   /// 应用代码
   let total = 0,
-      baseData = {
-        price:5,
-        discount:2
-      }
+      baseData = { price:5,discount:2}
+
+  //添加响应
   let product = reactive(baseData)
   let salePrice = ref(0)
 
-  let resultEl = $('.result'),
-      priceEl = $('#input-price'),
-      discountEl = $('#input-discount')
-      
-  function init(){
-    priceEl.value = product.price
-    discountEl.value = product.discount
-    resultEl.innerHTML = `${product.price}*0.9 =${salePrice.value}*${product.discount} => ${total}`
-  }
-
-  function render(){
-    init()
-  }
-
   effect(() => {
-    salePrice.value = product.price * 0.9
+    salePrice.value = product.price * 9
   })
 
   effect(() => {
     total = salePrice.value * product.discount
+    total = total/10
     render()
   })
 
-  $('input').addEventListener('change',updateValue)
+  function render(){
+    $('#input-price').value = product.price
+    $('#input-discount').value = product.discount
+    $('.result').innerHTML = `product:${JSON.stringify(product)} <br><br>(${product.price}*0.9)*${product.discount} = ${total}`
+  }
+  $.all('input').forEach((item)=>{
+    item.addEventListener('change',updateValue)
+  })
   
   function updateValue(e){
     product[e.target.name] = e.target.value

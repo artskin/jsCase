@@ -94,5 +94,7 @@ function ref(raw){
 }
 
 function $(el){
-  return document.querySelector(el)
+  return document.querySelector(el);
 }
+
+$.all = (el)=> document.querySelectorAll(el)
