@@ -20,7 +20,7 @@
 </head>
 <body class="paper">
   <h3 class="center">vue3 - LifeCycle</h3>
-  <p>vue3 生命周期演示 （建议Chrome打开）</p>
+  <p>vue3 生命周期演示 （建议Chrome）打开console查看</p>
   
 <hr>
   <div id="app">
@@ -50,32 +50,41 @@
   } from '../lib/vue@3.0.5.esm-browser.js'
 
   const output = []
+  let times=0
   function counter(currentCycle){
-    console.group(currentCycle)
-    console.count('顺序',currentCycle)
+    times++
+    //let order = console.count('LifeCycle')
+    console.group(times,currentCycle+'=>')
+    //console.time()
     //console.log(lifes.value.get(currentCycle))
     // if(!lifes.value.has(currentCycle)){
        //lifes.value.push(currentCycle)
     // }
     output.push(currentCycle)
-    console.log(output)
+    console.timeStamp('vue3生命周期='+currentCycle)
     console.groupEnd()
+    //console.timeEnd()
   }
   const App = {
     beforeCreate(){
       counter('beforeCreate')
     },
-    created() {
-      // `this` 指向 vm 实例
-      console.log('created')
-      counter('created')
+    myhook(){
+      console.log('myhook?支持吗')
+      counter('myhook')
+    },
+    mounted(){
+      counter('mounted')
     },
     setup(props, context) {
       const outs = ref([])
-      console.log(onMounted)
+      console.log(props,context)
 
       onMounted(()=>{
-        counter('onMounted')
+        counter('onMounted2')
+      })
+      onMounted(()=>{
+        counter('onMounted1')
       })
       onBeforeMount(()=>{
         counter('onBeforeMount')
@@ -109,17 +118,20 @@
       onRenderTriggered(()=>{
         counter('onRenderTriggered')
       })
-      // setTimeout(()=>{
-      //   outs.value = output
-      // },400)
-
       function showLife(){
-        console.log('打印',output)
         outs.value = output
-        
+        setTimeout(()=>{
+          outs.value = [...output]
+          console.log(outs.value)
+        })
       }
-      
+      counter('setup')
       return {outs,showLife}
+    },
+    created() {
+      // `this` 指向 vm 实例
+      counter('created')
+      console.log('created内的this =',this)
     }
   };
 
