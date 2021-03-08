@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Canvas 绘图</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css">
+  <style>
+    .canvas-layer{
+      position: relative;
+    }
+    canvas{position: absolute;background: rgba(0,0,0,.2);left: 0;top: 0;}
+    #canvas{}
+
+    #canvas2{border: 1px seagreen dashed;}
+  </style>
+ </head>
+
+<body>
+<div class="paper">
+  <h1>Canvas 绘图</h1>
+  <hr>
+  <h2>案例一：canvas绘制图形，且位置相对图片固定</h2>
+  <div class="canvas-layer">
+    <img width="60%" src="assets/images/map.png" alt="">
+    <canvas id="canvas1"></canvas>
+  </div>
+  
+  <h2>案例一：随机绘制4个线段</h2>
+  <div class="canvas-layer">
+    <img width="60%" src="assets/images/map.png" alt="">
+    <canvas id="canvas"></canvas>
+    
+  </div>
+
+  <button onclick="previewHumanBody(true)">预览</button>
+  <button onclick="previewHumanBody(false)">禁用预览</button>
+  <br>
+  
+</div>
+</body>
+<script>
+  const canvasSetting = {
+    ctx:''
+  }
+
+  function init(canvas){
+    let mapImg=canvas.previousElementSibling;
+    mapImg.onload = (e)=>{
+      resizeCanvas(mapImg)
+      previewHumanBody(true)
+    }
+  }
+  function resizeCanvas(imgEl){
+    canvasSetting.ctx = ctxInit(imgEl)
+      //drawLine(start,end,scaleX,scaleY)
+    
+  }
+  let canvas1=document.getElementById("canvas1");
+  init(canvas1)
+
+  function ctxInit(el){
+    canvas.width = el.width;
+    canvas.height = el.height;
+    let ctx=canvas.getContext("2d");
+    let scaleX = el.width/el.naturalWidth;
+    let scaleY = el.height/el.naturalHeight;
+    let scale = {
+      x:scaleX,
+      y:scaleY
+    }
+    return ctx
+  }
+
+  let start = {x:351,y:385},end={x:503,y:520};
+  
+  let humanBodyArray = [[4,105],[141,269],[408,623],[814,1071]]
+
+
+  window.onresize = ()=>{
+    resizeCanvas(canvas1)
+    //drawLine(start,end,scaleX,scaleY)
+  }
+
+  function drawLine(start,end,scaleX,scaleY){
+    ctx.clearRect(0,0,1000,1000)
+    ctx.beginPath();
+    ctx.scale(scaleX,scaleY)
+    ctx.moveTo(start.x,start.y);
+    
+    ctx.lineTo(end.x,end.y);
+    
+    ctx.closePath();
+    
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5,15]);
+    ctx.strokeStyle = "red"
+    ctx.stroke();
+  }
+  
+  function poly (num){
+    let r = 100;
+    let a = 2 * Math.PI / num;
+    ctx.beginPath();
+    ctx.moveTo(150+r,150);
+    for(let i=0;i < num;i++){
+      let x = 150 + r * Math.cos(a * i);
+      let y = 150 + r * Math.sin(a * i);
+      ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+  //poly(8);
+
+
+  function previewHumanBody(show){
+    ctx = canvasSetting.ctx
+    ctx.clearRect(0,0,1000,1000)
+    if(show){
+      humanBodyArray.forEach((item) => {
+        let pointX = Math.floor(Math.random()*(canvas.width - 1 + 1) + 1)
+        let pointObj = {
+          start:{
+            x:pointX,
+            y:item[0]
+          },
+          end:{
+            x:pointX,
+            y:item[1]
+          }
+        }
+        insertLines(ctx,pointObj.start,pointObj.end,"#cc0000");
+      });
+    }
+  }
+  
+  function insertLines(ctx,startPoint,endPoint,color){
+    //console.log(startPoint,endPoint,color,scale)
+    ctx.beginPath();
+    //ctx.scale(scale.x,scale.y)
+    ctx.moveTo(startPoint.x, startPoint.y);
+    ctx.lineTo(endPoint.x, endPoint.y);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 6;
+    ctx.lineCap="round";
+    ctx.stroke();
+  }
+  
+
+  // let videoDom2=document.getElementById("video");
+  // let canvas2=document.getElementById("canvas");
+  // let ctx2=canvas.getContext("2d");
+  // let start = {x:351,y:385},end={x:503,y:520};
+
+  // videoDom2.onload = ()=>{
+  //   let scaleX = videoDom2.width/originalVideo.width;
+  //   let scaleY = videoDom2.height/originalVideo.height;
+  //   canvas.width = videoDom2.width;
+  //   canvas.height = videoDom2.height;
+  //   drawLine(start,end,scaleX,scaleY)
+  // }
+    
+  // window.onresize = ()=>{
+  //   let scaleX = videoDom.width/originalVideo.width;
+  //   let scaleY = videoDom.height/originalVideo.height;
+  //   canvas.width = videoDom.width;
+  //   canvas.height = videoDom.height;
+      
+  //   drawLine2(start,end,scaleX,scaleY)
+  // }
+
+  // function drawLine2(start,end,scaleX,scaleY){
+  //   ctx.clearRect(0,0,1000,1000)
+  //   ctx.beginPath();
+  //   ctx.scale(scaleX,scaleY)
+  //   ctx.moveTo(start.x,start.y);
+  //   ctx.lineTo(end.x,end.y);
+  //   ctx.closePath();
+    
+  //   ctx.lineWidth = 2;
+  //   ctx.setLineDash([5,15]);
+  //   ctx.strokeStyle = "red"
+  //   ctx.stroke();
+  // }
+
+</script>
+</html>

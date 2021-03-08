@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple Demo</title>
+<style type = "text/css">
+body{
+    margin: 0px;
+    padding: 0px;
+}
+
+#myCanvas {
+    border: 1px solid #9C9898;
+}
+</style>
+</head>
+<body>
+<canvas id = "myCanvas" width = "800px" height = "500px"></canvas>
+
+<div id = "colorBox">
+<button id = "black">黑</button>
+<button id = "red">红</button>
+<button id = "yellow">黄</button>
+<button id = "blue">蓝</button>
+</div>
+<div id = "toolBox">
+    <button id = "pencil">铅笔</button>
+<button id = "line">直线</button>
+<button id = "rect">矩形</button>
+<button id = "circle">圆形</button>
+<button id = "multiLine">多边形</button>	
+</div> 
+<div id = "debug">
+</div>
+
+<!-- <script type = "text/javascript" language="javascript" src = "main.js"></script> -->
+<script>
+
+    var canvas, context, 
+　　	isPainting, 
+　　	clickX, clickY, clickDrag, clickColor,
+　　	curColor, curTool, //当前的颜色和所使用的工具
+　　	shapes, //存储几何形状
+　　	tempX1,tempX2,tempY1,tempY2;//临时工
+　　	
+　　var mouseDown = function(e){
+　　	var mouseX = e.pageX;
+　　  var mouseY = e.pageY;
+　　	isPainting = true;
+　　	if(curTool == "pencil"){
+　　		addClick(mouseX, mouseY, false);
+　　		redraw();
+　　	}else if(curTool == "rect"){
+　　		tempX1 = mouseX;
+　　		tempY1 = mouseY;
+　　	}
+　　  
+　　  
+　　}
+　　var mouseUp = function(e){
+　　	isPainting = false;
+　　	if(curTool == "rect"){
+　　		var mouseX = e.pageX;
+　　  	var mouseY = e.pageY;
+　　  	tempX2 = mouseX;
+　　		tempY2 = mouseY;
+　　		var aRect = new Rect();
+　　		aRect.beginX = tempX1;
+　　		aRect.beginY = tempY1;
+　　		aRect.endX = tempX2;
+　　		aRect.endY = tempY2;
+　　		aRect.color = curColor;
+　　		shapes.push(aRect);
+　　	}
+　　	redraw();
+　　}
+　　var mouseMove = function(e){
+　　	if(isPainting){
+　　		var mouseX = e.pageX;
+　　		var mouseY = e.pageY;
+　　		if(curTool == "pencil"){
+　　			addClick(mouseX, mouseY, true);
+　　			redraw();
+　　		}else if(curTool == "rect"){
+　　			redraw();
+　　			context.beginPath();
+　　			context.strokeStyle = curColor;
+　　			context.rect(tempX1,tempY1, mouseX-tempX1, mouseY-tempY1);
+　　			context.stroke();
+　　		}
+　　		
+　　	}
+　　
+　　}
+　　var mouseOut = function(e){
+　　	isPainting = false;
+　　}
+　　
+　　function addClick(mouseX, mouseY, isDragging){
+　　	clickX.push(mouseX);
+　　	clickY.push(mouseY);
+　　	clickDrag.push(isDragging);
+　　	clickColor.push(curColor);
+　　}
+　　//声明矩形类
+　　function Rect(){
+　　	this.beginX = 0;
+　　	this.beginY = 0;
+　　	this.endX = 0;
+　　	this.endY = 0;
+　　	this.color = "#000000";
+　　	//绘制方法
+　　	this.draw = function(){
+　　		context.beginPath();
+　　		context.strokeStyle = this.color;
+　　		context.rect(this.beginX, this.beginY, this.endX-this.beginX, this.endY-this.beginY);
+　　		context.stroke();
+　　	};
+　　}
+　　
+　　//重绘
+　　function redraw(){
+　　	context.clearRect (0 , 0, canvas.width , canvas.height );
+　　	var numOfPts = clickX.length;
+　　	var numOfShapes = shapes.length;
+　　	for(var i=0; i<numOfPts; i++){
+　　		context.beginPath();
+　　		context.strokeStyle = clickColor[i];
+　　		if(clickDrag[i]){
+　　			context.moveTo(clickX[i-1], clickY[i-1]);
+　　			context.lineTo(clickX[i], clickY[i]);
+　　		}else{
+　　			context.arc(clickX[i], clickY[i], 0.5, 0, 2*Math.PI, true);
+　　		}
+　　		context.closePath();
+　　		context.stroke();
+　　	}
+　　	for(var j=0; j<numOfShapes; j++){
+　　		shapes[j].draw();
+　　	}
+　　}
+　　
+　　//初始化
+　　function init(){
+　　	canvas = document.getElementById("myCanvas");
+　　	context = canvas.getContext("2d");
+　　	isPainting = false;
+　　	clickX = new Array();
+　　	clickY = new Array();
+　　	clickDrag = new Array();
+　　	clickColor = new Array();
+　　	shapes = new Array();
+　　	curColor = "#000000";
+　　	curTool = "pencil";
+　　	//鼠标事件
+　　	canvas.onmousedown = mouseDown;
+　　	canvas.onmouseup = mouseUp;
+　　	canvas.onmousemove = mouseMove;
+　　	canvas.onmouseout = mouseOut;
+　　	var black = document.getElementById("black");
+　　	black.onclick = function(){
+　　		curColor = "#000000";
+　　	}
+　　	var red = document.getElementById("red");
+　　	red.onclick = function(){
+　　		curColor = "#ff0000";
+　　	}
+　　	var yellow = document.getElementById("yellow");
+　　	yellow.onclick = function(){
+　　		curColor = "#ffff37";
+　　	}
+　　	var blue = document.getElementById("blue");
+　　	blue.onclick = function(){
+　　		curColor = "#2894ff";
+　　	}
+　　	var pencil = document.getElementById("pencil");
+　　	pencil.onclick = function(){
+　　		curTool = "pencil";
+　　	}
+　　	var rect = document.getElementById("rect");
+　　	rect.onclick = function(){
+　　		curTool = "rect";
+　　	}
+　　}
+　　
+　　window.onload = init();
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>商品*期免息价值计算</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <style>
+    body.paper{margin-top: 2%;width: 88%;margin-bottom: 2%;max-width: 500px;}
+    h3{
+      margin-top: 0.2em;
+    }
+    .center{
+      text-align: center;
+    }
+    form label{
+      display: inline-block;
+      width: 100px;
+      text-align: right;
+    }
+    form input{width: 52%;}
+    ul{
+      list-style: none;
+      padding-left: .2em;
+      margin-left: 0;
+    }
+    .result{display: none;}
+    ul li em{display: inline-block;width:2em;text-align: center;font-size: 12px;}
+    #app strong{color: green;}
+    .gray{
+      color: #ccc;
+      font-size: 12px;
+    }
+    .btn-blue{width: 55%;}
+  </style>
+</head>
+<body class="paper">
+  <h3 class="center">商品*期免息价值计算</h3>
+  <hr>
+  <video src="" currentTime="new Date()"></video>
+  <div id="app">
+    <div class="container">
+      <form>
+        <p><label for="price">商品金额：</label><input id="price" v-model="form.price" /></p>
+        <p><label for="month">免息期数：</label><input id="month" v-model="form.month" /></p>
+        <p><label for="rate">理财年化：</label><input id="rate" v-model="form.rate" /> %</p>
+        <p><label></label><button class="btn-blue" type="button" @click="countFn">计算</button></p>
+      </form>
+      <div ref="result" class="result" :style="'display:'+show">
+        每月应还：<strong>-{{perMonth.toFixed(2)}}</strong>元
+        <hr>
+        合计价值: <strong>+{{totalIncome.toFixed(4)}}</strong>元
+        <ul>
+          <li v-for="(item,index) in incomeList">
+            第<em>{{index+1}}</em>月收益：<strong>+{{item.monthInterest.toFixed(3)}}</strong>
+          </li>
+        </ul>
+        <hr>
+        <p class="gray">月收益采用四舍五入保留3位小数</p>
+      </div>
+    </div>
+    <p>{{double2}}</p>
+  </div>
+<!-- <script src="./lib/3.0.0-rc.1.vue.global.js"></script> -->
+<script src="../lib/3.0.4.vue.global.js"></script>
+<script>
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  //const { reactive,computed,toRefs,watchEffect,renderTemplate } = Vue
+  console.log(Vue)
+
+  // const store = reactive({
+  //   count:1,
+  // })
+  // const double2 = computed(()=> store.count *2)
+  // console.log(double2)
+  // increment= ()=>{
+  //   store.count ++ 
+  // }
+  // // document.body.addEventListener("click",increment)
+
+  // const renderContext = {
+  //   store,
+  //   increment
+  // }
+  // watchEffect(()=>{
+  //   // renderTemplate(
+  //   //   `<button @click="increment">{{ store.count }}</button>`,renderContext
+  //   // )
+  //   //document.body.innerHTML = `count is ${store.count}`
+  // })
+  // var App = {
+  //   template: ``,
+  //   setup(props, ctx) {
+  //     const state = reactive({
+  //       form:{
+  //         price:'1599',
+  //         rate:'4',
+  //         month:'24'
+  //       },
+  //       show:"none",
+  //       incomeList:[],
+  //       totalIncome:0,
+  //       perMonth:0,
+  //       double:computed(()=>{state.form.rate*2})
+  //     })
+
+  //     countFn = ()=>{
+  //       state.show = 'block'
+  //       let rateNumber  = Number(state.form.rate)/100
+  //       let priceNumber = Number(state.form.price)
+  //       let monthNumber = Number(state.form.month)
+  //       let monthPrice = priceNumber/monthNumber;
+        
+  //       if(state.form.month && monthNumber>0){
+  //         let comeList = []
+  //         let incomeArr = []
+  //         for(let i=0;i<monthNumber;i++){
+  //           if(i>0){
+  //             let monthInterest = (priceNumber - monthPrice*i)*rateNumber/12;
+  //             comeList.push({
+  //               monthPrice:monthPrice,
+  //               monthInterest:monthInterest,
+  //             })
+  //             incomeArr.push(monthInterest)
+  //           }
+  //         }
+  //         state.totalIncome =  incomeArr.reduce(reducer);
+  //         state.incomeList = comeList;
+  //         state.perMonth = priceNumber/monthNumber
+  //       }
+  //     }
+
+  //     return {
+  //       ...toRefs(state),
+  //       countFn
+  //     }
+  //   }
+  // }
+  
+  // Vue.createApp(App).mount('#app')
+</script>
+</body>
+</html>

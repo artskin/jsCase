@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>正则测试</title>
+    <link rel="stylesheet" href="./src/style/base.css?v=1">
+    <script type="text/javascript" src="lib/vue.2.6.11.js" ></script>
+    <script type="text/javascript">
+      //准备一个空的实例对象
+      var Event = new Vue();
+      var A={
+        template:`
+          <div style="border: 1px solid red; margin-bottom: 10px； width: 300px;">
+            <h4>A组件</h4>
+            <p>{{a}}</p>
+            <input type="button" value="把A数据给C" @click="send" />
+          </div>
+        `,
+        data(){
+          return {
+            a:'我是A里面的数据'
+          }
+        },
+        methods:{
+          send(){        //A发送数据
+            Event.$emit('a-msg',this.a);
+          }
+        }
+      };
+      var B={
+        template:`
+          <div style="border: 1px solid green; margin-bottom: 10px； width: 300px;">
+            <h4>B组件</h4>
+            <p>{{b}}</p>
+            <input type="button" value="把B数据给C" @click="send" />
+          </div>
+        `,
+        data(){
+          return {
+            b:'我是B里面的数据'
+          }
+        },
+        methods:{
+          send(){
+            Event.$emit('b-msg',this.b);
+          }
+        }
+      };
+      var C={
+        template:`
+          <div style="border: 1px dotted green; margin-bottom: 10px；width: 300px;">
+            <h4>我是C组件,我在坐等接收数据</h4>
+            <p>{{a}}</p>
+            <p>{{b}}</p>
+          </div>
+        `,
+        data(){
+          return{
+            a:'',
+            b:''
+          }
+        },
+        mounted(){        //两种接收的方式
+          var _this = this;
+          // console.log(this)
+          // console.log(Event)
+          Event.$on('a-msg',function(a){
+            _this.a=a;
+          });
+          Event.$on('b-msg',function(b){
+            this.b = b;
+          }.bind(this))
+        }
+      };
+      window.onload=function(){
+        new Vue({
+          el:'#box',
+          data:{
+              
+          },
+          components:{
+            'com-a':A,
+            'com-b':B,
+            'com-c':C
+          }
+        })
+      }
+    </script>
+    <script>
+      var str = "013d1we22ewfa33rr4rwq0dsf00dsf9fas999";
+      let arrAll = str.split('')
+      //console.log(arrAll)
+
+      var getNum = function (Str,isFilter) {
+      　　　//用来判断是否把连续的0去掉
+          isFilter = isFilter || false;
+          if (typeof Str === "string") {
+              // var arr = Str.match(/(0\d{2,})|([1-9]\d+)/g);
+              //"/[1-9]\d{1,}/g",表示匹配1到9,一位数以上的数字(不包括一位数).
+              //"/\d{2,}/g",  表示匹配至少二个数字至多无穷位数字
+              var arr = Str.match( isFilter ? /[1-9]\d{1,}/g : /\d{2,}/g);
+              //console.log(arr);
+              return arr.map(function (item) {
+                //转换为整数，
+                //但是提取出来的数字，如果是连续的多个0会被改为一个0，如000---->0，
+                //或者0开头的连续非零数字，比如015，会被改为15，这是一个坑
+                // return parseInt(item);
+                //字符串，连续的多个0也会存在，不会被去掉
+                return item;
+              });
+          } else {
+              return [];
+          }
+      }
+      //console.log(getNum(str));//默认不加1，即不会把提取出来的0去掉
+      
+ 
+    </script>
+  </head>
+  <body class="paper">
+    
+    <input type="text" value="Ass122232" maxlength="20" id="pwd">
+    <button onclick="verifyPWD('#pwd')">校验</button>
+    <div id="box">
+      <com-a></com-a>
+      <com-b></com-b>
+      <com-c></com-c>
+    </div>
+  </body>
+  <script>
+    let regX = /^\S*(?=\S{8,20})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[~!@#$%^&*()_+ ])\S*$/
+
+    let userName = "admin"
+    let limitName = ['sensetime','SenseTime','sense','time','Atlas','aurora','Nebula','Guard','IMDA']
+    limitName.push(userName)
+    limitName.push([...userName].reverse().join(''))
+
+    let keyWords = [...limitName]
+    console.log(keyWords)
+    function verifyPWD(el){
+      let result = document.querySelector(el).value
+      let i = 0;
+
+
+      //检测密码中是否含有公司或产品或用户名
+      let isKeyWord = false
+      if(keyWords.length>0){
+        keyWords.forEach((item)=>{
+          if(result.search(item) !== -1){
+            isKeyWord = true
+          }
+        })
+        console.log(isKeyWord)
+      }
+
+      if(result.length===0){
+        console.log('内容不能为空')
+      }else if(result.length>0 && result.length<20){
+        if(regX.test(result)) i++
+
+      }else{
+        console.log('内容长度不合要求')
+      }
+      function hasLower(){
+        
+      }
+      function hasUpper(){
+        
+      }
+      function hasNumber(){
+
+      }
+      console.log(i)
+      let rules = {
+        keyWord:{
+          errTip:'含有敏感词',
+          has:isKeyWord,
+        },
+        lowerCase:{
+          regExp:/[a-z]+/,
+          errTip:'需至少含有一个小写字母',
+          has:hasLower
+        },
+        upperCase:{
+          regExp:/[A-Z]+/,
+          errTip:'需至少含有一个大写字母',
+          has:hasUpper
+        },
+        number:{
+          regExp:/[0-9]+/,
+          errTip:'需至少含有一个数字',
+          has:hasNumber
+        },
+        symbol:{
+          regExp:'~!@#$^*()_+',
+          errTip:'需至少含有一个特殊字符'
+        },
+        continuous:{
+          regExp:'',
+          errTip:'有连续数字或字母'
+        }
+      }
+
+      //策略模式
+      // const stateM = {
+      //   1: '基础',
+      //   2: '高级',
+      //   3: 'VIP',
+      // }
+ 
+      // return stateM[i]
+      // return {
+      //   len: allowLen,
+      //   isKeyWord: isKeyWord,
+      //   size: allowSize,
+      // }
+      
+    }
+    ////                \
+    let regEnSymbol = /[-`~!@#$%^&*()_=+?:"{}|,\\<.>\/;'[\]]/im;
+    let value = document.querySelector('#pwd').value
+    console.log(regEnSymbol.test(value))
+  </script>
+</html>

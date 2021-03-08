@@ -1,0 +1,47 @@
+<!-- <pre v-highlight>
+      <code contenteditable="true" class="javascript">
+      let dd = '222';
+      console.log(dd)
+      </code>
+    </pre> -->
+    <!-- <pre v-highlight>
+      <code contenteditable="true">
+        <script type="text/html" style="display: block;">
+          <svg style="width:300px; height:300px" viewBox="0 0 100 100">
+            <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+          </svg>
+        </script>
+      </code>
+    </pre> -->
+
+    <!-- <textarea>
+    <svg style="width:300px; height:300px" :viewBox="viewBoxStr">
+      <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+    </svg>
+    </textarea> -->
+
+    <!-- <pre v-highlight>
+      <code contenteditable="true" class="xml">
+        <xmp>
+          <svg style="width:300px; height:300px" viewBox="0 0 100 100">
+            <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+          </svg>
+        </xmp>
+      </code>
+    </pre> -->
+    <form action="#">
+      <dl>
+        <dt>viewBox
+          <label>{{$slots}}</label>
+        </dt>
+        <dd class="flex">
+          <pre class="css-key">{{viewBox}}</pre>
+          <section><br><br><br>
+            <input type="range" @input="changeAttr" step=".1" min="0" max="100" :value="viewBox.x" name="x"> <br>
+            <input type="range" @input="changeAttr" step=".1" min="0" max="100" :value="viewBox.y" name="y"> <br>
+            <input type="range" @input="changeAttr" step=".1" min="0" max="100" :value="viewBox.width" name="width"> <br>
+            <input type="range" @input="changeAttr" step=".1" min="0" max="100" :value="viewBox.height" name="height">
+          </section>
+        </dd>
+      </dl>
+    </form>

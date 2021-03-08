@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streamedian RTSP player example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="sourcesNode"></div>
+<select name="socket_url" id="socket_url_list">
+  <option value="wss://streamedian.com/ws/">ws-streamedian</option>
+  <option value="ws://10.111.32.60:10219/rtsp-over-ws">ws-Razor</option>
+  <option value="wss://10.151.3.105/rtsp-over-ws">ws-Gurad</option>
+</select>
+<br>
+<div>
+  <input  id="socket_url" value="wss://streamedian.com/ws/" size="36">
+  <button id="set_socket_url">Set socket</button>
+</div>
+<select name="rtsp_urls" id="rtsp_urls">
+  <option value="rtsp://127.0.0.1:8554/test/">ws-streamedian</option>
+  <option value="rtsp://ivatest:Good5ensetime@10.9.61.34:554">ws-Razor</option>
+  <option value="rtsp://10.151.3.105:8080/vehicle_long.264">ws-Gurad</option>
+  <option value="rtsp://2.14.120.33:554/sip/32011261561326220042">南京sip</option>
+  <option value="rtsp://2.14.120.33:554/sip/32011261561326220042">南京sip</option>
+</select>
+<br>
+<div>
+    <input  id="stream_url" value="rtsp://127.0.0.1:8554/test/" size="36">
+    <button id="set_new_url">Set</button>
+</div>
+<!-- <button onclick="playerRun">Run</button> -->
+<div>
+    <p style="color:#808080">Enter your rtsp link to the stream, for example: "rtsp://192.168.1.1:554/h264",rtsp://127.0.0.1:8554/test/，rtsp://10.151.3.105:8080/vehicle_long.264</p>
+</div>
+
+<div>
+    <input id="buffer_duration" type="range" min="10" max="200" style="width:40%;">
+    <span  id="buffer_value">120sec.</span>
+</div>
+
+<div>
+    <p style="color:#808080">Change buffer duration</p>
+</div>
+
+<video id="test_video" controls autoplay>
+    <!--<source src="rtsp://192.168.10.205:554/ch01.264" type="application/x-rtsp">-->
+    <!--<source src="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov" type="application/x-rtsp">-->
+</video>
+
+<div class="controls form">
+    <div>
+        Playback rate:&nbsp;
+        <input id="rate" class="input" type="range" min="0.5" max="5.0" value="1.0" step="0.5">
+        <output for="rate" id="rate_res">live</output>
+    </div>
+    <div>
+        <button id="to_end" class="btn btn-success">live</button>
+    </div>
+</div>
+
+<p><br>Have any suggestions to improve our player? <br>Feel free to leave comments or ideas email: streamedian.player@gmail.com</p>
+<p>View HTML5 RTSP video player log</p>
+<div id="pllogs" class="logs"></div>
+<button class="btn btn-success" onclick="cleanLog(pllogs)">clear</button>
+<button class="btn btn-success" onclick="scrollset(pllogs, true)">scroll up</button>
+<button class="btn btn-success" onclick="scrollset(pllogs, false)">scroll down</button>
+<button id="scrollSetPl" class="btn btn-success" onclick="scrollswitch(pllogs)">Scroll off</button>
+<br/><br/>
+
+<b>How to use the player in the global network</b>
+<p>
+With an empty license file, you can only watch the stream on your computer locally (intranet).<br/>
+If you would like to stream into the global network please take a key to activate the license.<br/>
+You have personal 1 month validity key in the personal cabinet.<br/>
+To activate key, please, use the activation application that is placed:
+</p>
+<p>
+<b>Windows:</b> C:\Program Files\Streamedian\WS RTSP Proxy Server\activation_app<br/>
+<b>Mac OS:</b> /Library/Application Support/Streamedian/WS RTSP Proxy Server/activation_app<br/>
+<b>Linux (Ubunty, Debian, Centos, Fedora ):</b> /usr/bin/wsp/activation_app<br/>
+</p>
+<p>For more information go to <a href="https://streamedian.com/docs/">documentation</a></p>
+
+<script src="streamedian.min.js"></script> <!-- Path to player js-->
+
+<script>
+    var scrollStatPl = true;
+    var scrollStatWs = true;
+    var pllogs = document.getElementById("pllogs");
+    var wslogs = document.getElementById("wslogs");
+
+    // define a new console
+    // var console=(function(oldConsole){
+    //     return {
+    //         log: function(){
+    //             oldConsole.log(newConsole(arguments, "black", "#A9F5A9"));
+    //         },
+    //         info: function () {
+    //             oldConsole.info(newConsole(arguments, "black", "#A9F5A9"));
+    //         },
+    //         warn: function () {
+    //             oldConsole.warn(newConsole(arguments, "black", "#F3F781"));
+    //         },
+    //         error: function (e) {
+    //           console.log(e)
+    //             oldConsole.error(newConsole(arguments, "black", "#F5A9A9"));
+    //         }
+    //     };
+    // }(window.console));
+
+    function newConsole(args, textColor, backColor){
+        let text = '';
+        let node = document.createElement("div");
+        for (let arg in args){
+            text +=' ' + args[arg];
+        }
+        node.appendChild(document.createTextNode(text));
+        node.style.color = textColor;
+        node.style.backgroundColor = backColor;
+        pllogs.appendChild(node);
+        autoscroll(pllogs);
+        return text;
+    }
+
+    //Then redefine the old console
+    //window.console = console;
+
+    function cleanLog(element){
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    }
+
+    function autoscroll(element){
+        if(scrollStatus(element)){
+            element.scrollTop = element.scrollHeight;
+        }
+        if(element.childElementCount > 1000){
+            element.removeChild(element.firstChild);
+        }
+    }
+
+    function scrollset(element, state){
+        if(state){
+            element.scrollTop = 0;
+            scrollChange(element, false);
+        } else {
+            element.scrollTop = element.scrollHeight;
+            scrollChange(element, true);
+        }
+    }
+
+    function scrollswitch(element){
+        if(scrollStatus(element)){
+            scrollChange(element, false);
+        } else {
+            scrollChange(element, true);
+        }
+    }
+
+    function scrollChange(element, status){
+        if(scrollStatus(element)){
+            scrollStatPl = false;
+            document.getElementById("scrollSetPl").innerText = "Scroll on";
+        } else {
+            scrollStatPl = true;
+            document.getElementById("scrollSetPl").innerText = "Scroll off";
+        }
+    }
+
+    function scrollStatus(element){
+        if(element.id === "pllogs"){
+            return scrollStatPl;
+        } else {
+            return scrollStatWs;
+        }
+    }
+
+
+</script>
+
+<script>
+  let selectWs = document.querySelector('#socket_url_list')
+  let selectRtsp = document.querySelector('#rtsp_urls')
+  
+    if (window.Streamedian) {
+        let errHandler = function(err){
+            alert(err.message);
+        };
+
+        let infHandler = function(inf) {
+            let sourcesNode = document.getElementById("sourcesNode");
+            let clients = inf.clients;
+            sourcesNode.innerHTML = "";
+
+            for (let client in clients) {
+                clients[client].forEach((sources) => {
+                    let nodeButton = document.createElement("button");
+                    nodeButton.setAttribute('data', sources.url + ' ' + client);
+                    nodeButton.appendChild(document.createTextNode(sources.description));
+                    nodeButton.onclick = (event)=> {
+                        setPlayerSource(event.target.getAttribute('data'));
+                    };
+                    sourcesNode.appendChild(nodeButton);
+                });
+            }
+        };
+
+        var playerOptions = {
+            //socket: "ws://localhost:8088/ws/",            
+            socket: "wss://streamedian.com/ws/",//
+            redirectNativeMediaErrors : true,
+            bufferDuration: 30,
+            errorHandler: errHandler,
+            infoHandler: infHandler
+        };
+
+        var html5Player  = document.getElementById("test_video");
+        var urlButton    = document.getElementById("set_new_url");
+        var urlEdit      = document.getElementById("stream_url");
+        var bufferRange  = document.getElementById("buffer_duration");
+        var bufferValue  = document.getElementById("buffer_value");
+
+        var socketUrlButton    = document.getElementById("set_socket_url");
+        var socketUrlEdit      = document.getElementById("socket_url");
+
+        var player = Streamedian.player('test_video', playerOptions);
+        var nativePlayer = document.getElementById('test_video');
+        var range = document.getElementById('rate');
+        var set_live = document.getElementById('to_end');
+        var range_out = document.getElementById('rate_res');
+
+        range.addEventListener('input', function () {
+            nativePlayer.playbackRate = range.value;
+            range_out.innerHTML = `x${range.value}`;
+        });
+        set_live.addEventListener('click', function () {
+            range.value = 1.0;
+            range_out.innerHTML = `live`;
+            nativePlayer.playbackRate = 1;
+            nativePlayer.currentTime = nativePlayer.buffered.end(0);
+        });
+
+        // Tab switching and window minimization processing 
+        // for browsers that use the chrome rendering engine.
+        if (!!window.chrome) {
+            document.addEventListener('visibilitychange', function() {
+                if(document.visibilityState === 'hidden') {
+                    nativePlayer.pause()
+                } else {
+                    nativePlayer.play();
+
+                    // Automatic jump to buffer end for view live video when returning to the web page. 
+                    setTimeout(function() {
+                        nativePlayer.currentTime = nativePlayer.buffered.end(0)
+                    }, 3000); // Delay for a few seconds is required for the player has time to update the timeline.
+                }
+            });
+        }
+
+        var updateRangeControls = function(){
+            bufferRange.value     =  player.bufferDuration;
+            bufferValue.innerHTML = bufferRange.value + "sec.";
+        };
+
+        bufferRange.addEventListener('input', function(){
+            var iValue = parseInt(this.value, 10);
+            player.bufferDuration = iValue;
+            bufferValue.innerHTML = this.value + "sec.";
+        });
+
+        bufferRange.innerHTML = player.bufferDuration + "sec.";
+        updateRangeControls();
+
+        urlButton.onclick = ()=> {
+            setPlayerSource(urlEdit.value);
+        };
+
+        socketUrlButton.onclick = ()=> {
+            playerOptions.socket = socketUrlEdit.value;
+        };
+        selectWs.onchange = (e)=>{
+          console.log(e.target.value)
+          playerOptions.socket = e.target.value
+        }
+
+        selectRtsp.onchange = (e)=>{
+          setPlayerSource(e.target.value)
+        }
+
+        function setPlayerSource(newSource) {
+            player.destroy();
+            player = null;
+            if(newSource){
+              html5Player.src = newSource;
+            }
+
+            player = Streamedian.player("test_video", playerOptions);
+            updateRangeControls();
+        }
+        function playerRun(){
+            
+            
+        }
+    }
+</script>
+</body>
+</html>

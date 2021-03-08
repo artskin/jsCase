@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>vue3-computed</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <style>
+
+  </style>
+</head>
+<body class="paper">
+  <h3 class="center">vue3 - computed</h3>
+<hr>
+  <div id="app">
+    <div>Capacity： {{ capacity }}</div>
+    <p>Spases Left: {{ sapcesLeft }} out of {{ capacity }}</p>
+    <button @click="increaseCapacity()">Increase Capacity</button>
+  </div>
+
+<script src="../lib/vue@3.0.5.global.js"></script>
+<script type="module">
+  //import {ref} from '../lib/vue@3.0.5.global.js'
+  import {ref} from 'https://cdn.bootcdn.net/ajax/libs/vue/3.0.2/vue.esm-browser.js'
+  console.log(ref)
+  //import { ref, computed, watch } from "vue";
+  // console.log(Vue)
+  // const { ref, computed, watch, createApp } = Vue;
+  // //export default {}
+  // const App = {
+  //   setup(props, context) {
+  //     const capacity = ref(3);
+  //     const attending = ref(["Tim", "Bob", "Joe"]);
+  //     function increaseCapacity() {
+  //       capacity.value++;
+  //     }
+  //     const sapcesLeft = computed(() => {
+  //       return capacity.value - attending.value.length;
+  //     });
+  //     //debugger
+  //     return { capacity, increaseCapacity, attending, sapcesLeft };
+  //   },
+  // };
+
+  // let app = Vue.createApp(App).mount('#app')
+</script>
+</body>
+</html>

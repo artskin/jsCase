@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>js在线调试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/case.css?v=2">
+</head>
+<body>
+  <h1>js在线测试</h1>
+  <p>进入这个页面，先打开Console控制台</p>
+
+
+  <pre class="bindEvent"><button class="btn run">run</button><code class="language-html" contenteditable="true">
+    <template>
+      <div id="app">
+        {{msg}}
+      </div>
+    </template>
+    <script>
+      var vm = new Vue({
+        data:{
+          msg:'hello vue2'
+        }
+      })
+    </script>
+  </code></pre>
+  <div class="copyright">
+    Powerd by 阿沐<br>
+    Copyright © 2009-2019
+  </div>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.js"></script>
+<!-- <script src="./src/js/felib.js" type="module"></script> -->
+<script src="./lib/http-vue-loader.js"></script>
+
+<script type="module">
+  $(function(){
+    var data={
+      code:""
+    };
+    $("h3").each(function(i){
+      var title = $(this).text();
+      $(this).text(i+1 +"、"+title);
+    })
+
+    $('pre code').each(function(i, block) {
+      console.log(block)
+      //$(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+      hljs.highlightBlock(block);
+    });
+
+    $(".run").click(function(){
+      data.code = '"use strict";console.clear();'+$(this).next("code").text();
+      console.log($(this).next("code"))
+      console.log(data.code)
+      new Function(
+        data.code
+      )();
+    })
+
+  });
+</script>
+</body>
+</html>

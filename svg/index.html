@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  <title>webpackConfig.name</title>
+
+</head>
+<body>
+  <div id="app">
+    <video src="" currentTime="2020-11-11"></video>
+    <h3>{{msg}}</h3>
+    <svg ref="svg" style="width:300px; height:300px" viewBox="0 0 100 100">
+      <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+    </svg>
+    <svg ref="svg" style="width:300px; height:300px" :viewBox="viewBoxStr">
+      <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+    </svg>
+  </div>
+<script src="https://unpkg.com/vue@2.6.12/dist/vue.js"></script>
+<script>
+var app = new Vue({
+  el: '#app',
+  data() {
+    return {
+      msg:'hello svg',
+      viewBoxStr: '0 0 100 100'
+    };
+  },
+  methods: {
+    doSomething() {
+      alert('Hello!');
+    }
+  }
+});
+</script>
+</body>
+</html>

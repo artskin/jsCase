@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>SVG 演示</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <!-- <link data-n-head="ssr" href="/assets/manifest.json" rel="manifest"> -->
+  <link rel="stylesheet" href="../src/style/base.css?v=1">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css">
+  <style>
+    svg{
+      border: 1px dashed #ccc;
+    }
+    .flex{
+      display: flex;
+    }
+    .css-key{
+      line-height: 3;
+    }
+  </style>
+</head>
+<body class="paper">
+  <div id="app">
+    <svg ref="svg" style="width:300px; height:300px" :viewBox="viewBoxStr" xlink="http://www.w3.org/1999/xlink">
+      <circle cx="150" cy="150" r="150" fill="#fdd" stroke="none"></circle>
+    </svg>
+  </div>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+<script src="../lib/3.0.4.vue.global.js"></script>
+<script>
+  //let svgEl = document.querySelector('svg');
+  // document.querySelectorAll('pre code').forEach(function(i, block) {
+  //   console.log(i,block)
+  //   //let richHtml = i.innerHTML.replace(/\n/g,"\n")
+  //   //$(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+  //   //hljs.highlightBlock(i);
+  // });
+    
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  const { reactive,computed,toRefs,watchEffect,renderTemplate,ref,onMounted } = Vue
+
+  const store = reactive({
+    count:1,
+  })
+  const double2 = computed(()=> store.count *2)
+
+  increment= ()=>{
+    store.count ++ 
+  }
+  const renderContext = {
+    store,
+    increment
+  }
+
+  watchEffect(()=>{
+    // renderTemplate(
+    //   `<button @click="increment">{{ store.count }}</button>`,renderContext
+    // )
+    //document.body.innerHTML = `count is ${store.count}`
+  })
+  var App = {
+    template: ``,
+    setup(props, ctx) {
+      const svg = ref();
+      const state = reactive({
+        viewBox:{
+          x:'0',
+          y:'0',
+          width:'100',
+          height:'100'
+        },
+        viewBoxStr:'',
+        incomeList:[],
+        totalIncome:0,
+        perMonth:0,
+        //double:computed(()=>{state.form.rate*2})
+      })
+      changeAttr = (el)=>{
+        //svg.value.viewBox.baseVal[el.target.name] = el.target.value
+        state.viewBox[el.target.name] = el.target.value;
+        state.viewBoxStr = Object.values(state.viewBox).join(' ');
+      }
+      onMounted(()=>{
+        // console.log(svg)
+        // console.log(svg.value.viewBox)
+        state.viewBoxStr = Object.values(state.viewBox).join(' ');
+      })
+      
+      return {
+        ...toRefs(state),
+        changeAttr,
+        svg
+      }
+    }
+  }
+  //console.log(hljs.listLanguages())
+  hljs.configure({
+    languages:['xml']
+  })
+const app = Vue.createApp(App)
+  //app.use(hljs)
+  // 注册自定义指令高亮代码
+app.directive('highlight', {
+  beforeMount(el) {
+    // on first bind, highlight all targets
+    //console.log(el)
+    let blocks = el.querySelectorAll('pre code');
+    //console.log(blocks)
+    for(let i = 0 ;i < blocks.length ; i++){
+      let item = blocks[i]
+      console.log(item)
+      hljs.highlightBlock(item)
+    }
+    //console.log(hljs.getLanguage())
+  },
+  // called after the containing component's VNode and the VNodes of its children // have updated
+  updated(el, binding) {
+    //console.log(binding)
+    // after an update, re-fill the content and then highlight
+    let targets = el.querySelectorAll('pre code');
+    for (let i = 0; i < targets.length; i += 1) {
+      let target = targets[i];
+      if (typeof binding.value === 'string') {
+        target.textContent = binding.value;
+      }
+      hljs.highlightBlock(target);
+    }
+  }
+})
+app.mount('#app')
+
+</script>
+</body>
+</html>
