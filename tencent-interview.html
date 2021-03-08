@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>腾讯 笔试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  
+</head>
+<body class="paper">
+  <ul id="list">
+
+  </ul>
+<script>
+  //第一题
+  var str ="cabdccbdb58575"
+  function getMost(str){
+    let arr = str.split('');
+    let set1 = new Set(arr);
+    let results = []
+    let timeMap = new Map()
+    set1.forEach(tag=>{
+      for (let i=0;i<arr.length;i++){
+        let result = arr.filter(item=> item === tag);
+        timeMap.set(tag,result.length)
+      } 
+    })
+    let arrayMap = Array.from(timeMap).sort((a,b)=>a[1]-b[1])
+    let maxTimes = arrayMap[arrayMap.length-1][1]
+    arrayMap.forEach(item=>{
+      if(item[1] === maxTimes){
+        results.push(item[0])
+      }
+    })
+    return results
+  }
+  console.log(getMost(str))
+  
+
+  //第二题
+  function OutPut(){
+    for(let i=0;i<5;i++){
+      timer = setTimeout(()=>{
+        console.log(i+1)
+      }, i*1000)
+    }
+  }
+  //OutPut()
+  
+  //第三题
+  
+  // document.body.innerHTML = format(`<div>I am {name},my website is <a href="{website}">{website}</a>!</div>`,{
+  //     name:'james',
+  //     website:'http://www.qq.com'
+  // })
+
+  // function format(str,Obj){
+  //     let data = Obj
+      
+  //     //console.log(str.indexof('{'))
+  //     return str
+  // }
+
+  //第四题
+  class List{
+    constructor(){
+      this.length = arguments.length;
+      this.list = [...arguments]
+    }
+    add(){
+      this.list.push(...arguments)
+    }
+    all(){
+      return this.list
+    }
+  }
+  function runList(){
+    let ls = new List('A','B','C')
+    console.log(ls)
+    ls.add('D','E')
+    console.log(ls.all())
+  }
+  //runList()
+  
+
+  //五
+  let domUl = document.querySelector('#list')
+  let vFrame = document.createDocumentFragment()
+  
+  for(let n=0;n<100;n++){
+      let li = document.createElement('li')
+      li.innerHTML = n
+      vFrame.appendChild(li)
+  }
+  // domUl.appendChild(vFrame)
+  // domUl.onclick = (evt)=>{
+  //   console.log(evt.target.innerHTML)
+  // }
+
+
+
+  //附加题
+  const finBiger = (target,arr) =>{
+    let arr2 = [...new Set(arr)]
+    arr2.sort((a,b)=> a-b)
+    let bigerIndex = arr2.findIndex(item=>item>target)
+    return arr2[bigerIndex]
+  }
+
+  //finBiger(6,[6,8,2,3,6,1,2,3,4,5,9])
+
+</script>
+</body>
+</html>
