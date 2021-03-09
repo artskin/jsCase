@@ -16,6 +16,7 @@
   <ul id="list">
 
   </ul>
+  <h2>强制缓存，协商缓存</h2>
 <script>
   //第一题
   var str ="cabdccbdb58575"
@@ -39,7 +40,7 @@
     })
     return results
   }
-  console.log(getMost(str))
+  //console.log(getMost(str))
   
 
   //第二题
@@ -54,17 +55,27 @@
   
   //第三题
   
-  // document.body.innerHTML = format(`<div>I am {name},my website is <a href="{website}">{website}</a>!</div>`,{
-  //     name:'james',
-  //     website:'http://www.qq.com'
-  // })
+  document.body.innerHTML = format(`<div>I am {name},my website is <a href="{website}">{website}</a>!</div>`,{
+      name:'james',
+      website:'http://www.qq.com'
+  })
 
-  // function format(str,Obj){
-  //     let data = Obj
-      
-  //     //console.log(str.indexof('{'))
-  //     return str
-  // }
+  function format(str,Obj){
+    let safeStr = escapeHTML(str);
+    return safeStr.replace(/\\?\{([^{}]+)\}/g, function (match, name) {
+      return (Obj[name] === undefined) ? '' : Obj[name];
+    });
+  }
+  function escapeHTML (str) {
+    return str.replace(/[&<>'"]/g,tag => ({
+              '&': '&amp;',
+              '<': '&lt;',
+              '>': '&gt;',
+              "'": '&#39;',
+              '"': '&quot;'
+          }[tag] || tag)
+    );
+  }
 
   //第四题
   class List{
