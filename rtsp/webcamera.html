@@ -41,7 +41,13 @@
         //兼容webkit内核浏览器
         var CompatibleURL = window.URL || window.webkitURL;
         //将视频流设置为video元素的源
-        video.src = CompatibleURL.createObjectURL(stream);
+
+        if('srcObject' in video){
+            video.srcObject = stream
+        }else{
+            video.src = CompatibleURL.createObjectURL(stream);
+        }
+        
         //播放视频
         video.play();
     }
