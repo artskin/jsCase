@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Promise A </title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+ </head>
+<body>
+
+<script>
+  class MyPromise{
+    constructor(fn){
+      this.pState = 'pedding'
+      this.pResult = undefined
+      const resolve = (val)=>{
+        if(this.pState !== 'pedding') return;
+        this.pState = 'ok'
+        this.pResult = val
+      }
+      const reject = (er)=>{
+        if(this.pState !== 'pedding') return;
+        this.pState = 'fail'
+        this.pResult = er;
+      }
+      fn(resolve,reject)
+    }
+    then(onResolve,onReject){
+      //console.log(resolve)
+      //return resolve
+      return this;
+    }
+    catch(reject){
+      
+    }
+  }
+  
+  const nativePromise = new Promise((resolve,reject)=>{
+    resolve('成功')
+  })
+
+  console.log('原生',nativePromise)
+
+  let getValue = new MyPromise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve('结果2')
+    },5)
+    console.log(3)
+    
+  })
+  console.log(1)
+  getValue.then((data,error)=>{
+    console.log(data)
+    console.log(error)
+    console.log(2)
+  })
+  
+  getValue.catch((res)=>{
+    console.log(res)
+  })
+  console.log(getValue)
+
+  function Person(name){
+    this.name = name
+  }
+  Person.prototype.say = function(){
+    console.log(this.name)
+  }
+  let lili = new Person('lili')
+  lili.say()
+
+  function Animal(name){
+    this.name = name
+  }
+  Animal.prototype = new Person()
+  let maomi = {
+    name:'maomi'
+  }
+  lili.say.call(maomi)
+  lili.say.apply(maomi)
+  lili.say.bind(maomi)()
+ 
+  let dog = new Animal('dog')
+
+  dog.say()
+
+</script>
+</body>
+</html>
