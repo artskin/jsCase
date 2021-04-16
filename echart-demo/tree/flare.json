@@ -1,0 +1,54 @@
+{
+ "name": "表决通过",
+ "children": [
+  {
+   "name": "楼层",
+   "children": [
+    {
+     "name": "1~2楼",
+     "shape":"hexagonal",
+     "children": [
+      {"name": "AgglomerativeCluster", "value": 3938},
+      {"name": "CommunityStructure", "value": 3812},
+      {"name": "HierarchicalCluster", "value": 6714},
+      {"name": "MergeEdge", "value": 743}
+     ]
+    },
+    {
+     "name": "3~4楼",
+     "shape":"hexagonal",
+     "children": [
+      {"name": "BetweennessCentrality", "value": 3534},
+      {"name": "LinkDistance", "value": 5731},
+      {"name": "MaxFlowMinCut", "value": 7840},
+      {"name": "ShortestPaths", "value": 5914},
+      {"name": "SpanningTree", "value": 3416}
+     ]
+    },
+    {
+     "name": "5楼以上",
+     "shape":"hexagonal",
+     "children": [
+      {"name": "AspectRatioBanker", "value": 7074}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "年龄",
+   "children": [
+    {"name": "18岁以下", "shape":"hexagonal","value": 8833},
+    {"name": "18~25岁", "shape":"hexagonal","value": 1732},
+    {"name": "25~35岁", "shape":"hexagonal","value": 3623},
+    {"name": "35岁以上", "shape":"hexagonal","value": 10066}
+   ]
+  },
+  {
+   "name": "性别",
+   "children": [
+    {"name": "男", "shape":"hexagonal","value": 1082},
+    {"name": "女", "shape":"hexagonal","value": 1336}
+   ]
+  }
+ ]
+}
