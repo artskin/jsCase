@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>css3  实验</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  <style>
+    .mi-logo{
+      background:#f96400;
+      width:66px;
+      height:66px;
+      /* border-radius:1.1em; */
+      color:#fff;
+      box-sizing:border-box;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+      padding:8px;
+      font-size:18px;
+      transform: scale(2.5);
+      box-sizing: border-box;
+      /* border-top-left-radius: 20% 40%;
+      border-top-right-radius: 20% 40%;
+      border-bottom-right-radius: 20% 40%;
+      border-bottom-left-radius: 20% 40%; */
+      border-radius:40% / 20%;
+    }
+    .mi-logo:before,.mi-logo:after{
+      content:'';
+      display:inline-block;
+    }
+    .mi-logo:before{
+      transform: translateX(-20%);
+      width:0.88em;
+      height:0.88em;
+      background:#f96400;
+      border-radius:0 .3em 0 0;
+      box-shadow: 0 .4em #f96400,0 0 0 .3em #fff;
+    }
+    .mi-logo:after{
+      position:absolute;
+      left:45%;
+      top:58%;
+      transform: translate(-50%, -50%);
+      background:currentColor;
+      width:.3em;
+      height:.9em;
+      box-shadow: 21px -10.5px 0 0px, 21px 0.2px 0 0px;
+    }
+    .vuepress-plugin-demo-block__app{
+      height:250px;
+      display:flex; justify-content:center; align-items:center;
+    }
+  </style>
+ </head>
+<body>
+  <div class="paper">
+    <h1>mi-logo</h1>
+    <hr>
+    <div class="mi-logo"></div>
+  </div>
+</body>
+</html>

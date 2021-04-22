@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+  <meta charset="utf-8">
+  <title>树tree</title>
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  p{
+    color: #3650a7;
+  }
+</style>
+<script>
+  var dom = document.getElementById("container");
+  var myChart = echarts.init(dom);
+  var app = {};
+  var option;
+  let hexagonal = 'path://M341.2,207.6h-34.4c-3,0-5.8,1.6-7.4,4.3l-17.2,29.8c-1.5,2.6-1.5,5.9,0,8.5l17.2,29.8c1.5,2.6,4.3,4.3,7.4,4.3h34.4c3,0,5.8-1.6,7.4-4.3l17.2-29.8c1.5-2.6,1.5-5.9,0-8.5l-17.2-29.8C347,209.2,344.2,207.6,341.2,207.6z'
+
+  myChart.showLoading();
+  fetch('./flare.json',{
+    method: 'GET',
+    //mode: 'cors',
+  }).then(res=>{
+    return res.json()
+  }).then(data=>{
+    myChart.hideLoading();
+    myChart.setOption(option = {
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'mousemove'
+        },
+        series:[
+          {
+            type: 'tree',
+            data: [data],
+            left: '2%',
+            right: '2%',
+            top: '8%',
+            bottom: '20%',
+            // symbol: (data,params )=>{
+            //   "circle"
+            // },
+            symbol: hexagonal,
+            symbolSize: (value, params) => [80, 50], //  function(value,params)=>number
+            symbolRotate: 0, // 标记的旋转角度（而非弧度）。正值表示逆时针旋转
+            symbolOffset: [0, 0], // 标记相对于原本位置的偏移。默认情况下，标记会居中置放在数据对应的位置
+            orient: 'vertical',
+            expandAndCollapse: true,
+            itemStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: '#eaf0fc' // 0% 处的颜色
+                }, {
+                  offset: 1, color: '#c4d8f5' // 100% 处的颜色
+                }],
+                global: false // 缺省为 false
+              },
+              shadowBlur: 1,
+              shadowOffsetX:0,
+              shadowOffsetY:5,
+              opacity: 1,
+              shadowColor: '#5a78ff',
+              borderWidth:0,
+              borderColor:'#e1f4ff'
+            },
+            lineStyle:{
+              curveness : 0,
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 10,
+                x2: 0,
+                y2: 1,
+                colorStops: [{ offset: 0, color: 'transparent' // 0% 处的颜色
+                }, {
+                  offset: 1, color: '#dfe5eb' // 100% 处的颜色
+                }],
+                global: false // 缺省为 false
+              },
+            },
+            select:{
+              label: {
+                color:'#627cfd'
+              },
+              itemStyle:{
+
+              }
+            },
+            emphasis: {
+              focus: 'series',
+              //blurScope: 'coordinateSystem',
+              itemStyle:{
+                shadowBlur:5
+              },
+              label: {
+                color:'#627cfd',
+                show:true,
+                borderColor:'#c00',
+              },
+              
+            },
+            label: {
+              position: 'inside',
+              rotate: 0,
+              verticalAlign: 'middle',
+              align: 'center',
+              fontSize: 12,
+              color:'#606d8f',
+              fontFamilay:'黑体',
+              fontWeight:'bold',
+              fontStyle:'italic',
+              
+            },
+            leaves: {
+              label: {
+                position: 'inside',
+                rotate: 0,
+                verticalAlign: 'middle',
+                align: 'center',
+                fontWeight:'normal',
+                
+              },       
+              itemStyle:{
+                symbol: "rect",
+                symbolSize: (value, params) => [50, 50], //  function(value,params)=>number
+              }       
+            },
+            animationDurationUpdate: 750,
+          }
+        ]
+    })
+  })
+
+  if (option && typeof option === 'object') {
+    myChart.setOption(option);
+  }
+
+</script>
+</body>
+</html>
+    

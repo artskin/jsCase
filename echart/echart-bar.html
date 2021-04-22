@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+  <meta charset="utf-8">
+  <title>树tree</title>
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  p{
+    color: #3650a7;
+  }
+</style>
+<script>
+  var dom = document.getElementById("container");
+  var myChart = echarts.init(dom);
+  var app = {};
+  var option = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [
+        {
+          value: 120,
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: '#54baff' // 0% 处的颜色
+              }, {
+                offset: 1, color: '#cfe8ff' // 100% 处的颜色
+              }],
+              //global: false // 缺省为 false
+            }
+          }
+        }, 
+        {
+          value: 200,
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: '#7761ff' // 0% 处的颜色
+              }, {
+                offset: 1, color: '#c4d8f5' // 100% 处的颜色
+              }],
+              //global: false // 缺省为 false
+            },
+            shadowBlur: 10,
+              shadowOffsetX:0,
+              shadowOffsetY:0,
+              opacity: 1,
+              shadowColor: '#5a78ff',
+          }
+        },
+        {
+          value: 100,
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: '#eaf0fc' // 0% 处的颜色
+              }, {
+                offset: 1, color: '#c4d8f5' // 100% 处的颜色
+              }],
+              //global: false // 缺省为 false
+            }
+          }
+        }, 80, 70, 110, 130],
+      type: 'bar'
+    }]
+  };
+  myChart.setOption(option)
+
+  if (option && typeof option === 'object') {
+    myChart.setOption(option);
+  }
+
+</script>
+</body>
+</html>
+    

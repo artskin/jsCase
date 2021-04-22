@@ -27,7 +27,7 @@ function track(target,key){
 }
 
 function trigger(target,key){
-  console.log(target)
+  //console.log(target)
   const depsMap = targetMap.get(target)
   if(!depsMap) return
 
@@ -48,7 +48,7 @@ function reactive(target){
       return result
     },
     set:(target,key,newValue,proxySelf)=>{
-      console.warn('set',key)
+      //console.warn('set',key)
       let oldValue = target[key];
       let result = Reflect.set(target,key,newValue,proxySelf);
       // console.log(oldValue,newValue,result,oldValue != newValue)
@@ -64,6 +64,7 @@ function reactive(target){
 function ref(raw){
   const r = {
     get value(){
+      //console.log('触发get')
       track(r,'value')
       return raw
     },
@@ -77,6 +78,21 @@ function ref(raw){
   }
   return r
 }
+//console.log('ref',ref('0').value)
+let obj = {
+  value:0,
+  get val(){
+    console.warn("get",this)
+     
+    return this.value
+  },
+  set:()=>{
+    console.warn("get")
+  }
+    
+  
+}
+console.log(obj)
 
 function computed(getter){
   let result = ref();

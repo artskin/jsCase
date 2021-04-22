@@ -47,6 +47,9 @@
 </head>
 <body>
   <h2>不确定宽高块元素：上下左右居中</h2>
+  <ul id="list">
+
+  </ul>
   <div class="layer">
     <div id="block" contenteditable="true">
       ss21ss21ss21ss2132132<br>
@@ -60,6 +63,20 @@
   </div>
   
   <script>
+    let listDom = document.querySelector('#list');
+    let str = ``
+    for(let i=0;i<10;i++){
+      str += `<li>${i}</li>`
+    }
+    
+    listDom.innerHTML = `${str}`
+    const outPut = (evt) => {
+      console.log(evt,evt.target.innerText);
+    }
+    
+    listDom.addEventListener('click',outPut)
+    
+
     // console.log(1,[] == false)
     // console.log(2,{} == false)
     // console.log(3,[])

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Streamedian HTML5 RTSP/HLS player example</title>
+  <script src="libs/adapter.min.js" ></script>
+  <script src="libs/webrtcstreamer.js" ></script>
+  <script>        
+    var webRtcServer = null;
+    window.onload    = function() {
+      webRtcServer   = new WebRtcStreamer("video",location.protocol+"//"+window.location.hostname+":8000");
+      webRtcServer.connect("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+    }
+    window.onbeforeunload = function() { webRtcServer.disconnect(); }
+  </script>
+</head>
+<body>
+  <video id="video" ></video>
+</body>
+</html>
