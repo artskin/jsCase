@@ -10,9 +10,20 @@
   <meta name="keywords" content="首页关键词"/>
   <meta name="author" content="Web Layout:amu"/>
   <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
-  
+  <style>
+    .logo{
+      background-color: coral;
+    }
+    .logo::before{
+      content: '';
+      display: block;
+      border-radius: 6px;
+      border-width: 3px;
+    }
+  </style>
 </head>
 <body class="paper">
+  <div class="logo"></div>
   <ul id="list">
 
   </ul>
