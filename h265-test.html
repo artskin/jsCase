@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>h265 测试</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+  
+ </head>
+<body class="paper">
+  <div id="wrap">
+  </div>
+<script>
+  let videoEl = document.createElement('video')
+    videoEl.src = './video-h265.mkv'
+    console.log(videoEl.canPlayType('video/mp4; codecs="hevc"'))
+  let supportHEVC = function(video) {
+    if (typeof videoEl.canPlayType == 'function') {
+        var playable = videoEl.canPlayType('video/mp4; codecs="hevc"');
+        if ((playable.toLowerCase() == 'maybe') || (playable.toLowerCase() == 'probably')) {
+            return true;
+        }
+    }
+    return false;
+  };
+  //supportHEVC()
+</script>
+</body>
+</html>
