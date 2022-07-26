@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Canvas 绘图</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css">
+  <link rel="stylesheet" href="https://artskin.github.io/html-native-ui/assets/index.a9865689.css">
+  <style>
+    .canvas-layer{
+      position: relative;
+    }
+    input[type="color"]{
+      padding:0;
+    }
+    input[type="color" i]::-webkit-color-swatch-wrapper{
+      padding: 0;
+    }
+    input[type="color" i]::-webkit-color-swatch{
+      border: 0;
+    }
+    #tools{
+      display: flex;
+
+    }
+    canvas{
+      position: absolute;background: rgba(0,0,0,.1);left: 0;top: 0;
+      aspect-ratio: var(--imgRatio);
+    }
+    .canvas-layer img,.canvas-layer canvas{
+      width: 80%;
+    }
+    img{user-select: none;opacity: .4;}
+    #canvas{border: 1px red dashed;box-sizing: border-box;}
+
+  </style>
+ </head>
+
+<body>
+<div class="paper">
+  <h1>Canvas 绘制工具</h1>
+  <hr>
+  <div id='tools'>
+    <button value="rect">矩形</button>
+    <button value='line'>线段</button>
+    <input id="color" type="color" value="#cc0000" />
+  </div> 
+  <div class="canvas-layer">
+    <canvas id="canvas" width="960" height="540"
+        style="width:960px;height:540px;  background:url('https://img0.baidu.com/it/u=2183579431,409639925&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281');background-size: contain">
+    </canvas>
+  </div>
+  
+</div>
+</body>
+<script>
+  const canvas = document.getElementById('canvas')
+const ctx = canvas.getContext('2d');
+ 
+let clientX = 0, clientY = 0,  // 鼠标所在的位置坐标
+    points = [],   // 存储点击的坐标节点数据
+    polygonFillStyle = 'rgba(255,0,0,.2)',
+    rectFillStyle = 'yellow',
+    lineStyle = 'red',
+    lineWidth = 3
+ 
+ctx.lineJoin = 'round'
+ctx.strokeStyle = lineStyle
+ctx.lineWidth = lineWidth
+/**
+ * 清空Canvas内容
+ */
+function clear() {
+    ctx.fillStyle = 'transparent'
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+}
+ 
+/**
+ * 初始化监听事件
+ */
+function initEvent(){
+    // 监听鼠标移动事件
+    canvas.addEventListener('mousemove', (e) => {
+        let {x,y} = windowToCanvas(e.clientX,e.clientY)
+        clientX = x
+        clientY = y
+    })
+ 
+    // 监听鼠标点击事件
+    canvas.addEventListener('click', (e) => {
+        let len = points.length
+        let cIndex = 0
+        // 初始化存储节点数组
+        if (len === 0) {
+            points[cIndex] = []
+        } else {
+            cIndex = len - 1
+            if (typeof points[len - 1] === 'undefined') {
+                points[cIndex] = []
+            }
+        }
+        let lastPoints = points[cIndex]
+        let lastPointsLen = lastPoints.length
+        if (lastPointsLen === 0) {
+            // 如果空间是0的话，就直接新增
+            points[cIndex].push([clientX, clientY])
+        } else {
+            // 如果不是零，就判断是否在已存在的点上，如果是就闭合路径，如果不是，就继续添加节点
+            let lastStartX = lastPoints[0][0],
+                lastStartY = lastPoints[0][1]
+            if (isInPoint(clientX, clientY, lastStartX, lastStartY)) {
+                points[cIndex].push([lastStartX, lastStartY])
+                points[len] = []
+            } else {
+                points[cIndex].push([clientX, clientY])
+            }
+        }
+    })
+ 
+}
+ 
+/**
+ * 绘制两点之间的线段
+ * @param points
+ */
+function drawLine(points) {
+    ctx.beginPath()
+    for (let i = 0; i < points.length; i++) {
+        let p = points[i]
+        let cx = p[0], cy = p[1]
+ 
+        // 初始化起始点
+        if (i === 0) {
+            ctx.moveTo(cx, cy)
+        }
+ 
+        // 画一条线
+        ctx.lineTo(cx, cy)
+        // 在点处画一个小矩形
+        // ctx.fillRect(cx - 5, cy - 5, 10, 10)
+    }
+    ctx.stroke()
+}
+ 
+/**
+ * 绘制线段之间的背景颜色
+ * @param points
+ */
+function drawPolygon(points) {
+    if (points.length < 1) {
+        return;
+    }
+ 
+    let len = points.length
+    let moveX = clientX, moveY = clientY,
+        startX = points[0][0], startY = points[0][1],
+        endX = points[len - 1][0], endY = points[len - 1][1]
+ 
+    ctx.fillStyle = polygonFillStyle
+    for (let i = 0; i < points.length; i++) {
+        let p = points[i]
+        let cx = p[0], cy = p[1]
+        // 初始化起始点
+        if (i === 0) {
+            ctx.moveTo(cx, cy)
+        }
+        // 画一条线
+        ctx.lineTo(cx, cy)
+    }
+    if (isInPoint(moveX, moveY, startX, startY)) {
+        ctx.lineTo(startX, startY)
+    } else {
+        ctx.lineTo(clientX, clientY)
+    }
+ 
+    ctx.fill()
+}
+ 
+/**
+ * 绘制鼠标跟随线段
+ */
+function drawFollowLine(points) {
+    if (points.length < 1) {
+        ctx.fillRect(clientX - 5, clientY - 5, 10, 10)
+        return;
+    }
+    ctx.save()
+    let len = points.length
+    // 判断是否与第一个节点重合
+    let moveX = clientX, moveY = clientY,
+        startX = points[0][0], startY = points[0][1],
+        endX = points[len - 1][0], endY = points[len - 1][1]
+ 
+ 
+    ctx.beginPath()
+    ctx.moveTo(endX, endY)
+    ctx.fillStyle = rectFillStyle
+    // 如果鼠标在第一个点的附近，，就将鼠标强制到这第一个点
+    if (isInPoint(moveX, moveY, startX, startY)) {
+        ctx.lineTo(startX, startY)
+        // 画一个小矩形，跟随鼠标
+        ctx.fillRect(startX - 5, startY - 5, 10, 10)
+    } else {
+        ctx.lineTo(moveX, moveY)
+        // 画一个小矩形，跟随鼠标
+        ctx.fillRect(clientX - 5, clientY - 5, 10, 10)
+        // ctx.arc(clientX , clientY,10, 0 , 2*Math.PI, true)
+        // ctx.fill()
+    }
+    ctx.closePath()
+    ctx.stroke()
+    ctx.restore()
+}
+ 
+ 
+/**
+ * 判断一个点是否在另一点的附近
+ */
+function isInPoint(x, y, tx, ty) {
+    let r = Math.sqrt(Math.pow(x - tx, 2) + Math.pow(y - ty, 2))
+    if (r <= 20) {
+        return true
+    }
+    return false
+}
+ 
+ 
+/**
+ * 将窗口坐标转换成Canvas坐标
+ * @param x 窗口x坐标
+ * @param y 窗口y坐标
+ * @returns {{x: number, y: number}}
+ */
+function windowToCanvas(x, y) {
+    let bbox = canvas.getBoundingClientRect();
+    return {
+        x: x - bbox.left * (canvas.width  / bbox.width),
+        y: y - bbox.top  * (canvas.height / bbox.height)
+    };
+}
+ 
+ 
+/**
+ * 开始函数
+ */
+function start() {
+    initEvent()
+ 
+    let refresh = function (){
+        window.requestAnimationFrame(() => {
+            clear()
+            let len = points.length
+            for (let i = 0; i < points.length; i++) {
+                drawLine(points[i])
+                drawPolygon(points[i])
+                if (i == len - 1) {
+                    // 只对最后一个多边形做鼠标跟随
+                    drawFollowLine(points[i])
+                }
+            }
+ 
+            refresh()
+        })
+    }
+    refresh()
+}
+start()
+</script>
+</html>

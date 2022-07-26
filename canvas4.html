@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Canvas 绘图</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css">
+  <link rel="stylesheet" href="https://artskin.github.io/html-native-ui/assets/index.a9865689.css">
+  <style>
+    .canvas-layer{
+      position: relative;
+    }
+    input[type="color"]{
+      padding:0;
+    }
+    input[type="color" i]::-webkit-color-swatch-wrapper{
+      padding: 0;
+    }
+    input[type="color" i]::-webkit-color-swatch{
+      border: 0;
+    }
+    #tools{
+      display: flex;
+
+    }
+    canvas{
+      position: absolute;background: rgba(0,0,0,.1);left: 0;top: 0;
+      aspect-ratio: var(--imgRatio);
+    }
+    .canvas-layer img,.canvas-layer canvas{
+      width: 80%;
+    }
+    img{user-select: none;opacity: .4;}
+    #canvas{border: 1px red dashed;box-sizing: border-box;}
+
+  </style>
+ </head>
+
+<body>
+<div class="paper">
+  <h1>Canvas 绘制工具</h1>
+  <hr>
+  <div id='tools'>
+    <button value="rect">矩形</button>
+    <button value='line'>线段</button>
+    <input id="color" type="color" value="#cc0000" />
+  </div> 
+  <div class="canvas-layer">
+    <img src="assets/images/map.png" alt="">
+    <canvas id="canvas"></canvas>
+  </div>
+  
+</div>
+</body>
+<script>
+  
+function $(val){
+  const prefix = val.substr(0,1)
+  if(prefix ==='.'){
+    return document.querySelectorAll(val)
+  } else if(prefix === '#'){
+    return document.getElementById(val.substring(1))
+  }else{
+    return document.querySelector(val)
+  }
+}
+let ratioW = 1;
+let ratioH = 1;
+function init(){
+  const bgMap = new Image()
+  bgMap.src = 'https://artskin.github.io/jsCase/assets/images/map.png'
+  bgMap.onload = (e)=>{
+    const img = e.target || e.path[0];
+    const originWidth = img.naturalWidth
+    const originHeight = img.naturalHeight
+    const imgRatio = `${originWidth}/${originHeight}`
+    canvas.style.cssText = `--imgRatio:${imgRatio}`
+    canvas.width = originWidth;
+    canvas.height = originHeight;
+    ratioW = originWidth/canvas.clientWidth;
+    ratioH = originHeight/canvas.clientHeight;
+    console.log(ratioH,ratioW)
+    //previewShap()
+    //previewPath()
+  }
+}
+init()
+let isDragging = false
+//线段的点的集合
+ var points=[];
+ //可拖动圆圈的点的集合
+ var circles=[];
+ //每一个点的对象
+ function Point(x, y) {
+     this.x = x;
+     this.y = y;
+   }
+ //圆圈对象
+ function Circle(x, y) {
+    this.x = x;
+    this.y = y;
+    this.radius = 100;
+    this.color = "blue";
+    //拖拽点的标记
+    this.isSelected = false;
+  }
+ /*每一次的点都看作一个对象,然后把点放在数组里保存起来
+ 这样circles和points就会是这种形式
+ points=[{(x0,y0},{x1,y1},{x2,y2}..]
+ circles=[{x0,y0,10,blue,false}...]*/
+
+ canvas.onmousedown=function(e){
+    //  var clickX = e.pageX - canvas.offsetLeft;
+    //  var clickY = e.pageY - canvas.offsetTop;
+    var clickX = e.layerX * ratioW;
+    var clickY = e.layerY * ratioH;
+     //判断当前点击点是否在已经绘制的圆圈上，如果是执行相关操作，并return，不进入画线的代码
+     for(var i=1; i<circles.length; i++) {
+        var circle = circles[i];
+        //使用勾股定理计算这个点与圆心之间的距离
+        var distanceFromCenter = Math.sqrt(Math.pow(circle.x - clickX, 2)
+            + Math.pow(circle.y - clickY, 2));
+        console.log(distanceFromCenter)
+        // 如果是其他的点，则设置可以拖动
+        if (distanceFromCenter <= circle.radius) {
+          // 清除之前选择的圆圈
+          index=i;
+          isDragging=true;
+          //停止搜索
+          return;
+        }
+      }
+    //如果点击新的位置，则进入下面的代码，绘制点
+    context.clearRect(0,0,canvas.width,canvas.height);
+    //遍历数组画圆
+     var circle=new Circle(clickX,clickY);
+     circles.push(circle);
+     circles[0].color="green";
+     for(var i=0; i<circles.length; i++) {
+        var circle = circles[i];
+        // 绘制圆圈
+        context.globalAlpha = 0.85;
+        context.beginPath();
+        context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
+        context.fillStyle = circle.color;
+        context.strokeStyle = "black";
+        context.fill();
+        context.stroke();
+      }
+      // 画线
+     var point=new Point(clickX,clickY);
+     points.push(point);
+     context.beginPath();
+     context.lineWidth = 4;
+     //从起始点开始绘制
+     context.moveTo(points[0].x,points[0].y);
+     for (var i = 0; i < points.length; i++) {
+       context.lineTo(points[i].x, points[i].y);
+     }
+     context.fillStyle="rgb(2,100,30)";
+     context.fill();
+     context.strokeStyle="#9d4dca";
+     context.stroke();
+   };
+
+   canvas.onmousemove=function(e){
+   // 判断圆圈是否开始拖拽
+   if (isDragging == true) {
+     // 判断拖拽对象是否存在
+       // 取得鼠标位置
+       var x1 = e.pageX - canvas.offsetLeft;
+       var y1 = e.pageY - canvas.offsetTop;
+       context.clearRect(0,0,canvas.width,canvas.height);
+       //根据上文得到的index设置index点位置随鼠标改变
+       circles[index].x=x1;
+       circles[index].y=y1;
+       points[index].x=x1;
+       points[index].y=y1;
+       for(var i=0; i<circles.length; i++) {
+          var circle = circles[i];
+          // 绘制圆圈
+          context.globalAlpha = 0.85;
+          context.beginPath();
+          context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
+          context.fillStyle = circle.color;
+          context.strokeStyle = "black";
+          context.fill();
+          context.stroke();
+        }
+       context.beginPath();
+       context.moveTo(points[0].x,points[0].y);
+       for (var i = 0; i < points.length; i++) {
+         context.lineTo(points[i].x, points[i].y);
+       }
+       context.lineTo(points[0].x,points[0].y);
+       // context.fillStyle="#831f68";
+       context.fillStyle="rgb(2,100,30)";
+       context.fill();
+       context.strokeStyle="#9d4dca";
+       context.stroke();
+     }
+   };
+
+   canvas.onmouseup=function(){
+     isDragging=false;
+   };
+
+   canvas.onmouseout=function(){
+     isDragging=false;
+   };
+   window.onload = function() {
+      canvas = document.getElementById("canvas");
+      context = canvas.getContext("2d");
+      // canvas.onmousedown = canvasClick;
+      // canvas.onmouseup = stopDragging;
+      // canvas.onmouseout = stopDragging;
+      // canvas.onmousemove =dragRect;
+      // addRandomRect()
+      // addRandomRect(200,200,100,100)
+  };
+</script>
+</html>

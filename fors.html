@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>js 循环</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css?v=1">
+</head>
+<body class="paper">
+  <h3 class="center">js 循环</h3>
+
+<script src="./lib/3.0.0-rc.1.vue.global.js"></script>
+<script>
+  const list = [
+    {
+      "name":"热区1",
+      "vertices":[{"x":0.1, "y":0.1}, {"x":1, "y":0.1}, {"x":1, "y":1}, {"x":0.1, "y":1}]
+    },
+    {
+      "name":"热区2",
+      "roi":{
+        "vertices":[{"x":0.1, "y":0.1}, {"x":1, "y":0.1}, {"x":1, "y":1}, {"x":0.1, "y":1}],
+        "include":[
+          {"vertices":[{"x":0.1, "y":0.1}, {"x":0.5, "y":0.6}, {"x":0.8, "y":0.7}, {"x":0.2, "y":0.9}]},
+          {"vertices":[{"x":0.0359375,"y":0.037037037},{"x":0.034895834,"y":0.17777778},{"x":0.17135416,"y":0.17777778},{"x":0.18333334,"y":0.019444445}]}
+        ]
+      }
+      
+    }
+  ]
+  const apiData = {"object_config":"{\"algo_config\":{\"app_name\":\"com.sensetime.algo.garbage\",\"app_version\":20202,\"data\":{\"value\":\"{\\\"rules\\\":[{\\\"type\\\":\\\"ST_TRASH_CLEANED\\\",\\\"rule_id\\\":\\\"997de0fe270a488f8b067a15a4e347e9\\\",\\\"roi\\\":{\\\"vertices\\\":[{\\\"x\\\":0.1,\\\"y\\\":0.1},{\\\"x\\\":1,\\\"y\\\":0.1},{\\\"x\\\":1,\\\"y\\\":1},{\\\"x\\\":0.1,\\\"y\\\":1}],\\\"include\\\":[{\\\"vertices\\\":[{\\\"x\\\":0.03125,\\\"y\\\":0.062037036},{\\\"x\\\":0.0171875,\\\"y\\\":0.2324074},{\\\"x\\\":0.07239583,\\\"y\\\":0.23425926},{\\\"x\\\":0.071354166,\\\"y\\\":0.05277778}]},{\\\"vertices\\\":[{\\\"x\\\":0.1109375,\\\"y\\\":0.05648148},{\\\"x\\\":0.080729164,\\\"y\\\":0.19722222},{\\\"x\\\":0.15677084,\\\"y\\\":0.18796296}]}]},\\\"activate_seconds\\\":5,\\\"cooldown_seconds\\\":1,\\\"quality_threshold\\\":0.1}],\\\"detect_interval\\\":14}\"}}}","extend_config":""}
+    //apiData.object_config =  apiData.object_config.replace(/\\/g, '\\')
+    apiData.object_config = apiData.object_config.replace(/\\/g,'').replace(/\}"/g,'}').replace(/\"{/g,'{')
+    //apiData.object_config = JSON.parse(apiData.object_config)
+    Object.assign(apiData,JSON.parse(apiData.object_config))
+    //apiData.object_config.data = JSON.parse(apiData.object_config.algo_config.data.value)
+  console.log(apiData)
+</script>
+</body>
+</html>

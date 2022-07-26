@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <meta name="renderer" content="webkit">
+  <title>Canvas 绘图</title>
+  <meta name="description" content="首页描述"/>
+  <meta name="keywords" content="首页关键词"/>
+  <meta name="author" content="Web Layout:amu"/>
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no"/>
+  <link rel="stylesheet" href="./src/style/base.css">
+  <link rel="stylesheet" href="https://artskin.github.io/html-native-ui/assets/index.a9865689.css">
+  <style>
+    .canvas-layer{
+      position: relative;
+    }
+    input[type="color"]{
+      padding:0;
+    }
+    input[type="color" i]::-webkit-color-swatch-wrapper{
+      padding: 0;
+    }
+    input[type="color" i]::-webkit-color-swatch{
+      border: 0;
+    }
+    #tools{
+      display: flex;
+
+    }
+    canvas{
+      position: absolute;background: rgba(0,0,0,.1);left: 0;top: 0;
+      aspect-ratio: var(--imgRatio);
+    }
+    .canvas-layer img,.canvas-layer canvas{
+      width: 80%;
+    }
+    img{user-select: none;}
+    #canvas{border: 1px red dashed;box-sizing: border-box;}
+
+  </style>
+ </head>
+
+<body>
+<div class="paper">
+  <h1>Canvas 绘制工具</h1>
+  <hr>
+  <div id='tools'>
+    <button value="rect">矩形</button>
+    <button value='line'>线段</button>
+    <input id="color" type="color" value="#cc0000" />
+  </div> 
+  <div class="canvas-layer">
+    <img src="assets/images/map.png" alt="">
+    <canvas id="canvas"></canvas>
+  </div>
+  
+</div>
+</body>
+<script>
+
+function Shape(x,y,color){
+  this.x = x
+  this.y = y
+  this.color = color
+  this.isSelected = false;
+}
+  
+function $(val){
+  const prefix = val.substr(0,1)
+  if(prefix ==='.'){
+    return document.querySelectorAll(val)
+  } else if(prefix === '#'){
+    return document.getElementById(val.substring(1))
+  }else{
+    return document.querySelector(val)
+  }
+}
+let currentType = 'line'
+
+$('#tools').onclick = (e) =>{
+  const siblings = e.target.parentNode.children;
+  for(let i=0;i<siblings.length;i++){
+    //siblings[i].classList.remove('active')
+    siblings[i].dataset.type =''
+  }
+  
+  if(e.target.tagName ==='BUTTON'){
+    currentType = e.target.value
+    //e.target.classList.add('active')
+    e.target.dataset.type ='primary'
+  }
+  
+}
+
+const canvasSetting = {
+  ctx:'',
+  color:'#ffcc00',
+  width:'2px'
+}
+
+const canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d')
+let ratioW = 1
+let ratioH = 1
+let mousedownPos = {x:0,y:0}
+const strokeCache = []
+function init(){
+  const bgMap = new Image()
+  bgMap.src = 'https://artskin.github.io/jsCase/assets/images/map.png'
+  bgMap.onload = (e)=>{
+    const img = e.target || e.path[0];
+    const originWidth = img.naturalWidth
+    const originHeight = img.naturalHeight
+    const imgRatio = `${originWidth}/${originHeight}`
+    canvas.style.cssText = `--imgRatio:${imgRatio}`
+    canvas.width = originWidth;
+    canvas.height = originHeight;
+    ratioW = originWidth/canvas.clientWidth;
+    ratioH = originHeight/canvas.clientHeight;
+    console.log(ratioH,ratioW)
+    //previewShap()
+    previewPath()
+  }
+}
+init()
+
+function previewShap(){
+  ctx.fillStyle = "rgba(255,0,0,0.5)";
+  ctx.strokeStyle = 'orange'
+  
+  ctx.fillRect(10, 13, 335, 340);
+}
+function previewPath(){
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(10,10);
+  ctx.lineTo(100,200);
+  ctx.lineTo(100,20);
+  ctx.closePath();
+  ctx.stroke()
+}
+
+function transPos (e){
+  return {
+    x:e.layerX*ratioW,
+    y:e.layerY*ratioH
+  }
+}
+
+let cacheImageData
+canvas.onmousedown = function (e){
+  ctx.fillStyle = $('#color').value
+  ctx.strokeStyle = $('#color').value
+  
+  ctx.rect(e.layerX*ratioW-15, e.layerY*ratioH-15, 30, 30);
+  ctx.fill();
+  mousedownPos=transPos(e);
+  cacheImageData = ctx.getImageData(0,0,canvas.width,canvas.height)
+  strokeCache.push(mousedownPos);
+  console.log(currentType,strokeCache)
+  if(currentType ==='rect'){
+    canvas.addEventListener('mousemove',drawRect)
+  }else{
+    canvas.addEventListener('mousemove',drawLine)
+  }
+  ctx.setLineDash([]);
+  console.log(ctx.isPointInPath(mousedownPos.x, mousedownPos.y))
+}
+canvas.ondblclick = function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+}
+
+function closeDraw(){
+  ctx.closePath()
+  canvas.removeEventListener('mousemove',drawLine);
+  canvas.removeEventListener('mousemove',drawRect);
+}
+
+function drawLine(e){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.putImageData(cacheImageData,0,0,0,0,canvas.width,canvas.height)
+  
+  ctx.beginPath()
+  ctx.moveTo(mousedownPos.x, mousedownPos.y)
+  
+  ctx.lineTo(e.layerX*ratioW, e.layerY*ratioH);
+  ctx.stroke();
+}
+
+function drawRect(e){
+  if(strokeCache.length>1){
+    closeDraw()
+    ctx.setLineDash([]);
+  }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.setLineDash([10,10]);
+  ctx.putImageData(cacheImageData,0,0,0,0,canvas.width,canvas.height)
+
+  const data = [mousedownPos.x,mousedownPos.y,e.layerX*ratioW-mousedownPos.x,e.layerY*ratioH-mousedownPos.y]
+  ctx.strokeRect(...data)
+
+  ctx.fillStyle = 'rgba(0,0,0,.2)'
+  ctx.fillRect(...data);
+  //ctx.fill()
+  //ctx.strokeRect(50, 50, 50, 50);
+}
+</script>
+</html>
