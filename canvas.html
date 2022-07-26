@@ -130,6 +130,7 @@
   
   function drawEnd(){
     ctx.closePath();
+    console.log(strokeCache)
     steps.push(strokeCache.length)
     if(strokeCache.length>1){
       btnReplay.disabled = false

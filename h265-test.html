@@ -17,19 +17,21 @@
   <div id="wrap">
   </div>
 <script>
+  console.log(MediaSource.isTypeSupported('video/mp4; codecs="hev1.1.6.L120.90"'))//safari true
   let videoEl = document.createElement('video')
     videoEl.src = './video-h265.mkv'
-    console.log(videoEl.canPlayType('video/mp4; codecs="hevc"'))
+    console.log(videoEl,typeof videoEl.canPlayType == 'function')
   let supportHEVC = function(video) {
     if (typeof videoEl.canPlayType == 'function') {
-        var playable = videoEl.canPlayType('video/mp4; codecs="hevc"');
+        var playable = videoEl.canPlayType('video/mp4; codecs="hev1.1.6.L120.90"');//safari no 
+        console.log(playable)
         if ((playable.toLowerCase() == 'maybe') || (playable.toLowerCase() == 'probably')) {
             return true;
         }
     }
     return false;
   };
-  //supportHEVC()
+  console.log(supportHEVC())
 </script>
 </body>
 </html>
